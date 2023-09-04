@@ -1,93 +1,116 @@
 package com.eztix.eventservice.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
+@Entity(name="Event")
+@Table(name= "EVENT")
 public class Event {
-  
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
 
-  private String name;
+    @Id
+    @SequenceGenerator(name = "event_sequence", sequenceName = "event_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_sequence")
+    @Schema(hidden = true)
+    private Long id;
 
-  private String category;
+    @NotNull
+    @Column(name = "name")
+    private String name;
 
-  private String artist;
+    @NotNull
+    @Column(name = "category")
+    private String category;
 
-  private String description;
+    @NotNull
+    @Column(name = "artist")
+    private String artist;
 
-  private String bannerURL;
+    @NotNull
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
 
-  private String seatMapURL;
+    @NotNull
+    @Column(name = "banner_url", columnDefinition = "TEXT")
+    private String bannerURL;
 
-  private String status;
+    @NotNull
+    @Column(name = "seat_map_url", columnDefinition = "TEXT")
+    private String seatMapURL;
 
-  public Long getId() {
-    return id;
-  }
+    @NotNull
+    @Column(name = "is_featured")
+    private Boolean isFeatured;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Column(name = "feature_sequence")
+    private int featureSequence;
 
-  public String getName() {
-    return name;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getCategory() {
-    return category;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public void setCategory(String category) {
-    this.category = category;
-  }
+    public String getCategory() {
+        return category;
+    }
 
-  public String getArtist() {
-    return artist;
-  }
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-  public void setArtist(String artist) {
-    this.artist = artist;
-  }
+    public String getArtist() {
+        return artist;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public String getBannerURL() {
-    return bannerURL;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setBannerURL(String bannerURL) {
-    this.bannerURL = bannerURL;
-  }
+    public String getBannerURL() {
+        return bannerURL;
+    }
 
-  public String getSeatMapURL() {
-    return seatMapURL;
-  }
+    public void setBannerURL(String bannerURL) {
+        this.bannerURL = bannerURL;
+    }
 
-  public void setSeatMapURL(String seatmapURL) {
-    this.seatMapURL = seatmapURL;
-  }
+    public String getSeatMapURL() {
+        return seatMapURL;
+    }
 
-  public String getStatus() {
-    return status;
-  }
+    public void setSeatMapURL(String seatmapURL) {
+        this.seatMapURL = seatmapURL;
+    }
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+    public Boolean getFeatured() {
+        return isFeatured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        isFeatured = featured;
+    }
+
+    public int getFeatureSequence() {
+        return featureSequence;
+    }
+
+    public void setFeatureSequence(int featureSequence) {
+        this.featureSequence = featureSequence;
+    }
 
 }

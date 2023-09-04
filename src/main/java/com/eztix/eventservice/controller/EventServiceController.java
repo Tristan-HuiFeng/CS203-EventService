@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@RestController()
 public class EventServiceController {
 
     private final EventService eventService;
@@ -37,7 +37,7 @@ public class EventServiceController {
 
         Event result = eventService.addNewEvent(event);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(result);
 
     }
