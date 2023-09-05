@@ -48,4 +48,8 @@ public class EventServiceController {
                 .body(eventService.getAllEvents());
     }
 
+    public void printSomething(){
+        System.out.println("HELLO!");
+    }
+
 }
