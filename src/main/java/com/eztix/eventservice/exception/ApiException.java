@@ -1,10 +1,12 @@
 package com.eztix.eventservice.exception;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-
+@Getter
 public class ApiException {
 
     private  String path;
@@ -18,4 +20,5 @@ public class ApiException {
         this.message = message;
         this.timestamp = timestamp;
     }
+
 }

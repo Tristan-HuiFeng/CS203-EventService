@@ -3,7 +3,13 @@ package com.eztix.eventservice.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name="Event")
 @Table(name= "EVENT")
 public class Event {
@@ -43,74 +49,7 @@ public class Event {
     private Boolean isFeatured;
 
     @Column(name = "feature_sequence")
-    private int featureSequence;
+    private Integer featureSequence;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getBannerURL() {
-        return bannerURL;
-    }
-
-    public void setBannerURL(String bannerURL) {
-        this.bannerURL = bannerURL;
-    }
-
-    public String getSeatMapURL() {
-        return seatMapURL;
-    }
-
-    public void setSeatMapURL(String seatmapURL) {
-        this.seatMapURL = seatmapURL;
-    }
-
-    public Boolean getFeatured() {
-        return isFeatured;
-    }
-
-    public void setFeatured(Boolean featured) {
-        isFeatured = featured;
-    }
-
-    public int getFeatureSequence() {
-        return featureSequence;
-    }
-
-    public void setFeatureSequence(int featureSequence) {
-        this.featureSequence = featureSequence;
-    }
 
 }
