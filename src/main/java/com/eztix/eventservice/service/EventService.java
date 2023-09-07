@@ -28,7 +28,7 @@ public class EventService {
             throw new RequestValidationException("event id cannot be null");
         }
 
-        eventRepository.findById(event.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("event with id %d does not exist", event.getId()));
+        eventRepository.findById(event.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("event with id %d does not exist", event.getId())));
 
        return eventRepository.save(event);
     }

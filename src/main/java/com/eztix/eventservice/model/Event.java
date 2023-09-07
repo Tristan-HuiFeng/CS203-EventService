@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
+import java.util.*;
 @Getter
 @Setter
 @ToString
@@ -19,6 +19,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_sequence")
     @Schema(hidden = true)
     private Long id;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private List<Activity> activities = new ArrayList<>();
 
     @NotNull
     @Column(name = "name")

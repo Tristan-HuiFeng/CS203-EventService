@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.Optional;
 
 @RestController
@@ -20,23 +21,23 @@ public class ActivityController {
 
     // create own custom exception later on
     @GetMapping("/{activityId}")
-    public ResponseEntity<Optional<Activity>> getActivity(@PathVariable String activityId){
+    public ResponseEntity<Activity> getActivity(@PathVariable String activityId){
         try {
-            int iD = Integer.parseInt(activityId);
+            long iD = Integer.parseInt(activityId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(activityService.getActivity(iD));
 
         } catch(NumberFormatException e){
-            throw new RuntimeException();
+            throw new RuntimeException("Invalid ID");
         }
     }
 
-    @GetMapping("/activity/all")
+    @GetMapping("/all")
     public ResponseEntity<Iterable<Activity>> getAllActivity(){
         return ResponseEntity.status(HttpStatus.OK).body(activityService.getAllActivity());
     }
 
-    @PostMapping("activity/add")
+    @PostMapping("/add")
     public ResponseEntity<Activity> addEvent(@RequestBody Activity activity) {
 
         Activity result = activityService.addNewActivity(activity);
@@ -44,5 +45,21 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(result);
     }
+
+    @PutMapping("/{activityId}")
+    public ResponseEntity<Activity> updateActivity(@PathVariable String activityId, @RequestBody Activity activity){
+
+        try {
+            long iD = Long.parseLong(activityId);
+            activity.setActivityId(iD);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(activityService.updateActivity(activity));
+
+        } catch(NumberFormatException e){
+            throw new RuntimeException("Invalid ID");
+        }
+    }
+
+
 
 }
