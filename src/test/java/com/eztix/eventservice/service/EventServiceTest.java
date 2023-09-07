@@ -29,7 +29,7 @@ class EventServiceTest {
 
 
     @Test
-    void givenNewEvent_whenAddEvent_then() {
+    void givenNewEvent_whenAddEvent_thenSuccess() {
         // given
         Event event = new Event();
         event.setName("Test Event");
