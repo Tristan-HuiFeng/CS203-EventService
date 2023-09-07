@@ -16,8 +16,8 @@ public class TicketTypeService {
         this.ticketTypeRepository = ticketTypeRepository;
     }
 
-    // Create new TicketType
-    public TicketType createNewTicketType(TicketType ticketType) {
+    // Add new TicketType
+    public TicketType addNewTicketType(TicketType ticketType) {
         return ticketTypeRepository.save(ticketType);
     }
 

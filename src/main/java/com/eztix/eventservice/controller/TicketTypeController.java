@@ -20,7 +20,7 @@ public class TicketTypeController {
     @PostMapping("/ticketType/add")
     public ResponseEntity<TicketType> addTicketType (@RequestBody TicketType ticketType) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(ticketTypeService.createNewTicketType(ticketType));
+                .body(ticketTypeService.addNewTicketType(ticketType));
     }
 
     //Get TicketType by id
