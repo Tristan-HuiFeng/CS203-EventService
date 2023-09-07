@@ -26,6 +26,19 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiException, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(RequestValidationException.class)
+    public ResponseEntity<ApiException> handleException(RequestValidationException e,
+                                                        HttpServletRequest request) {
+        ApiException apiException = new ApiException(
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                ZonedDateTime.now(ZoneId.of("Singapore"))
+        );
+
+        return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiException> handleException(Exception e,
                                                     HttpServletRequest request) {

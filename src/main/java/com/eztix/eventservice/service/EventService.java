@@ -20,7 +20,11 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public Event getEventById(Long id) { return eventRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(String.format("event with id %d does not exist", id))); }
+    public Event getEventById(Long id) {
+        return eventRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("event with id %d does not exist", id))
+        );
+    }
 
     @Transactional
     public Event updateEvent(Event event) {
@@ -28,13 +32,17 @@ public class EventService {
             throw new RequestValidationException("event id cannot be null");
         }
 
-        eventRepository.findById(event.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("event with id %d does not exist", event.getId()));
+        eventRepository.findById(event.getId()).orElseThrow(() -> new ResourceNotFoundException(String.format("event with id %d does not exist", event.getId())));
 
        return eventRepository.save(event);
     }
 
     public Iterable<Event> getAllEvents() {
         return eventRepository.findAll();
+    }
+
+    public void deleteAll() {
+        eventRepository.deleteAll();
     }
 
 }
