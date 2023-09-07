@@ -19,7 +19,7 @@ public class EventController {
     @PostMapping("event/add")
     public ResponseEntity<Event> addEvent(@RequestBody Event event) {
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(eventService.addNewEvent(event));
 
     }
