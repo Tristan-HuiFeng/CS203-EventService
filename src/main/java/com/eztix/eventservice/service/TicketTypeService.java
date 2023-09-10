@@ -46,4 +46,9 @@ public class TicketTypeService {
         return ticketTypeRepository.save(ticketType);
     }
 
+    // Delete all TicketType
+    public void deleteAllTicketTypes() {
+        ticketTypeRepository.deleteAll();
+    }
+
 }
