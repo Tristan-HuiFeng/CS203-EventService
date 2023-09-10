@@ -52,6 +52,7 @@ public class TicketTypeServiceTest {
 
         // Arrange
         TicketType mockTicketType = new TicketType();
+        ticketTypeRepository.save(mockTicketType);
 
         // Mock behaviour
         when(ticketTypeRepository.findById(1L)).thenReturn(Optional.of(mockTicketType));
