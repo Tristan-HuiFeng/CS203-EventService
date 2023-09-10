@@ -23,9 +23,14 @@ public class TicketTypeService {
 
     // Get TicketType by id
     public TicketType getTicketTypeById(Long id) {
+        try {
         return ticketTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(String
-                        .format("ticket type with id  %d not found", id)));
+                        .format("ticket type with id %d not found", id)));
+            } catch (NullPointerException e) {
+                throw new ResourceNotFoundException(String
+                .format("ticket type with id %d not found", id));
+            }
     }
 
     // Get all TicketTypes

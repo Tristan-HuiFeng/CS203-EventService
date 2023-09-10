@@ -19,7 +19,7 @@ public class TicketTypeController {
     //Add a new Ticket
     @PostMapping("/ticketType/add")
     public ResponseEntity<TicketType> addTicketType (@RequestBody TicketType ticketType) {
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketTypeService.addNewTicketType(ticketType));
     }
 

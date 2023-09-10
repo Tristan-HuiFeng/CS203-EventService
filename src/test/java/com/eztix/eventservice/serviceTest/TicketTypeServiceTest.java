@@ -1,117 +1,140 @@
 package com.eztix.eventservice.serviceTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import org.mockito.ArgumentCaptor;
-import org.mockito.stubbing.Answer;
-import static org.mockito.Mockito.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
+import com.eztix.eventservice.exception.RequestValidationException;
+import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.eztix.eventservice.service.TicketTypeService;
 
+@ExtendWith(MockitoExtension.class)
 public class TicketTypeServiceTest {
 
     @Mock
     private TicketTypeRepository ticketTypeRepository;
+    @InjectMocks
+    private TicketTypeService testTicketTypeService;
 
-    private TicketTypeService ticketTypeService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        this.ticketTypeService = new TicketTypeService(this.ticketTypeRepository);
+    @Test
+    void givenNewTicketType_whenAddTicketType_thenSuccess() {
+        // given
+        TicketType ticketType = new TicketType();
+        ticketType.setActivityId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupied_count(0);
+        ticketType.setPrice(0);
+        ticketType.setReserved_count(0);
+        ticketType.setTotal_vacancy(0);
+        ticketType.setType("test type");
+
+        // when
+        testTicketTypeService.addNewTicketType(ticketType);
+
+        // then
+        ArgumentCaptor<TicketType> ticketTypeArgumentCaptor =
+                ArgumentCaptor.forClass(TicketType.class);
+
+        verify(ticketTypeRepository).save(ticketTypeArgumentCaptor.capture());
+
+        TicketType capturedTicketType = ticketTypeArgumentCaptor.getValue();
+
+        assertThat(capturedTicketType).isEqualTo(ticketType);
     }
 
     @Test
-    public void testAddTicketType() {
+    void givenTicketTypeIdNotInDB_whenRetrieveTicketTypeById_throwResourceNotFoundException() {
 
-        // Arrange
-        TicketType mockTicketType = new TicketType();
+        // given
+        given(ticketTypeRepository.findById(1L)).willReturn(null);
+        // when
+        // then
+        assertThatThrownBy(() -> testTicketTypeService.getTicketTypeById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining("ticket type with id %d not found", 1L);
 
-        // Act
-        TicketType addedTicketType = ticketTypeService.addNewTicketType(mockTicketType);
-        verify(ticketTypeRepository).save(mockTicketType);
-
-        // Assert
-        assertNotNull(addedTicketType.getId());
     }
 
     @Test
-    public void testGetTicketTypeById() {
+    void givenTicketTypeExist_whenRetrieve_thenSuccessful() {
 
-        // Arrange
-        TicketType mockTicketType = new TicketType();
-        ticketTypeRepository.save(mockTicketType);
+        // given
+        TicketType ticketType = new TicketType();
+        ticketType.setActivityId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupied_count(0);
+        ticketType.setPrice(0);
+        ticketType.setReserved_count(0);
+        ticketType.setTotal_vacancy(0);
+        ticketType.setType("test type");
 
-        // Mock behaviour
-        when(ticketTypeRepository.findById(1L)).thenReturn(Optional.of(mockTicketType));
+        given(ticketTypeRepository.findById(ticketType.getId())).willReturn(Optional.of(ticketType));
 
-        // Act
-        TicketType result = ticketTypeService.getTicketTypeById(1L);
+        // when
+        TicketType retrievedTicketType = testTicketTypeService.getTicketTypeById(ticketType.getId());
 
-        // Assert
-        verify(ticketTypeRepository).findById(1L);
-        assertNotNull(result);
-        assertEquals(1L, result.getId().longValue());
+        // then
+        assertThat(retrievedTicketType).isEqualTo(ticketType);
+
     }
 
     @Test
-    public void testGetAllTicketType() {
+    void givenNullId_whenUpdate_throwRequestValidationException() {
+        // given
+        TicketType ticketType = new TicketType();
+        ticketType.setActivityId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupied_count(0);
+        ticketType.setPrice(0);
+        ticketType.setReserved_count(0);
+        ticketType.setTotal_vacancy(0);
+        ticketType.setType("test type");
+        // when
+        // then
+        assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessageContaining("ticket type cannot be null");
 
-        // Arrange
-        TicketType mockTicketType = new TicketType();
-        ticketTypeRepository.save(mockTicketType);
+    }
 
-        // Act
-        Iterable<TicketType> mockAllTicketType = ticketTypeService.getAllTicketTypes();
+    @Test
+    void givenIdNotInDB_whenUpdate_throwRequestNotFoundException() {
+        // given
+        TicketType ticketType = new TicketType();
+        ticketType.setId(1L);
+        ticketType.setActivityId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupied_count(0);
+        ticketType.setPrice(0);
+        ticketType.setReserved_count(0);
+        ticketType.setTotal_vacancy(0);
+        ticketType.setType("test type");
+        // when
+        // then
+        assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessageContaining(String.format("ticket type with id %s not found", ticketType.getId()));
 
-        // Assert
+    }
+
+    @Test
+    void getAllTicketTypes() {
+        testTicketTypeService.getAllTicketTypes();
         verify(ticketTypeRepository).findAll();
+    }    
 
-        // Check iterable
-        List<TicketType> ticketTypeList = StreamSupport
-                .stream(mockAllTicketType.spliterator(), false)
-                .collect(Collectors.toList());
-
-        assertEquals(1, ticketTypeList.size());
-        assertEquals(1L, ticketTypeList.get(0).getId().longValue());
-    }
-
-    @Test
-    public void testUpdateTicketType() {
-
-        // Arrange
-        TicketType mockTicketType = new TicketType();
-        mockTicketType.setDescription("test description");
-
-        // Mock behaviour
-        ArgumentCaptor<TicketType> mockArgumentCaptor = ArgumentCaptor.forClass(TicketType.class);
-        doAnswer((Answer<TicketType>) invocation -> {
-            TicketType savedTicketType = mockArgumentCaptor.getValue();
-            TicketType argTicketType = invocation.getArgument(0);
-            savedTicketType.setDescription(argTicketType.getDescription());
-            return savedTicketType;
-        }).when(ticketTypeRepository).save(mockArgumentCaptor.capture());
-
-        // Act
-        ticketTypeService.updateTicketType(mockTicketType);
-
-        // Assert
-        verify(ticketTypeRepository).save(mockTicketType);
-        TicketType savedTicketType = mockArgumentCaptor.getValue();
-
-        assertEquals("test description", savedTicketType.getDescription());
-    }
 
 }
