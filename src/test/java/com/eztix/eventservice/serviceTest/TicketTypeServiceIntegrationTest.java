@@ -74,7 +74,6 @@ public class TicketTypeServiceIntegrationTest {
     public void updateTicketType() throws Exception {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
         ticketType.setActivityId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
