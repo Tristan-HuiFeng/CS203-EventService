@@ -1,5 +1,6 @@
 package com.eztix.eventservice.repository;
 
+import com.eztix.eventservice.exception.ResourceNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 import com.eztix.eventservice.model.Activity;
 

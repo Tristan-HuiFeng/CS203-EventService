@@ -18,8 +18,14 @@ public class ActivityService {
     }
 
     public Activity getActivityById(Long iD){
-        return activityRepository.findById(iD).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("Activity with id %d does not exist", iD)));
+        try {
+            return activityRepository.findById(iD).orElseThrow(() ->
+                    new ResourceNotFoundException(String.format("Activity with id %d does not exist", iD)));
+        } catch (NullPointerException e){
+            throw new ResourceNotFoundException(String.format("Activity with id %d does not exist", iD));
+        }
+
+
     }
 
     public Iterable<Activity> getAllActivity(){
