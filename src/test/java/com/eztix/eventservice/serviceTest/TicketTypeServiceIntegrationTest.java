@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +41,6 @@ public class TicketTypeServiceIntegrationTest {
     public void addNewTicketType() throws Exception {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
         ticketType.setActivityId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
@@ -64,7 +64,7 @@ public class TicketTypeServiceIntegrationTest {
 
         Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-        Optional<TicketType> retrieved = ticketTypeRepo.findById(ticketType.getId());
+        Optional<TicketType> retrieved = ticketTypeRepo.findById(id);
 
         assertThat(retrieved).isNotNull();
 
@@ -82,8 +82,7 @@ public class TicketTypeServiceIntegrationTest {
         ticketType.setTotal_vacancy(0);
         ticketType.setType("test type");
 
-        ticketTypeRepo.save(ticketType);
-
+        TicketType savedTicketType = ticketTypeRepo.save(ticketType);
         ticketType.setDescription("test description update");
 
         // when

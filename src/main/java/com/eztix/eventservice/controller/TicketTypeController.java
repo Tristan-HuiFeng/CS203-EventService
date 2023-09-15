@@ -40,6 +40,7 @@ public class TicketTypeController {
     //Update TicketType
     @PutMapping("/updateTicketType/{ticketType_Id}")
     public ResponseEntity<TicketType> updateTicketType (@PathVariable Long ticketType_Id, @RequestBody TicketType ticketType) {
+        ticketType.setId(ticketType_Id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketTypeService.updateTicketType(ticketType));
     }

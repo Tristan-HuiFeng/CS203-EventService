@@ -106,12 +106,12 @@ public class TicketTypeServiceTest {
         // then
         assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
                 .isInstanceOf(RequestValidationException.class)
-                .hasMessageContaining("ticket type cannot be null");
+                .hasMessageContaining("ticket type id cannot be null");
 
     }
 
     @Test
-    void givenIdNotInDB_whenUpdate_throwRequestNotFoundException() {
+    void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);

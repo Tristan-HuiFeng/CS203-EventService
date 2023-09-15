@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+@EqualsAndHashCode
 @Getter
 @Setter
 @ToString
