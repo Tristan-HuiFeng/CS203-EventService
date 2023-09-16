@@ -5,14 +5,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-@EqualsAndHashCode
+
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name="TicketType")
-@Table(name= "TICKETTYPE")
+@Table(name= "TICKET_TYPE")
 public class TicketType {
 
     @Id
@@ -20,10 +22,6 @@ public class TicketType {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketType_sequence")
     @Schema(hidden = true)
     private Long id;
-
-    @NotNull
-    @Column(name = "activity_id")
-    private Long activityId;
 
     @NotNull
     @Column(name = "type")
@@ -48,5 +46,10 @@ public class TicketType {
     @NotNull
     @Column(name = "description")
     private String description;
-    
+
+    @ManyToOne
+    @NotNull
+    @JoinColumn(name = "activity_id")
+    private Activity activity;
+
 }
