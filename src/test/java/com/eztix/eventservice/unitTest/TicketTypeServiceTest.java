@@ -33,7 +33,6 @@ public class TicketTypeServiceTest {
     void givenNewTicketType_whenAddTicketType_thenSuccess() {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setActivityId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
@@ -59,12 +58,12 @@ public class TicketTypeServiceTest {
     void givenTicketTypeIdNotInDB_whenRetrieveTicketTypeById_throwResourceNotFoundException() {
 
         // given
-        given(ticketTypeRepository.findById(1L)).willReturn(null);
+        given(ticketTypeRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
         assertThatThrownBy(() -> testTicketTypeService.getTicketTypeById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("ticket type with id %d not found", 1L);
+                .hasMessageContaining("ticket type with id %d does not exist.", 1L);
 
     }
 
@@ -73,7 +72,7 @@ public class TicketTypeServiceTest {
 
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setActivityId(1L);
+        ticketType.setId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
@@ -95,7 +94,6 @@ public class TicketTypeServiceTest {
     void givenNullId_whenUpdate_throwRequestValidationException() {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setActivityId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
@@ -106,7 +104,7 @@ public class TicketTypeServiceTest {
         // then
         assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
                 .isInstanceOf(RequestValidationException.class)
-                .hasMessageContaining("ticket type id cannot be null");
+                .hasMessageContaining("ticket type id cannot be null.");
 
     }
 
@@ -115,18 +113,19 @@ public class TicketTypeServiceTest {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setActivityId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
         ticketType.setType("test type");
+
+        given(ticketTypeRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
         assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining(String.format("ticket type with id %s not found", ticketType.getId()));
+                .hasMessageContaining(String.format("ticket type with id %s does not exist.", ticketType.getId()));
 
     }
 
