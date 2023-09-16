@@ -17,14 +17,10 @@ public class ActivityService {
         this.activityRepository = activityRepository;
     }
 
-    public Activity getActivityById(Long iD){
-        try {
-            return activityRepository.findById(iD).orElseThrow(() ->
-                    new ResourceNotFoundException(String.format("Activity with id %d does not exist", iD)));
-        } catch (NullPointerException e){
-            throw new ResourceNotFoundException(String.format("Activity with id %d does not exist", iD));
-        }
-
+    public Activity getActivityById(Long id){
+            return activityRepository.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException(String.format("activity with id %d does not exist.", id))
+            );
 
     }
 
@@ -37,17 +33,21 @@ public class ActivityService {
     }
     @Transactional
     public Activity updateActivity(Activity activity){
-        if (activity.getActivityId() == null){
-            throw new RequestValidationException("Activity id cannot be null");
+        if (activity.getId() == null){
+            throw new RequestValidationException("activity id cannot be null.");
         }
-        long activityId = activity.getActivityId();
+
+        activityRepository.findById(activity.getId()).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("activity with id %d does not exist.", activity.getId()))
+        );
+
+        long activityId = activity.getId();
         Optional<Activity> result = activityRepository.findById(activityId);
         if (result.isEmpty()){
-            throw new ResourceNotFoundException(String.format("Activity with id %d not found!", activityId));
+            throw new ResourceNotFoundException(String.format("activity with id %d not found.", activityId));
         }
         return activityRepository.save(activity);
    }
 
 
 }
-

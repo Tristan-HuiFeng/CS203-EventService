@@ -1,10 +1,10 @@
-package com.eztix.eventservice.service;
+package com.eztix.eventservice.unitTest;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.EventRepository;
-import org.junit.jupiter.api.Disabled;
+import com.eztix.eventservice.service.EventService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -58,12 +58,12 @@ class EventServiceTest {
     void givenIdNotInDB_whenRetrieveById_throwResourceNotFoundException() {
 
         // given
-        given(eventRepository.findById(1L)).willReturn(null);
+        given(eventRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
         assertThatThrownBy(() -> testEventService.getEventById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("event with id %d does not exist", 1L);
+                .hasMessageContaining("event with id %d does not exist.", 1L);
 
     }
 
@@ -105,12 +105,12 @@ class EventServiceTest {
         // then
         assertThatThrownBy(() -> testEventService.updateEvent(event))
                 .isInstanceOf(RequestValidationException.class)
-                .hasMessageContaining("event id cannot be null");
+                .hasMessageContaining("event id cannot be null.");
 
     }
 
     @Test
-    void givenIdNotInDB_whenUpdate_throwRequestNotFoundException() {
+    void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
         // given
         Event event = new Event();
         event.setId(1L);
@@ -121,11 +121,13 @@ class EventServiceTest {
         event.setBannerURL("url1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
+
+        given(eventRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
         assertThatThrownBy(() -> testEventService.updateEvent(event))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining(String.format("event with id %s does not exist", event.getId()));
+                .hasMessageContaining(String.format("event with id %s does not exist.", event.getId()));
 
     }
 
