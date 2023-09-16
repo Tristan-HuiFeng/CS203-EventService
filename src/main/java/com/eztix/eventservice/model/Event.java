@@ -4,10 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.mapping.Set;
+
+import java.util.List;
 
 @Getter
 @Setter
+@Builder
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name="Event")
@@ -50,6 +55,11 @@ public class Event {
 
     @Column(name = "feature_sequence")
     private Integer featureSequence;
+
+    @OneToMany(mappedBy="event", fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<Activity> activities;
 
 
 }

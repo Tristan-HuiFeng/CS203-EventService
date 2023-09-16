@@ -41,7 +41,7 @@ public class TicketTypeServiceIntegrationTest {
     public void addNewTicketType() throws Exception {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setActivityId(1L);
+        ticketType.setId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
@@ -74,7 +74,7 @@ public class TicketTypeServiceIntegrationTest {
     public void updateTicketType() throws Exception {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setActivityId(1L);
+        ticketType.setId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);

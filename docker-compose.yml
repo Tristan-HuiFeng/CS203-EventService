@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  test-db:
+    container_name: 'test-db'
+    image: mysql:8.0.34
+    restart: always
+    ports:
+      - '3307:3306'
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: cs203project
+      MYSQL_PASSWORD: cs203project
+      MYSQL_DATABASE: test-db
+volumes:
+  test-db:
