@@ -78,7 +78,7 @@ public class TicketTypeServiceTest {
         ticketType.setPrice(0);
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
-        ticketType.setType("test type");
+        ticketType.setType("test ticket type");
 
         given(ticketTypeRepository.findById(ticketType.getId())).willReturn(Optional.of(ticketType));
 
@@ -99,7 +99,7 @@ public class TicketTypeServiceTest {
         ticketType.setPrice(0);
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
-        ticketType.setType("test type");
+        ticketType.setType("test ticket type");
         // when
         // then
         assertThatThrownBy(() -> testTicketTypeService.updateTicketType(ticketType))
