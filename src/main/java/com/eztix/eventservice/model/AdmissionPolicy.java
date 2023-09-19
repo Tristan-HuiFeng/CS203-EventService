@@ -26,6 +26,10 @@ public class AdmissionPolicy {
     private String description;
 
     @NotNull
+    @Column(name = "name")
+    private String name;
+
+    @NotNull
     @Column(name = "Policy Order", columnDefinition = "TEXT")
     private String policyOrder;
 
