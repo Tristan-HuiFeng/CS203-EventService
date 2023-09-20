@@ -3,7 +3,6 @@ package com.eztix.eventservice.service;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

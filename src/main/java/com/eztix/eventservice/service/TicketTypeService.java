@@ -24,9 +24,8 @@ public class TicketTypeService {
     // Get TicketType by id
     public TicketType getTicketTypeById(Long id) {
 
-        return ticketTypeRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", id))
-        );
+        return ticketTypeRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", id)));
 
     }
 
@@ -42,9 +41,8 @@ public class TicketTypeService {
             throw new RequestValidationException("ticket type id cannot be null.");
         }
 
-        ticketTypeRepository.findById(ticketType.getId()).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", ticketType.getId()))
-        );
+        ticketTypeRepository.findById(ticketType.getId()).orElseThrow(() -> new ResourceNotFoundException(
+                String.format("ticket type with id %d does not exist.", ticketType.getId())));
 
         return ticketTypeRepository.save(ticketType);
     }

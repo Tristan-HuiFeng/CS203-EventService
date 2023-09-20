@@ -1,10 +1,11 @@
-    package com.eztix.eventservice.model;
+package com.eztix.eventservice.model;
+
+import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 
 @Getter
 @Setter
@@ -13,8 +14,8 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="TicketType")
-@Table(name= "TICKET_TYPE")
+@Entity(name = "TicketType")
+@Table(name = "TICKET_TYPE")
 public class TicketType {
 
     @Id
@@ -51,5 +52,8 @@ public class TicketType {
     @NotNull
     @JoinColumn(name = "activity_id")
     private Activity activity;
+
+    @OneToMany(mappedBy = "ticketType", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<TicketSalesLimit> ticketSalesLimits;
 
 }

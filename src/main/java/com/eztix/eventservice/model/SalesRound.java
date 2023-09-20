@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.time.*;
+import java.util.List;
+
 import lombok.*;
 
 @EqualsAndHashCode
@@ -12,8 +14,8 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="SalesRound")
-@Table(name= "SALES_ROUND")
+@Entity(name = "SalesRound")
+@Table(name = "SALES_ROUND")
 public class SalesRound {
 
     @Id
@@ -46,5 +48,8 @@ public class SalesRound {
     @NotNull
     @Column(name = "sales_type")
     private String sales_type;
-    
+
+    @OneToMany(mappedBy = "salesRound", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<TicketSalesLimit> ticketSalesLimits;
+
 }

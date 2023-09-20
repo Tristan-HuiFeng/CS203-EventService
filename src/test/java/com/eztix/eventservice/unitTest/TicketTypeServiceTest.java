@@ -1,4 +1,4 @@
-package com.eztix.eventservice.serviceTest;
+package com.eztix.eventservice.unitTest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -6,7 +6,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -16,6 +19,8 @@ import static org.mockito.Mockito.verify;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
+import com.eztix.eventservice.model.Activity;
+import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.eztix.eventservice.service.TicketTypeService;
@@ -32,6 +37,24 @@ public class TicketTypeServiceTest {
     @Test
     void givenNewTicketType_whenAddTicketType_thenSuccess() {
         // given
+        Event event = new Event();
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("url1");
+        event.setSeatMapURL("url2");
+        event.setIsFeatured(false);
+        // eventRepository.save(event);
+
+        Activity activity = new Activity();
+        activity.setName("Test Activity");
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        activity.setLocation("Test Location");
+        // activityRepository.save(activity);
+
         TicketType ticketType = new TicketType();
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
@@ -39,6 +62,7 @@ public class TicketTypeServiceTest {
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
         ticketType.setType("test type");
+        ticketType.setActivity(activity);
 
         // when
         testTicketTypeService.addNewTicketType(ticketType);
@@ -71,14 +95,32 @@ public class TicketTypeServiceTest {
     void givenTicketTypeExist_whenRetrieve_thenSuccessful() {
 
         // given
+        Event event = new Event();
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("url1");
+        event.setSeatMapURL("url2");
+        event.setIsFeatured(false);
+        // eventRepository.save(event);
+
+        Activity activity = new Activity();
+        activity.setName("Test Activity");
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        activity.setLocation("Test Location");
+        // activityRepository.save(activity);
+
         TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
         ticketType.setDescription("test description");
         ticketType.setOccupied_count(0);
         ticketType.setPrice(0);
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
         ticketType.setType("test ticket type");
+        ticketType.setActivity(activity);
 
         given(ticketTypeRepository.findById(ticketType.getId())).willReturn(Optional.of(ticketType));
 
@@ -111,6 +153,24 @@ public class TicketTypeServiceTest {
     @Test
     void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
         // given
+        Event event = new Event();
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("url1");
+        event.setSeatMapURL("url2");
+        event.setIsFeatured(false);
+        // eventRepository.save(event);
+
+        Activity activity = new Activity();
+        activity.setName("Test Activity");
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        activity.setLocation("Test Location");
+        // activityRepository.save(activity);
+
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
         ticketType.setDescription("test description");
@@ -119,6 +179,7 @@ public class TicketTypeServiceTest {
         ticketType.setReserved_count(0);
         ticketType.setTotal_vacancy(0);
         ticketType.setType("test type");
+        ticketType.setActivity(activity);
 
         given(ticketTypeRepository.findById(1L)).willReturn(Optional.empty());
         // when
