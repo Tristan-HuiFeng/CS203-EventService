@@ -4,10 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
 import com.eztix.eventservice.model.TicketSalesLimitId;
-import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.service.TicketSalesLimitService;
 
 @RestController
