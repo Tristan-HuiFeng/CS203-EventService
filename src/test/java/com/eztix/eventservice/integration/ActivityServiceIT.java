@@ -1,4 +1,4 @@
-package com.eztix.eventservice.integrationTest;
+package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
@@ -6,9 +6,8 @@ import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+
 import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +31,7 @@ import java.time.*;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class ActivityServiceIntegrationTest {
+public class ActivityServiceIT {
 
     @Autowired
     private MockMvc mockMvc;
