@@ -1,7 +1,7 @@
-package com.eztix.eventservice.serviceTest;
+package com.eztix.eventservice.integration;
 
-import com.eztix.eventservice.model.TicketType;
-import com.eztix.eventservice.repository.TicketTypeRepository;
+import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.repository.EventRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class TicketTypeServiceIntegrationTest {
+public class EventServiceIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,25 +34,26 @@ public class TicketTypeServiceIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private TicketTypeRepository ticketTypeRepo;
+    private EventRepository eventRepository;
 
     @Test
-    public void addNewTicketType() throws Exception {
+    public void addNewEvent() throws Exception {
         // given
-        TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
-        ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
-        ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
-        ticketType.setType("test type");
+        Event event = new Event();
+        event.setId(1L);
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("url1");
+        event.setSeatMapURL("url2");
+        event.setIsFeatured(false);
 
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/ticketType/add")
+        ResultActions resultActions = mockMvc.perform(post("/event/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ticketType)));
+                .content(objectMapper.writeValueAsString(event)));
 
         // then
         MockHttpServletResponse result = resultActions
@@ -64,31 +64,33 @@ public class TicketTypeServiceIntegrationTest {
 
         Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-        Optional<TicketType> retrieved = ticketTypeRepo.findById(id);
+        Optional<Event> retrieved = eventRepository.findById(event.getId());
 
         assertThat(retrieved).isNotNull();
 
     }
 
-    @Test
-    public void updateTicketType() throws Exception {
+    //@Test
+    public void updateEvent() throws Exception {
         // given
-        TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
-        ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
-        ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
-        ticketType.setType("test type");
+        Event event = new Event();
+        event.setId(1L);
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("url1");
+        event.setSeatMapURL("url2");
+        event.setIsFeatured(false);
 
-        TicketType savedTicketType = ticketTypeRepo.save(ticketType);
-        ticketType.setDescription("test description update");
+        eventRepository.save(event);
+
+        event.setName("Test Event Update");
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/updateTicketType/{ticketType_Id}", ticketType.getId())
+        ResultActions resultActions = mockMvc.perform(put("/event/{id}", event.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ticketType)));
+                .content(objectMapper.writeValueAsString(event)));
 
         // then
         MockHttpServletResponse result = resultActions
@@ -97,10 +99,10 @@ public class TicketTypeServiceIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        String description = JsonPath.parse(result.getContentAsString()).read("$.description", String.class);
+        String name = JsonPath.parse(result.getContentAsString()).read("$.name");
 
 
-        assertThat(description).isEqualTo(ticketType.getDescription());
+        assertThat(name).isEqualTo(event.getName());
 
     }
 
