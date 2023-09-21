@@ -25,11 +25,11 @@ public class TicketSalesLimit {
 
     @NotNull
     @Column(name = "limit_vacancy")
-    private int limit_vacancy;
+    private int limitVacancy;
 
     @NotNull
     @Column(name = "occupied_vacancy")
-    private int occupied_vacancy;
+    private int occupiedVacancy;
 
     @ManyToOne
     @JoinColumn(name = "salesRound_id")

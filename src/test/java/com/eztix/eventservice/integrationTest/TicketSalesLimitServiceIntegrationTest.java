@@ -81,29 +81,29 @@ public class TicketSalesLimitServiceIntegrationTest {
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
                 ticketType.setDescription("test description");
-                ticketType.setOccupied_count(0);
+                ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
-                ticketType.setReserved_count(0);
-                ticketType.setTotal_vacancy(0);
+                ticketType.setReservedCount(0);
+                ticketType.setTotalVacancy(0);
                 ticketType.setType("test ticket type");
                 ticketType.setActivity(activity);
                 ticketTypeRepository.save(ticketType);
 
                 SalesRound salesRound = new SalesRound();
                 salesRound.setId(1L);
-                salesRound.setRound_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-                salesRound.setRound_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                salesRound.setPurchase_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-                salesRound.setPurchase_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                salesRound.setSales_type("test sales type");
+                salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+                salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+                salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                salesRound.setSalesType("test sales type");
                 salesRound.setActivity(activity);
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
                 TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
                 ticketSalesLimit.setId(ticketSalesLimitId);
-                ticketSalesLimit.setLimit_vacancy(0);
-                ticketSalesLimit.setOccupied_vacancy(0);
+                ticketSalesLimit.setLimitVacancy(0);
+                ticketSalesLimit.setOccupiedVacancy(0);
 
                 // when
                 ResultActions resultActions = mockMvc.perform(post("/ticketSalesLimit/add")
@@ -151,32 +151,32 @@ public class TicketSalesLimitServiceIntegrationTest {
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
                 ticketType.setDescription("test description");
-                ticketType.setOccupied_count(0);
+                ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
-                ticketType.setReserved_count(0);
-                ticketType.setTotal_vacancy(0);
+                ticketType.setReservedCount(0);
+                ticketType.setTotalVacancy(0);
                 ticketType.setType("test ticket type");
                 ticketType.setActivity(activity);
                 ticketTypeRepository.save(ticketType);
 
                 SalesRound salesRound = new SalesRound();
                 salesRound.setId(1L);
-                salesRound.setRound_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-                salesRound.setRound_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                salesRound.setPurchase_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-                salesRound.setPurchase_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                salesRound.setSales_type("test sales type");
+                salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+                salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+                salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                salesRound.setSalesType("test sales type");
                 salesRound.setActivity(activity);
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
                 TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
                 ticketSalesLimit.setId(ticketSalesLimitId);
-                ticketSalesLimit.setLimit_vacancy(0);
-                ticketSalesLimit.setOccupied_vacancy(0);
+                ticketSalesLimit.setLimitVacancy(0);
+                ticketSalesLimit.setOccupiedVacancy(0);
 
                 ticketSalesLimitRepo.save(ticketSalesLimit);
-                ticketSalesLimit.setLimit_vacancy(835);
+                ticketSalesLimit.setLimitVacancy(835);
 
                 // when
                 ResultActions resultActions = mockMvc
@@ -195,7 +195,7 @@ public class TicketSalesLimitServiceIntegrationTest {
 
                 int limit_vacancy = JsonPath.parse(result.getContentAsString()).read("$.limit_vacancy", Integer.class);
 
-                assertThat(limit_vacancy).isEqualTo(ticketSalesLimit.getLimit_vacancy());
+                assertThat(limit_vacancy).isEqualTo(ticketSalesLimit.getLimitVacancy());
 
         }
 

@@ -31,23 +31,23 @@ public class SalesRound {
 
     @NotNull
     @Column(name = "round_start")
-    private OffsetDateTime round_start;
+    private OffsetDateTime roundStart;
 
     @NotNull
     @Column(name = "round_end")
-    private OffsetDateTime round_end;
+    private OffsetDateTime roundEnd;
 
     @NotNull
     @Column(name = "purchase_start")
-    private OffsetDateTime purchase_start;
+    private OffsetDateTime purchaseStart;
 
     @NotNull
     @Column(name = "purchase_end")
-    private OffsetDateTime purchase_end;
+    private OffsetDateTime purchaseEnd;
 
     @NotNull
     @Column(name = "sales_type")
-    private String sales_type;
+    private String salesType;
 
     @OneToMany(mappedBy = "salesRound", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<TicketSalesLimit> ticketSalesLimits;

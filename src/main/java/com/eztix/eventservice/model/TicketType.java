@@ -34,15 +34,15 @@ public class TicketType {
 
     @NotNull
     @Column(name = "total_vacancy")
-    private int total_vacancy;
+    private int totalVacancy;
 
     @NotNull
     @Column(name = "occupied_count")
-    private int occupied_count;
+    private int occupiedCount;
 
     @NotNull
     @Column(name = "reserved_count")
-    private int reserved_count;
+    private int reservedCount;
 
     @NotNull
     @Column(name = "description")

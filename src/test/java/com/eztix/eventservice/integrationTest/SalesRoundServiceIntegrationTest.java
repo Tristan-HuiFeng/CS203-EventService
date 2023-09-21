@@ -71,11 +71,11 @@ public class SalesRoundServiceIntegrationTest {
         
         SalesRound salesRound = new SalesRound();
         salesRound.setId(1L);
-        salesRound.setRound_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setRound_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setPurchase_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setPurchase_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setSales_type("test sales type");
+        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
 
         // when
@@ -123,16 +123,16 @@ public class SalesRoundServiceIntegrationTest {
         
         SalesRound salesRound = new SalesRound();
         salesRound.setId(1L);
-        salesRound.setRound_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setRound_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setPurchase_start(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setPurchase_end(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setSales_type("test sales type");
+        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
 
         salesRoundRepo.save(salesRound);
 
-        salesRound.setSales_type("test sales type update");
+        salesRound.setSalesType("test sales type update");
 
         // when
         ResultActions resultActions = mockMvc.perform(put("/updateSalesRound/{salesRound_Id}", salesRound.getId())
@@ -149,7 +149,7 @@ public class SalesRoundServiceIntegrationTest {
         String salesType = JsonPath.parse(result.getContentAsString()).read("$.sales_type", String.class);
 
 
-        assertThat(salesType).isEqualTo(salesRound.getSales_type());
+        assertThat(salesType).isEqualTo(salesRound.getSalesType());
 
     }
 
