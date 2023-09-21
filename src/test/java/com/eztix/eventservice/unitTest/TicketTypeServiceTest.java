@@ -56,10 +56,10 @@ public class TicketTypeServiceTest {
 
         TicketType ticketType = new TicketType();
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
         ticketType.setActivity(activity);
 
@@ -114,10 +114,10 @@ public class TicketTypeServiceTest {
 
         TicketType ticketType = new TicketType();
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test ticket type");
         ticketType.setActivity(activity);
 
@@ -136,10 +136,10 @@ public class TicketTypeServiceTest {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test ticket type");
         // when
         // then
@@ -173,10 +173,10 @@ public class TicketTypeServiceTest {
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
         ticketType.setActivity(activity);
 
