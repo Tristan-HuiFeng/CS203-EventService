@@ -47,7 +47,7 @@ public class AdmissionPolicyServiceTest {
         admissionPolicy.setName("Test admission policy");
         admissionPolicy.setEvent(event);
         admissionPolicy.setDescription("This is a test policy");
-        admissionPolicy.setPolicyOrder("This is a test policy");
+        admissionPolicy.setPolicyOrder(1L);
 
         // when
         testAdmissionPolicyService.addNewAdmissionPolicy(admissionPolicy);
@@ -92,7 +92,7 @@ public class AdmissionPolicyServiceTest {
         admissionPolicy.setName("Test admission policy");
         admissionPolicy.setEvent(event);
         admissionPolicy.setDescription("This is a test policy");
-        admissionPolicy.setPolicyOrder("This is a test policy");
+        admissionPolicy.setPolicyOrder(1L);
 
         // when
 
@@ -119,7 +119,7 @@ public class AdmissionPolicyServiceTest {
         admissionPolicy.setName("Test admission policy");
         admissionPolicy.setEvent(event);
         admissionPolicy.setDescription("This is a test policy");
-        admissionPolicy.setPolicyOrder("This is a test policy");
+        admissionPolicy.setPolicyOrder(1L);
 
         // when
         // then
@@ -144,7 +144,7 @@ public class AdmissionPolicyServiceTest {
         admissionPolicy.setName("Test admission policy");
         admissionPolicy.setEvent(event);
         admissionPolicy.setDescription("This is a test policy");
-        admissionPolicy.setPolicyOrder("This is a test policy");
+        admissionPolicy.setPolicyOrder(1L);
 
         given(admissionPolicyRepository.findById(1L)).willReturn(Optional.empty());
         // when

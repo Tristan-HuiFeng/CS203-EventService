@@ -30,8 +30,8 @@ public class AdmissionPolicy {
     private String name;
 
     @NotNull
-    @Column(name = "Policy Order", columnDefinition = "TEXT")
-    private String policyOrder;
+    @Column(name = "Policy Order")
+    private Long policyOrder;
 
     @ManyToOne
     @NotNull
