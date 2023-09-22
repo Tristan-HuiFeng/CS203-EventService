@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,10 +42,10 @@ public class TicketTypeServiceIT {
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
 
 
@@ -76,10 +75,10 @@ public class TicketTypeServiceIT {
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
         ticketType.setDescription("test description");
-        ticketType.setOccupied_count(0);
+        ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
-        ticketType.setReserved_count(0);
-        ticketType.setTotal_vacancy(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
 
         TicketType savedTicketType = ticketTypeRepo.save(ticketType);
