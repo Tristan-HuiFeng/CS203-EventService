@@ -280,7 +280,7 @@ class TicketSalesLimitServiceTest {
     }
 
     @Test
-    void getAllEvents() {
+    void getAllTicketSalesLimits() {
         testTicketSalesLimitService.getAllTicketSalesLimits();
         verify(ticketSalesLimitRepository).findAll();
     }
