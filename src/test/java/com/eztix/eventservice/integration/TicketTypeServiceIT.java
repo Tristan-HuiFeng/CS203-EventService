@@ -1,15 +1,14 @@
-package com.eztix.eventservice.integrationTest;
+package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
+import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import java.time.ZoneId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +18,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,12 +28,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.*;
-
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class ActivityServiceIntegrationTest {
+public class TicketTypeServiceIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,13 +40,14 @@ public class ActivityServiceIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private TicketTypeRepository ticketTypeRepo;
+    @Autowired
     private ActivityRepository activityRepository;
     @Autowired
     private EventRepository eventRepository;
 
     @Test
-    public void addNewActivity() throws Exception {
-
+    public void addNewTicketType() throws Exception {
         // given
         Event event = new Event();
         event.setId(1L);
@@ -58,6 +58,7 @@ public class ActivityServiceIntegrationTest {
         event.setBannerURL("url1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
+        eventRepository.save(event);
 
         Activity activity = new Activity();
         activity.setId(1L);
@@ -66,25 +67,42 @@ public class ActivityServiceIntegrationTest {
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
+        activityRepository.save(activity);
+
+        TicketType ticketType = new TicketType();
+        ticketType.setId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupiedCount(0);
+        ticketType.setPrice(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
+        ticketType.setType("test type");
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/activity/add").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
+        ResultActions resultActions = mockMvc.perform(post("/ticketType/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ticketType)));
+
         // then
-        MockHttpServletResponse result = resultActions.andExpect(status().isCreated()).andDo(print()).andReturn().getResponse();
+        MockHttpServletResponse result = resultActions
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andReturn()
+                .getResponse();
 
-        Long id = JsonPath.parse(result.getContentAsString()).read("$.activityId", Long.class);
+        Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-        Optional<Activity> retrieved = activityRepository.findById(activity.getId());
+        Optional<TicketType> retrieved = ticketTypeRepo.findById(ticketType.getId());
 
         assertThat(retrieved).isNotNull();
+
     }
 
     @Test
-    public void updateActivity() throws Exception {
-
+    public void updateTicketType() throws Exception {
         // given
         Event event = new Event();
-        event.setId(2L);
+        event.setId(1L);
         event.setName("Test Event");
         event.setCategory("concert");
         event.setArtist("artist1");
@@ -95,7 +113,7 @@ public class ActivityServiceIntegrationTest {
         eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setId(2L);
+        activity.setId(1L);
         activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -103,17 +121,35 @@ public class ActivityServiceIntegrationTest {
         activity.setLocation("Test Location");
         activityRepository.save(activity);
 
-        activity.setName("Activity name test update");
+        TicketType ticketType = new TicketType();
+        ticketType.setId(1L);
+        ticketType.setDescription("test description");
+        ticketType.setOccupiedCount(0);
+        ticketType.setPrice(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(0);
+        ticketType.setType("test type");
+
+        ticketTypeRepo.save(ticketType);
+
+        ticketType.setDescription("test description update");
+
         // when
-        ResultActions resultActions = mockMvc.perform(put("/activity/{id}", activity.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
+        ResultActions resultActions = mockMvc.perform(put("/updateTicketType/{ticketType_Id}", ticketType.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(ticketType)));
 
         // then
-        MockHttpServletResponse result = resultActions.andExpect(status().isOk()).andDo(print()).andReturn().getResponse();
+        MockHttpServletResponse result = resultActions
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn()
+                .getResponse();
 
-        String name = JsonPath.parse(result.getContentAsString()).read("$.activityName", String.class);
+        String description = JsonPath.parse(result.getContentAsString()).read("$.description");
 
-        assertThat(name).isEqualTo(activity.getName());
+        assertThat(description).isEqualTo(ticketType.getDescription());
 
-    }
+        }
 
 }

@@ -1,4 +1,4 @@
-package com.eztix.eventservice.integrationTest;
+package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class TicketSalesLimitServiceIntegrationTest {
+public class TicketSalesLimitServiceIT {
 
         @Autowired
         private MockMvc mockMvc;

@@ -1,4 +1,4 @@
-package com.eztix.eventservice.unitTest;
+package com.eztix.eventservice.unit;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;

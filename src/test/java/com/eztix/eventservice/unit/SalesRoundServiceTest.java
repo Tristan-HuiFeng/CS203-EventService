@@ -1,15 +1,4 @@
-package com.eztix.eventservice.unitTest;
-
-import com.eztix.eventservice.exception.RequestValidationException;
-import com.eztix.eventservice.exception.ResourceNotFoundException;
-import com.eztix.eventservice.model.Activity;
-import com.eztix.eventservice.model.Event;
-import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
-import com.eztix.eventservice.model.TicketType;
-import com.eztix.eventservice.repository.TicketSalesLimitRepository;
-import com.eztix.eventservice.service.TicketSalesLimitService;
+package com.eztix.eventservice.unit;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -27,16 +15,24 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import com.eztix.eventservice.exception.RequestValidationException;
+import com.eztix.eventservice.exception.ResourceNotFoundException;
+import com.eztix.eventservice.model.Activity;
+import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.model.SalesRound;
+import com.eztix.eventservice.repository.SalesRoundRepository;
+import com.eztix.eventservice.service.SalesRoundService;
+
 @ExtendWith(MockitoExtension.class)
-class TicketSalesLimitServiceTest {
+public class SalesRoundServiceTest {
 
     @Mock
-    private TicketSalesLimitRepository ticketSalesLimitRepository;
+    private SalesRoundRepository salesRoundRepository;
     @InjectMocks
-    private TicketSalesLimitService testTicketSalesLimitService;
+    private SalesRoundService testSalesRoundService;
 
     @Test
-    void givenNewTicketSalesLimit_whenAddTicketSalesLimit_thenSuccess() {
+    void givenNewSalesRound_whenAddSalesRound_thenSuccess() {
         // given
         Event event = new Event();
         event.setName("Test Event");
@@ -55,17 +51,7 @@ class TicketSalesLimitServiceTest {
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
         // activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test ticket type");
-        ticketType.setActivity(activity);
-        // ticketTypeRepository.save(ticketType);
-
+        
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -73,41 +59,36 @@ class TicketSalesLimitServiceTest {
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
-
-        TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        ticketSalesLimit.setLimitVacancy(0);
-        ticketSalesLimit.setOccupiedVacancy(0);
-        ticketSalesLimit.setSalesRound(salesRound);
-        ticketSalesLimit.setTicketType(ticketType);
 
         // when
-        testTicketSalesLimitService.addNewTicketSalesLimit(ticketSalesLimit);
+        testSalesRoundService.addNewSalesRound(salesRound);
 
         // then
-        ArgumentCaptor<TicketSalesLimit> eventArgumentCaptor = ArgumentCaptor.forClass(TicketSalesLimit.class);
+        ArgumentCaptor<SalesRound> salesRoundArgumentCaptor =
+                ArgumentCaptor.forClass(SalesRound.class);
 
-        verify(ticketSalesLimitRepository).save(eventArgumentCaptor.capture());
+        verify(salesRoundRepository).save(salesRoundArgumentCaptor.capture());
 
-        TicketSalesLimit capturedTicketSalesLimit = eventArgumentCaptor.getValue();
+        SalesRound capturedSalesRound = salesRoundArgumentCaptor.getValue();
 
-        assertThat(capturedTicketSalesLimit).isEqualTo(ticketSalesLimit);
+        assertThat(capturedSalesRound).isEqualTo(salesRound);
     }
 
     @Test
-    void givenIdNotInDB_whenRetrieveByTicketSalesLimitId_throwResourceNotFoundException() {
+    void givenSalesRoundIdNotInDB_whenRetrieveSalesRoundById_throwResourceNotFoundException() {
 
         // given
-        given(ticketSalesLimitRepository.findById(1L)).willReturn(Optional.empty());
+        given(salesRoundRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
-        assertThatThrownBy(() -> testTicketSalesLimitService.getTicketSalesLimitById(1L))
+        assertThatThrownBy(() -> testSalesRoundService.getSalesRoundById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("ticket sales limit with id %d does not exist.", 1L);
+                .hasMessageContaining("sales round with id %d does not exist", 1L);
+
     }
 
     @Test
-    void givenTicketSalesLimitExist_whenRetrieve_thenSuccessful() {
+    void givenSalesRoundExist_whenRetrieve_thenSuccessful() {
 
         // given
         Event event = new Event();
@@ -127,17 +108,7 @@ class TicketSalesLimitServiceTest {
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
         // activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test ticket type");
-        ticketType.setActivity(activity);
-        // ticketTypeRepository.save(ticketType);
-
+        
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -145,24 +116,14 @@ class TicketSalesLimitServiceTest {
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
 
-        TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId();
-        ticketSalesLimitId.setSalesRound(salesRound);
-        ticketSalesLimitId.setTicketType(ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
-        ticketSalesLimit.setLimitVacancy(0);
-        ticketSalesLimit.setOccupiedVacancy(0);
-
-        given(ticketSalesLimitRepository.findById(ticketSalesLimit.getId().getId()))
-                .willReturn(Optional.of(ticketSalesLimit));
+        given(salesRoundRepository.findById(salesRound.getId())).willReturn(Optional.of(salesRound));
 
         // when
-        TicketSalesLimit retrievedTicketSalesLimit = testTicketSalesLimitService
-                .getTicketSalesLimitById(ticketSalesLimit.getId().getId());
+        SalesRound retrievedSalesRound = testSalesRoundService.getSalesRoundById(salesRound.getId());
+
         // then
-        assertThat(retrievedTicketSalesLimit).isEqualTo(ticketSalesLimit);
+        assertThat(retrievedSalesRound).isEqualTo(salesRound);
 
     }
 
@@ -186,17 +147,7 @@ class TicketSalesLimitServiceTest {
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
         // activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test ticket type");
-        ticketType.setActivity(activity);
-        // ticketTypeRepository.save(ticketType);
-
+        
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -204,26 +155,16 @@ class TicketSalesLimitServiceTest {
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
-
-        TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId();
-        ticketSalesLimitId.setSalesRound(salesRound);
-        ticketSalesLimitId.setTicketType(ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
-        ticketSalesLimit.setLimitVacancy(0);
-        ticketSalesLimit.setOccupiedVacancy(0);
-
         // when
         // then
-        assertThatThrownBy(() -> testTicketSalesLimitService.updateTicketSalesLimit(ticketSalesLimit))
+        assertThatThrownBy(() -> testSalesRoundService.updateSalesRound(salesRound))
                 .isInstanceOf(RequestValidationException.class)
-                .hasMessageContaining("ticket sales limit id cannot be null.");
+                .hasMessageContaining("sales round id cannot be null");
 
     }
 
     @Test
-    void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
+    void givenIdNotInDB_whenUpdate_throwRequestNotFoundException() {
         // given
         Event event = new Event();
         event.setName("Test Event");
@@ -242,18 +183,7 @@ class TicketSalesLimitServiceTest {
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
         // activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test ticket type");
-        ticketType.setActivity(activity);
-        // ticketTypeRepository.save(ticketType);
-
+        
         SalesRound salesRound = new SalesRound();
         salesRound.setId(1L);
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -262,26 +192,21 @@ class TicketSalesLimitServiceTest {
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
         salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
 
-        TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
-        ticketSalesLimit.setLimitVacancy(0);
-        ticketSalesLimit.setOccupiedVacancy(0);
-
-        given(ticketSalesLimitRepository.findById(1L)).willReturn(Optional.empty());
+        given(salesRoundRepository.findById(1L)).willReturn(Optional.empty());
         // when
         // then
-        assertThatThrownBy(() -> testTicketSalesLimitService.updateTicketSalesLimit(ticketSalesLimit))
+        assertThatThrownBy(() -> testSalesRoundService.updateSalesRound(salesRound))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("ticket sales limit with id %d does not exist.", 1L);
+                .hasMessageContaining(String.format("sales round with id %s not found", salesRound.getId()));
 
     }
 
     @Test
-    void getAllEvents() {
-        testTicketSalesLimitService.getAllTicketSalesLimits();
-        verify(ticketSalesLimitRepository).findAll();
-    }
+    void getAllSalesRounds() {
+        testSalesRoundService.getAllSalesRounds();
+        verify(salesRoundRepository).findAll();
+    }    
+
+
 }

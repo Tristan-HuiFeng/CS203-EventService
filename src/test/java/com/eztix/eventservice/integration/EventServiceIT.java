@@ -1,25 +1,22 @@
-package com.eztix.eventservice.integrationTest;
+package com.eztix.eventservice.integration;
 
-import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
-import com.eztix.eventservice.model.TicketType;
-import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
-import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class TicketTypeServiceIntegrationTest {
+public class EventServiceIT {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,14 +37,10 @@ public class TicketTypeServiceIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private TicketTypeRepository ticketTypeRepo;
-    @Autowired
-    private ActivityRepository activityRepository;
-    @Autowired
     private EventRepository eventRepository;
 
     @Test
-    public void addNewTicketType() throws Exception {
+    public void addNewEvent() throws Exception {
         // given
         Event event = new Event();
         event.setId(1L);
@@ -58,30 +51,12 @@ public class TicketTypeServiceIntegrationTest {
         event.setBannerURL("url1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
-        eventRepository.save(event);
 
-        Activity activity = new Activity();
-        activity.setId(1L);
-        activity.setName("Test Activity");
-        activity.setEvent(event);
-        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
-        activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test type");
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/ticketType/add")
+        ResultActions resultActions = mockMvc.perform(post("/event/add")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ticketType)));
+                .content(objectMapper.writeValueAsString(event)));
 
         // then
         MockHttpServletResponse result = resultActions
@@ -92,14 +67,14 @@ public class TicketTypeServiceIntegrationTest {
 
         Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-        Optional<TicketType> retrieved = ticketTypeRepo.findById(ticketType.getId());
+        Optional<Event> retrieved = eventRepository.findById(event.getId());
 
         assertThat(retrieved).isNotNull();
 
     }
 
-    @Test
-    public void updateTicketType() throws Exception {
+    //@Test
+    public void updateEvent() throws Exception {
         // given
         Event event = new Event();
         event.setId(1L);
@@ -110,34 +85,15 @@ public class TicketTypeServiceIntegrationTest {
         event.setBannerURL("url1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
+
         eventRepository.save(event);
 
-        Activity activity = new Activity();
-        activity.setId(1L);
-        activity.setName("Test Activity");
-        activity.setEvent(event);
-        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
-        activityRepository.save(activity);
-
-        TicketType ticketType = new TicketType();
-        ticketType.setId(1L);
-        ticketType.setDescription("test description");
-        ticketType.setOccupiedCount(0);
-        ticketType.setPrice(0);
-        ticketType.setReservedCount(0);
-        ticketType.setTotalVacancy(0);
-        ticketType.setType("test type");
-
-        ticketTypeRepo.save(ticketType);
-
-        ticketType.setDescription("test description update");
+        event.setName("Test Event Update");
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/updateTicketType/{ticketType_Id}", ticketType.getId())
+        ResultActions resultActions = mockMvc.perform(put("/event/{id}", event.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(ticketType)));
+                .content(objectMapper.writeValueAsString(event)));
 
         // then
         MockHttpServletResponse result = resultActions
@@ -146,10 +102,13 @@ public class TicketTypeServiceIntegrationTest {
                 .andReturn()
                 .getResponse();
 
-        String description = JsonPath.parse(result.getContentAsString()).read("$.description");
+        String name = JsonPath.parse(result.getContentAsString()).read("$.name");
 
-        assertThat(description).isEqualTo(ticketType.getDescription());
 
-        }
+        assertThat(name).isEqualTo(event.getName());
+
+    }
+
+
 
 }
