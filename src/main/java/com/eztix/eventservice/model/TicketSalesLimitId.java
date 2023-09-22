@@ -31,7 +31,7 @@ public class TicketSalesLimitId {
     @Id
     @SequenceGenerator(name = "ticketSalesLimit_sequence", sequenceName = "ticketSalesLimit_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketSalesLimit_sequence")
-    @Column(name = "ticketSalesLimit_id") // Define a single field named "id" as part of the primary key
+    @Column(name = "ticketSalesLimit_id")
     @NotNull
     @Schema(hidden = true)
     private Long id;
