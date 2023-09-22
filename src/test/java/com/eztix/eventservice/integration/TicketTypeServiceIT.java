@@ -1,4 +1,4 @@
-package com.eztix.eventservice.serviceTest;
+package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketTypeRepository;
