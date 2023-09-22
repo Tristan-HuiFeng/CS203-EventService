@@ -39,11 +39,11 @@ public class PurchaseRequestService {
     @Transactional
     public PurchaseRequest updatePurchaseRequest(PurchaseRequest purchaseRequest) {
         if (purchaseRequest.getId() == null) {
-            throw new RequestValidationException("purchase request id cannot be null");
+            throw new RequestValidationException("purchase request id cannot be null.");
         }
 
         purchaseRequestRepository.findById(purchaseRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request with id %d not found", purchaseRequest.getId())));
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request with id %d does not exist.", purchaseRequest.getId())));
 
         return purchaseRequestRepository.save(purchaseRequest);
     }
