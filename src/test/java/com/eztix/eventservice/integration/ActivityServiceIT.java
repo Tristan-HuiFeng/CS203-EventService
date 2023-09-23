@@ -60,14 +60,13 @@ public class ActivityServiceIT {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/activity/add").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/activity").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
         // then
         MockHttpServletResponse result = resultActions.andExpect(status().isCreated()).andDo(print()).andReturn().getResponse();
 
@@ -95,23 +94,22 @@ public class ActivityServiceIT {
 
         Activity activity = new Activity();
         activity.setId(2L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         activity.setLocation("Test Location");
         activityRepository.save(activity);
 
-        activity.setName("Activity name test update");
+        activity.setLocation("Location New");
         // when
-        ResultActions resultActions = mockMvc.perform(put("/activity/{id}", activity.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
+        ResultActions resultActions = mockMvc.perform(put("/api/v1/activity/{id}", activity.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
 
         // then
         MockHttpServletResponse result = resultActions.andExpect(status().isOk()).andDo(print()).andReturn().getResponse();
 
         String name = JsonPath.parse(result.getContentAsString()).read("$.activityName", String.class);
 
-        assertThat(name).isEqualTo(activity.getName());
+        assertThat(name).isEqualTo(activity.getLocation());
 
     }
 
