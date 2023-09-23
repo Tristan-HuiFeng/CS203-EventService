@@ -17,30 +17,30 @@ public class PurchaseRequestItemController {
     }
 
     //Add a new PurchaseRequestItem
-    @PostMapping("/purchaseRequestItem/add")
+    @PostMapping("/api/v1/purchase-request-item")
     public ResponseEntity<PurchaseRequestItem> addPurchaseRequestItem (@RequestBody PurchaseRequestItem purchaseRequestItem) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchaseRequestItemService.addNewPurchaseRequestItem(purchaseRequestItem));
     }
 
     //Get PurchaseRequestItem by id
-    @GetMapping ("/purchaseRequestItem/{PRItemId}")
-    public ResponseEntity<PurchaseRequestItem> getPurchaseRequestItemBySalesRoundIdAndTicketTypeId (@PathVariable Long PRItemId) {
+    @GetMapping ("/api/v1/purchase-request-item/{id}")
+    public ResponseEntity<PurchaseRequestItem> getPurchaseRequestItemBySalesRoundIdAndTicketTypeId (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(purchaseRequestItemService.getPurchaseRequestItemById(PRItemId));
+               .body(purchaseRequestItemService.getPurchaseRequestItemById(id));
     }
 
     //Get all PurchaseRequestItems
-    @GetMapping("/purchaseRequestItem/getAll")
+    @GetMapping("/api/v1/purchase-request-item")
     public ResponseEntity<Iterable<PurchaseRequestItem>> getAllPurchaseRequestItem () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestItemService.getAllPurchaseRequestItems());
     }
 
     //Update PurchaseRequestItem
-    @PutMapping("/updatePurchaseRequestItem/{PRItemId}")
-    public ResponseEntity<PurchaseRequestItem> updatePurchaseRequestItem (@PathVariable Long PRItemId, @RequestBody PurchaseRequestItem purchaseRequestItem) {
-        purchaseRequestItem.setId(PRItemId);
+    @PutMapping("/api/v1/purchase-request-item/{id}")
+    public ResponseEntity<PurchaseRequestItem> updatePurchaseRequestItem (@PathVariable Long id, @RequestBody PurchaseRequestItem purchaseRequestItem) {
+        purchaseRequestItem.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestItemService.updatePurchaseRequestItem(purchaseRequestItem));
     }

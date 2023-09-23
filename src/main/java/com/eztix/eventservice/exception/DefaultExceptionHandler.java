@@ -1,4 +1,4 @@
-package com.eztix.eventservice.controller;
+package com.eztix.eventservice.exception;
 
 import com.eztix.eventservice.exception.ApiException;
 import com.eztix.eventservice.exception.RequestValidationException;

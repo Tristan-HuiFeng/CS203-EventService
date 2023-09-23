@@ -17,30 +17,30 @@ public class TicketTypeController {
     }
 
     //Add a new Ticket
-    @PostMapping("/ticketType/add")
+    @PostMapping("/api/v1/ticket-type")
     public ResponseEntity<TicketType> addTicketType (@RequestBody TicketType ticketType) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketTypeService.addNewTicketType(ticketType));
     }
 
     //Get TicketType by id
-    @GetMapping ("/ticketType/{ticketType_Id}")
-    public ResponseEntity<TicketType> getTicketTypeById (@PathVariable Long ticketType_Id) {
+    @GetMapping ("/api/v1/ticket-type/{id}")
+    public ResponseEntity<TicketType> getTicketTypeById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(ticketTypeService.getTicketTypeById(ticketType_Id));
+               .body(ticketTypeService.getTicketTypeById(id));
     }
 
     //Get all TicketTypes
-    @GetMapping("/ticketType/getAll")
+    @GetMapping("/api/v1/ticket-type")
     public ResponseEntity<Iterable<TicketType>> getAllTicketType () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketTypeService.getAllTicketTypes());
     }
 
     //Update TicketType
-    @PutMapping("/updateTicketType/{ticketType_Id}")
-    public ResponseEntity<TicketType> updateTicketType (@PathVariable Long ticketType_Id, @RequestBody TicketType ticketType) {
-        ticketType.setId(ticketType_Id);
+    @PutMapping("/api/v1/ticket-type/{id}")
+    public ResponseEntity<TicketType> updateTicketType (@PathVariable Long id, @RequestBody TicketType ticketType) {
+        ticketType.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketTypeService.updateTicketType(ticketType));
     }
