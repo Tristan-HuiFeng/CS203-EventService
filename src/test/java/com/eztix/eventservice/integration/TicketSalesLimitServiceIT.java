@@ -70,7 +70,6 @@ public class TicketSalesLimitServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -79,7 +78,6 @@ public class TicketSalesLimitServiceIT {
 
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
-                ticketType.setDescription("test description");
                 ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
                 ticketType.setReservedCount(0);
