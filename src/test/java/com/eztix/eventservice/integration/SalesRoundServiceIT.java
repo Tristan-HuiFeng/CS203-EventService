@@ -62,7 +62,6 @@ public class SalesRoundServiceIT {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -79,7 +78,7 @@ public class SalesRoundServiceIT {
         salesRound.setActivity(activity);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/salesRound/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/sales-round")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(salesRound)));
 
@@ -114,7 +113,6 @@ public class SalesRoundServiceIT {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -135,7 +133,7 @@ public class SalesRoundServiceIT {
         salesRound.setSalesType("test sales type update");
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/updateSalesRound/{salesRound_Id}", salesRound.getId())
+        ResultActions resultActions = mockMvc.perform(put("/api/v1/sales-round/{id}", salesRound.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(salesRound)));
 

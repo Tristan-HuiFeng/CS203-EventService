@@ -38,12 +38,12 @@ public class TicketSalesLimitService {
     // Update TicketSalesLimit
     @Transactional
     public TicketSalesLimit updateTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
-        if (ticketSalesLimit.getId().getId() == null) {
+        if (ticketSalesLimit.getId() == null) {
             throw new RequestValidationException("ticket sales limit id cannot be null.");
         }
 
-        ticketSalesLimitRepository.findById(ticketSalesLimit.getId().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("ticket sales limit with id %d does not exist.", ticketSalesLimit.getId().getId())));
+        ticketSalesLimitRepository.findById(ticketSalesLimit.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("ticket sales limit with id %d does not exist.", ticketSalesLimit.getId())));
 
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }

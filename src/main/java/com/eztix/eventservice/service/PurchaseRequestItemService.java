@@ -38,12 +38,12 @@ public class PurchaseRequestItemService {
     // Update PurchaseRequestItem
     @Transactional
     public PurchaseRequestItem updatePurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
-        if (purchaseRequestItem.getId().getId() == null) {
+        if (purchaseRequestItem.getId() == null) {
             throw new RequestValidationException("purchase request item id cannot be null.");
         }
 
-        purchaseRequestItemRepository.findById(purchaseRequestItem.getId().getId())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request item with id %d does not exist.", purchaseRequestItem.getId().getId())));
+        purchaseRequestItemRepository.findById(purchaseRequestItem.getId())
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request item with id %d does not exist.", purchaseRequestItem.getId())));
 
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }

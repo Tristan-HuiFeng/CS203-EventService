@@ -17,30 +17,30 @@ public class SalesRoundController {
     }
 
     //Add a new SalesRound
-    @PostMapping("/salesRound/add")
+    @PostMapping("/api/v1/sales-round")
     public ResponseEntity<SalesRound> addSalesRound (@RequestBody SalesRound salesRound) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(salesRoundService.addNewSalesRound(salesRound));
     }
 
     //Get SalesRound by id
-    @GetMapping ("/salesRound/{salesRound_Id}")
-    public ResponseEntity<SalesRound> getSalesRoundById (@PathVariable Long salesRound_Id) {
+    @GetMapping ("/api/v1/sales-round/{id}")
+    public ResponseEntity<SalesRound> getSalesRoundById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(salesRoundService.getSalesRoundById(salesRound_Id));
+               .body(salesRoundService.getSalesRoundById(id));
     }
 
     //Get all SalesRounds
-    @GetMapping("/salesRound/getAll")
+    @GetMapping("/api/v1/sales-round")
     public ResponseEntity<Iterable<SalesRound>> getAllSalesRound () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(salesRoundService.getAllSalesRounds());
     }
 
     //Update SalesRound
-    @PutMapping("/updateSalesRound/{salesRound_Id}")
-    public ResponseEntity<SalesRound> updateSalesRound (@PathVariable Long salesRound_Id, @RequestBody SalesRound salesRound) {
-        salesRound.setId(salesRound_Id);
+    @PutMapping("/api/v1/sales-round/{id}")
+    public ResponseEntity<SalesRound> updateSalesRound (@PathVariable Long id, @RequestBody SalesRound salesRound) {
+        salesRound.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(salesRoundService.updateSalesRound(salesRound));
     }

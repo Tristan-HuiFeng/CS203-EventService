@@ -16,7 +16,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @PostMapping("event/add")
+    @PostMapping("/api/v1/event")
     public ResponseEntity<Event> addEvent(@RequestBody Event event) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -24,20 +24,20 @@ public class EventController {
 
     }
 
-    @GetMapping("event/{id}")
+    @GetMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventService.getEventById(id));
     }
 
-    @PutMapping("/event/{id}")
+    @PutMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         event.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventService.updateEvent(event));
     }
 
-    @GetMapping("/event")
+    @GetMapping("/api/v1/event")
     public ResponseEntity<Iterable<Event>>  getAllEvent() {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventService.getAllEvents());

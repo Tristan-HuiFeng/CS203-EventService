@@ -5,7 +5,6 @@ import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
@@ -72,7 +71,6 @@ public class PurchaseRequestItemServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -81,7 +79,6 @@ public class PurchaseRequestItemServiceIT {
 
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
-                ticketType.setDescription("test description");
                 ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
                 ticketType.setReservedCount(0);
@@ -101,8 +98,7 @@ public class PurchaseRequestItemServiceIT {
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
+                ticketSalesLimit.setId(1L);
                 ticketSalesLimit.setLimitVacancy(0);
                 ticketSalesLimit.setOccupiedVacancy(0);
 
@@ -114,7 +110,7 @@ public class PurchaseRequestItemServiceIT {
                 purchaseRequest.setStatus("test status");
 
                 // when
-                ResultActions resultActions = mockMvc.perform(post("/ticketSalesLimit/add")
+                ResultActions resultActions = mockMvc.perform(post("/api/v1/ticketSalesLimit")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(ticketSalesLimit)));
 
@@ -149,7 +145,6 @@ public class PurchaseRequestItemServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -158,7 +153,6 @@ public class PurchaseRequestItemServiceIT {
 
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
-                ticketType.setDescription("test description");
                 ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
                 ticketType.setReservedCount(0);
@@ -178,8 +172,7 @@ public class PurchaseRequestItemServiceIT {
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
+                ticketSalesLimit.setId(1L);
                 ticketSalesLimit.setLimitVacancy(0);
                 ticketSalesLimit.setOccupiedVacancy(0);
 
@@ -188,8 +181,8 @@ public class PurchaseRequestItemServiceIT {
 
                 // when
                 ResultActions resultActions = mockMvc
-                                .perform(put("/updateTicketSalesLimit/{ticketSalesLimit_Id}",
-                                                ticketSalesLimit.getId().getId())
+                                .perform(put("/api/v1/updateTicketSalesLimit/{id}",
+                                                ticketSalesLimit.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(objectMapper.writeValueAsString(ticketSalesLimit)));
 

@@ -15,23 +15,23 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
-    @GetMapping("activity/{activityId}")
+    @GetMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long activityId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(activityService.getActivityById(activityId));
     }
 
-    @GetMapping("activity/all")
+    @GetMapping("/api/v1/activity")
     public ResponseEntity<Iterable<Activity>> getAllActivity(){
         return ResponseEntity.status(HttpStatus.OK).body(activityService.getAllActivity());
     }
 
-    @PostMapping("activity/add")
+    @PostMapping("/api/v1/activity")
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
         return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(activity));
     }
 
-    @PutMapping("activity/{activityId}")
+    @PutMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> updateActivity(@PathVariable Long activityId, @RequestBody Activity activity ){
         activity.setId((activityId));
         return ResponseEntity.status(HttpStatus.OK).body(activityService.updateActivity(activity));

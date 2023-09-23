@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
 import com.eztix.eventservice.service.TicketSalesLimitService;
 
 @RestController
@@ -18,31 +17,30 @@ public class TicketSalesLimitController {
     }
 
     //Add a new TicketSalesLimit
-    @PostMapping("/ticketSalesLimit/add")
+    @PostMapping("/api/v1/ticket-sales-limit")
     public ResponseEntity<TicketSalesLimit> addTicketSalesLimit (@RequestBody TicketSalesLimit ticketSalesLimit) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ticketSalesLimitService.addNewTicketSalesLimit(ticketSalesLimit));
     }
 
     //Get TicketSalesLimit by id
-    @GetMapping ("/ticketSalesLimit/{ticketSalesLimit_id}")
-    public ResponseEntity<TicketSalesLimit> getTicketSalesLimitBySalesRoundIdAndTicketTypeId (@PathVariable Long ticketSalesLimit_id) {
+    @GetMapping ("/api/v1/ticket-sales-limit/{id}")
+    public ResponseEntity<TicketSalesLimit> getTicketSalesLimitBySalesRoundIdAndTicketTypeId (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(ticketSalesLimitService.getTicketSalesLimitById(ticketSalesLimit_id));
+               .body(ticketSalesLimitService.getTicketSalesLimitById(id));
     }
 
     //Get all TicketSalesLimits
-    @GetMapping("/ticketSalesLimit/getAll")
+    @GetMapping("/api/v1/ticket-sales-limit")
     public ResponseEntity<Iterable<TicketSalesLimit>> getAllTicketSalesLimit () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketSalesLimitService.getAllTicketSalesLimits());
     }
 
     //Update TicketSalesLimit
-    @PutMapping("/updateTicketSalesLimit/{ticketSalesLimit_id}")
-    public ResponseEntity<TicketSalesLimit> updateTicketSalesLimit (@PathVariable Long ticketSalesLimit_id, @RequestBody TicketSalesLimit ticketSalesLimit) {
-        TicketSalesLimitId id = ticketSalesLimit.getId();
-        id.setId(ticketSalesLimit_id);
+    @PutMapping("/api/v1/ticket-sales-limit/{id}")
+    public ResponseEntity<TicketSalesLimit> updateTicketSalesLimit (@PathVariable Long id, @RequestBody TicketSalesLimit ticketSalesLimit) {
+
         ticketSalesLimit.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketSalesLimitService.updateTicketSalesLimit(ticketSalesLimit));
