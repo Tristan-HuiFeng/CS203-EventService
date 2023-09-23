@@ -216,7 +216,6 @@ class PurchaseRequestItemServiceTest {
         purchaseRequest.setStatus("test status");
 
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
-        purchaseRequestItem.setId(1L);
         purchaseRequestItem.setTicketType(ticketType);
         purchaseRequestItem.setPurchaseRequest(purchaseRequest);
         purchaseRequestItem.setQuantityRequested(0);
@@ -286,6 +285,7 @@ class PurchaseRequestItemServiceTest {
         assertThatThrownBy(() -> testPurchaseRequestItemService.updatePurchaseRequestItem(purchaseRequestItem))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("purchase request item with id %d does not exist.", 1L);
+
 
     }
 
