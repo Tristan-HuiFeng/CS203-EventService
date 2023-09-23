@@ -41,7 +41,6 @@ public class TicketTypeServiceIT {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -50,7 +49,7 @@ public class TicketTypeServiceIT {
 
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/ticketType/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/ticket-type")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ticketType)));
 
@@ -74,7 +73,6 @@ public class TicketTypeServiceIT {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -82,10 +80,10 @@ public class TicketTypeServiceIT {
         ticketType.setType("test type");
 
         TicketType savedTicketType = ticketTypeRepo.save(ticketType);
-        ticketType.setDescription("test description update");
+        ticketType.setType("type new");
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/updateTicketType/{ticketType_Id}", ticketType.getId())
+        ResultActions resultActions = mockMvc.perform(put("/api/v1/ticket-type/{id}", ticketType.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(ticketType)));
 
@@ -99,7 +97,7 @@ public class TicketTypeServiceIT {
         String description = JsonPath.parse(result.getContentAsString()).read("$.description", String.class);
 
 
-        assertThat(description).isEqualTo(ticketType.getDescription());
+        assertThat(description).isEqualTo(ticketType.getType());
 
     }
 

@@ -14,13 +14,13 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "SalesRound")
+@Entity
 @Table(name = "SALES_ROUND")
 public class SalesRound {
 
     @Id
-    @SequenceGenerator(name = "salesRound_sequence", sequenceName = "salesRound_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salesRound_sequence")
+    @SequenceGenerator(name = "sales_round_sequence", sequenceName = "sales_round_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sales_round_sequence")
     @Schema(hidden = true)
     private Long id;
 
@@ -37,11 +37,9 @@ public class SalesRound {
     @Column(name = "round_end")
     private OffsetDateTime roundEnd;
 
-    @NotNull
     @Column(name = "purchase_start")
     private OffsetDateTime purchaseStart;
 
-    @NotNull
     @Column(name = "purchase_end")
     private OffsetDateTime purchaseEnd;
 
@@ -49,7 +47,10 @@ public class SalesRound {
     @Column(name = "sales_type")
     private String salesType;
 
-    @OneToMany(mappedBy = "salesRound", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="salesRound", fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
     private List<TicketSalesLimit> ticketSalesLimits;
+
 
 }

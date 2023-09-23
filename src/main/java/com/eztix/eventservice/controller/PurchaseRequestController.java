@@ -17,30 +17,30 @@ public class PurchaseRequestController {
     }
 
     //Add a new PurchaseRequest
-    @PostMapping("/purchaseRequest/add")
+    @PostMapping("/api/v1/purchase-request")
     public ResponseEntity<PurchaseRequest> addPurchaseRequest (@RequestBody PurchaseRequest purchaseRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest));
     }
 
     //Get PurchaseRequest by id
-    @GetMapping ("/purchaseRequest/{purchaseRequest_Id}")
-    public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long purchaseRequest_Id) {
+    @GetMapping ("/api/v1/purchase-request/{id}")
+    public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(purchaseRequestService.getPurchaseRequestById(purchaseRequest_Id));
+               .body(purchaseRequestService.getPurchaseRequestById(id));
     }
 
     //Get all PurchaseRequests
-    @GetMapping("/purchaseRequest/getAll")
+    @GetMapping("/api/v1/purchase-request")
     public ResponseEntity<Iterable<PurchaseRequest>> getAllPurchaseRequest () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestService.getAllPurchaseRequests());
     }
 
     //Update PurchaseRequest
-    @PutMapping("/updatePurchaseRequest/{purchaseRequest_Id}")
-    public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long purchaseRequest_Id, @RequestBody PurchaseRequest purchaseRequest) {
-        purchaseRequest.setId(purchaseRequest_Id);
+    @PutMapping("/api/v1/purchase-request/{id}")
+    public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long id, @RequestBody PurchaseRequest purchaseRequest) {
+        purchaseRequest.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
     }

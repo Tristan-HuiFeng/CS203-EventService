@@ -51,7 +51,7 @@ public class EventServiceIT {
 
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/event/add")
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/event")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(event)));
 
@@ -88,7 +88,7 @@ public class EventServiceIT {
         event.setName("Test Event Update");
 
         // when
-        ResultActions resultActions = mockMvc.perform(put("/event/{id}", event.getId())
+        ResultActions resultActions = mockMvc.perform(put("/api/v1/event/{id}", event.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(event)));
 

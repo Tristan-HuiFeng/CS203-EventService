@@ -4,7 +4,6 @@ import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
@@ -71,7 +70,6 @@ public class TicketSalesLimitServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -80,7 +78,6 @@ public class TicketSalesLimitServiceIT {
 
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
-                ticketType.setDescription("test description");
                 ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
                 ticketType.setReservedCount(0);
@@ -100,13 +97,12 @@ public class TicketSalesLimitServiceIT {
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
+                ticketSalesLimit.setId(1L);
                 ticketSalesLimit.setLimitVacancy(0);
                 ticketSalesLimit.setOccupiedVacancy(0);
 
                 // when
-                ResultActions resultActions = mockMvc.perform(post("/ticketSalesLimit/add")
+                ResultActions resultActions = mockMvc.perform(post("/api/v1/ticket-sales-limit")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(ticketSalesLimit)));
 
@@ -141,7 +137,6 @@ public class TicketSalesLimitServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -150,7 +145,6 @@ public class TicketSalesLimitServiceIT {
 
                 TicketType ticketType = new TicketType();
                 ticketType.setId(1L);
-                ticketType.setDescription("test description");
                 ticketType.setOccupiedCount(0);
                 ticketType.setPrice(0);
                 ticketType.setReservedCount(0);
@@ -170,8 +164,7 @@ public class TicketSalesLimitServiceIT {
                 salesRoundRepository.save(salesRound);
 
                 TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
+                ticketSalesLimit.setId(1L);
                 ticketSalesLimit.setLimitVacancy(0);
                 ticketSalesLimit.setOccupiedVacancy(0);
 
@@ -180,8 +173,8 @@ public class TicketSalesLimitServiceIT {
 
                 // when
                 ResultActions resultActions = mockMvc
-                                .perform(put("/updateTicketSalesLimit/{ticketSalesLimit_Id}",
-                                                ticketSalesLimit.getId().getId())
+                                .perform(put("/api/v1/ticket-sales-limit/{id}",
+                                                ticketSalesLimit.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(objectMapper.writeValueAsString(ticketSalesLimit)));
 

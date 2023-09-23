@@ -66,7 +66,6 @@ public class PurchaseRequestServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -91,7 +90,7 @@ public class PurchaseRequestServiceIT {
                 purchaseRequest.setStatus("test status");
 
                 // when
-                ResultActions resultActions = mockMvc.perform(post("/purchaseRequest/add")
+                ResultActions resultActions = mockMvc.perform(post("/api/v1/purchase-request")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(purchaseRequest)));
 
@@ -126,7 +125,6 @@ public class PurchaseRequestServiceIT {
 
                 Activity activity = new Activity();
                 activity.setId(1L);
-                activity.setName("Test Activity");
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -155,7 +153,7 @@ public class PurchaseRequestServiceIT {
 
                 // when
                 ResultActions resultActions = mockMvc
-                                .perform(put("/updatePurchaseRequest/{purchaseRequest_Id}",
+                                .perform(put("/api/v1/purchase-request/{id}",
                                                 purchaseRequest.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(objectMapper.writeValueAsString(purchaseRequest)));

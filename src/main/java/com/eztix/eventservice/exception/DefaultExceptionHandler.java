@@ -1,5 +1,8 @@
 package com.eztix.eventservice.exception;
 
+import com.eztix.eventservice.exception.ApiException;
+import com.eztix.eventservice.exception.RequestValidationException;
+import com.eztix.eventservice.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +18,7 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ApiException> handleException(ResourceNotFoundException e,
-                                                    HttpServletRequest request) {
+                                                        HttpServletRequest request) {
         ApiException apiException = new ApiException(
                 request.getRequestURI(),
                 HttpStatus.NOT_FOUND,

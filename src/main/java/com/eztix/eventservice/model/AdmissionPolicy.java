@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @Builder
-@Entity(name = "Admission Policy")
+@Entity(name = "admission_policy")
 @Table(name = "ADMISSION_POLICY")
 public class AdmissionPolicy {
     @Id

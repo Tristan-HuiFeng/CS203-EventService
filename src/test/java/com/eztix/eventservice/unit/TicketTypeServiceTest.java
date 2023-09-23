@@ -33,7 +33,6 @@ public class TicketTypeServiceTest {
     void givenNewTicketType_whenAddTicketType_thenSuccess() {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -73,7 +72,6 @@ public class TicketTypeServiceTest {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -94,7 +92,6 @@ public class TicketTypeServiceTest {
     void givenNullId_whenUpdate_throwRequestValidationException() {
         // given
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -113,7 +110,6 @@ public class TicketTypeServiceTest {
         // given
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setTotalVacancy(0);

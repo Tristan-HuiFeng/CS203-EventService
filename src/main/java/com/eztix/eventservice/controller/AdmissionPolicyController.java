@@ -15,23 +15,23 @@ public class AdmissionPolicyController {
         this.admissionPolicyService = admissionPolicyService;
     }
 
-    @GetMapping("admissionPolicy/{id}")
+    @GetMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy>getAdmissionPolicyById(@PathVariable Long iD){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(admissionPolicyService.getAdmissionPolicyById(iD));
     }
 
-    @GetMapping("admissionPolicy/all")
+    @GetMapping("/api/v1/admission-policy")
     public ResponseEntity<Iterable<AdmissionPolicy>> getAllAdmissionPolicy(){
         return ResponseEntity.status(HttpStatus.OK).body(admissionPolicyService.getAllAdmissionPolicy());
     }
 
-    @PostMapping("admissionPolicy/add")
+    @PostMapping("/api/v1/admission-policy")
     public ResponseEntity<AdmissionPolicy> addAdmissionPolicy(@RequestBody AdmissionPolicy admissionPolicy){
         return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(admissionPolicy));
     }
 
-    @PutMapping("admissionPolicy/{id}")
+    @PutMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy> updateAdmissionPolicy(@PathVariable Long iD, @RequestBody AdmissionPolicy admissionPolicy){
         admissionPolicy.setId(iD);
         return ResponseEntity.status(HttpStatus.OK).body(admissionPolicyService.updateAdmissionPolicy(admissionPolicy));
