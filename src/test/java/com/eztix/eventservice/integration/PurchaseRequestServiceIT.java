@@ -2,15 +2,12 @@ package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
-import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
+import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
-import com.eztix.eventservice.repository.TicketSalesLimitRepository;
-import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
@@ -36,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class TicketSalesLimitServiceIT {
+public class PurchaseRequestServiceIT {
 
         @Autowired
         private MockMvc mockMvc;
@@ -49,14 +46,12 @@ public class TicketSalesLimitServiceIT {
         @Autowired
         private EventRepository eventRepository;
         @Autowired
-        private TicketSalesLimitRepository ticketSalesLimitRepo;
-        @Autowired
         private SalesRoundRepository salesRoundRepository;
         @Autowired
-        private TicketTypeRepository ticketTypeRepository;
+        private PurchaseRequestRepository purchaseRequestRepository;
 
         @Test
-        public void addNewTicketSalesLimit() throws Exception {
+        public void addNewPurchaseRequest() throws Exception {
                 // given
                 Event event = new Event();
                 event.setId(1L);
@@ -78,17 +73,6 @@ public class TicketSalesLimitServiceIT {
                 activity.setLocation("Test Location");
                 activityRepository.save(activity);
 
-                TicketType ticketType = new TicketType();
-                ticketType.setId(1L);
-                ticketType.setDescription("test description");
-                ticketType.setOccupiedCount(0);
-                ticketType.setPrice(0);
-                ticketType.setReservedCount(0);
-                ticketType.setTotalVacancy(0);
-                ticketType.setType("test ticket type");
-                ticketType.setActivity(activity);
-                ticketTypeRepository.save(ticketType);
-
                 SalesRound salesRound = new SalesRound();
                 salesRound.setId(1L);
                 salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -99,16 +83,17 @@ public class TicketSalesLimitServiceIT {
                 salesRound.setActivity(activity);
                 salesRoundRepository.save(salesRound);
 
-                TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
-                ticketSalesLimit.setLimitVacancy(0);
-                ticketSalesLimit.setOccupiedVacancy(0);
+                PurchaseRequest purchaseRequest = new PurchaseRequest();
+                purchaseRequest.setId(1L);
+                purchaseRequest.setCustomer("test customer");
+                purchaseRequest.setQueueNumber(1L);
+                purchaseRequest.setSalesRound(salesRound);
+                purchaseRequest.setStatus("test status");
 
                 // when
-                ResultActions resultActions = mockMvc.perform(post("/ticketSalesLimit/add")
+                ResultActions resultActions = mockMvc.perform(post("/purchaseRequest/add")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(ticketSalesLimit)));
+                                .content(objectMapper.writeValueAsString(purchaseRequest)));
 
                 // then
                 MockHttpServletResponse result = resultActions
@@ -119,14 +104,14 @@ public class TicketSalesLimitServiceIT {
 
                 Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-                Optional<TicketSalesLimit> retrieved = ticketSalesLimitRepo.findById(id);
+                Optional<PurchaseRequest> retrieved = purchaseRequestRepository.findById(id);
 
                 assertThat(retrieved).isNotNull();
 
         }
 
         @Test
-        public void updateTicketSalesLimit() throws Exception {
+        public void updatePurchaseRequest() throws Exception {
                 // given
                 Event event = new Event();
                 event.setId(1L);
@@ -148,17 +133,6 @@ public class TicketSalesLimitServiceIT {
                 activity.setLocation("Test Location");
                 activityRepository.save(activity);
 
-                TicketType ticketType = new TicketType();
-                ticketType.setId(1L);
-                ticketType.setDescription("test description");
-                ticketType.setOccupiedCount(0);
-                ticketType.setPrice(0);
-                ticketType.setReservedCount(0);
-                ticketType.setTotalVacancy(0);
-                ticketType.setType("test ticket type");
-                ticketType.setActivity(activity);
-                ticketTypeRepository.save(ticketType);
-
                 SalesRound salesRound = new SalesRound();
                 salesRound.setId(1L);
                 salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -169,21 +143,22 @@ public class TicketSalesLimitServiceIT {
                 salesRound.setActivity(activity);
                 salesRoundRepository.save(salesRound);
 
-                TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-                TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-                ticketSalesLimit.setId(ticketSalesLimitId);
-                ticketSalesLimit.setLimitVacancy(0);
-                ticketSalesLimit.setOccupiedVacancy(0);
+                PurchaseRequest purchaseRequest = new PurchaseRequest();
+                purchaseRequest.setId(1L);
+                purchaseRequest.setCustomer("test customer");
+                purchaseRequest.setQueueNumber(1L);
+                purchaseRequest.setSalesRound(salesRound);
+                purchaseRequest.setStatus("test status");
 
-                ticketSalesLimitRepo.save(ticketSalesLimit);
-                ticketSalesLimit.setLimitVacancy(835);
+                purchaseRequestRepository.save(purchaseRequest);
+                purchaseRequest.setStatus("HAHAHA have a nice day!");
 
                 // when
                 ResultActions resultActions = mockMvc
-                                .perform(put("/updateTicketSalesLimit/{ticketSalesLimit_Id}",
-                                                ticketSalesLimit.getId().getId())
+                                .perform(put("/updatePurchaseRequest/{purchaseRequest_Id}",
+                                                purchaseRequest.getId())
                                                 .contentType(MediaType.APPLICATION_JSON)
-                                                .content(objectMapper.writeValueAsString(ticketSalesLimit)));
+                                                .content(objectMapper.writeValueAsString(purchaseRequest)));
 
                 // then
                 MockHttpServletResponse result = resultActions
@@ -192,9 +167,9 @@ public class TicketSalesLimitServiceIT {
                                 .andReturn()
                                 .getResponse();
 
-                int limit_vacancy = JsonPath.parse(result.getContentAsString()).read("$.limit_vacancy", Integer.class);
+                String status = JsonPath.parse(result.getContentAsString()).read("$.status", String.class);
 
-                assertThat(limit_vacancy).isEqualTo(ticketSalesLimit.getLimitVacancy());
+                assertThat(status).isEqualTo(purchaseRequest.getStatus());
 
         }
 

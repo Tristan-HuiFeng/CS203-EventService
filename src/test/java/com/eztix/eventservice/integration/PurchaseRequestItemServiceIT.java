@@ -2,6 +2,7 @@ package com.eztix.eventservice.integration;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
 import com.eztix.eventservice.model.TicketSalesLimitId;
@@ -36,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-it.properties")
 @AutoConfigureMockMvc
-public class TicketSalesLimitServiceIT {
+public class PurchaseRequestItemServiceIT {
 
         @Autowired
         private MockMvc mockMvc;
@@ -104,6 +105,13 @@ public class TicketSalesLimitServiceIT {
                 ticketSalesLimit.setId(ticketSalesLimitId);
                 ticketSalesLimit.setLimitVacancy(0);
                 ticketSalesLimit.setOccupiedVacancy(0);
+
+                PurchaseRequest purchaseRequest = new PurchaseRequest();
+                purchaseRequest.setId(1L);
+                purchaseRequest.setCustomer("test customer");
+                purchaseRequest.setQueueNumber(1L);
+                purchaseRequest.setSalesRound(salesRound);
+                purchaseRequest.setStatus("test status");
 
                 // when
                 ResultActions resultActions = mockMvc.perform(post("/ticketSalesLimit/add")
