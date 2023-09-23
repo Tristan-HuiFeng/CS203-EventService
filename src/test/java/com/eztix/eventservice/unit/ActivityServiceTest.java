@@ -45,7 +45,7 @@ class ActivityServiceTest {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
+        activity.setLocation("Test Location");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -93,7 +93,6 @@ class ActivityServiceTest {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -122,7 +121,6 @@ class ActivityServiceTest {
         event.setIsFeatured(false);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -149,7 +147,6 @@ class ActivityServiceTest {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));

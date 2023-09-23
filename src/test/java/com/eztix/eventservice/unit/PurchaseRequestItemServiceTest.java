@@ -49,7 +49,6 @@ class PurchaseRequestItemServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -57,7 +56,6 @@ class PurchaseRequestItemServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -84,7 +82,7 @@ class PurchaseRequestItemServiceTest {
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
         purchaseRequestItem.setTicketType(ticketType);
         purchaseRequestItem.setPurchaseRequest(purchaseRequest);
-        purchaseRequestItem.setQuanitityApproved(0);
+        purchaseRequestItem.setQuantityApproved(0);
         purchaseRequestItem.setQuantityRequested(0);
 
         // when
@@ -127,7 +125,6 @@ class PurchaseRequestItemServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -135,7 +132,6 @@ class PurchaseRequestItemServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -160,17 +156,16 @@ class PurchaseRequestItemServiceTest {
         purchaseRequest.setStatus("test status");
 
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
-        PurchaseRequestItemId purchaseRequestItemId = new PurchaseRequestItemId(1L, ticketType, purchaseRequest);
-        purchaseRequestItem.setId(purchaseRequestItemId);
-        purchaseRequestItem.setQuanitityApproved(0);
+        purchaseRequestItem.setId(1L);
+        purchaseRequestItem.setQuantityApproved(0);
         purchaseRequestItem.setQuantityRequested(0);
 
-        given(purchaseRequestItemRepository.findById(purchaseRequestItem.getId().getId()))
+        given(purchaseRequestItemRepository.findById(purchaseRequestItem.getId()))
                 .willReturn(Optional.of(purchaseRequestItem));
 
         // when
         PurchaseRequestItem retrievedPurchaseRequestItem = testPurchaseRequestItemService
-                .getPurchaseRequestItemById(purchaseRequestItem.getId().getId());
+                .getPurchaseRequestItemById(purchaseRequestItem.getId());
         // then
         assertThat(retrievedPurchaseRequestItem).isEqualTo(purchaseRequestItem);
 
@@ -190,7 +185,6 @@ class PurchaseRequestItemServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -198,7 +192,6 @@ class PurchaseRequestItemServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -223,11 +216,9 @@ class PurchaseRequestItemServiceTest {
         purchaseRequest.setStatus("test status");
 
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
-        PurchaseRequestItemId purchaseRequestItemId = new PurchaseRequestItemId();
-        purchaseRequestItem.setId(purchaseRequestItemId);
+        purchaseRequestItem.setId(1L);
         purchaseRequestItem.setTicketType(ticketType);
         purchaseRequestItem.setPurchaseRequest(purchaseRequest);
-        purchaseRequestItem.setQuanitityApproved(0);
         purchaseRequestItem.setQuantityRequested(0);
 
         // when
@@ -252,7 +243,6 @@ class PurchaseRequestItemServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -261,7 +251,6 @@ class PurchaseRequestItemServiceTest {
 
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -287,9 +276,8 @@ class PurchaseRequestItemServiceTest {
         purchaseRequest.setStatus("test status");
 
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
-        PurchaseRequestItemId purchaseRequestItemId = new PurchaseRequestItemId(1L, ticketType, purchaseRequest);
-        purchaseRequestItem.setId(purchaseRequestItemId);
-        purchaseRequestItem.setQuanitityApproved(0);
+        purchaseRequestItem.setId(1L);
+        purchaseRequestItem.setQuantityApproved(0);
         purchaseRequestItem.setQuantityRequested(0);
 
         given(purchaseRequestItemRepository.findById(1L)).willReturn(Optional.empty());
