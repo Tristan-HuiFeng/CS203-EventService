@@ -16,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "Activity")
+@Entity(name = "activity")
 @Table(name = "ACTIVITY")
 public class Activity {
 
@@ -25,10 +25,6 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "activity_sequence")
     @Schema(hidden = true)
     private Long id;
-
-    @NotNull
-    @Column(name = "name")
-    private String name;
 
     @NotNull
     @Column(name = "start_datetime")
@@ -50,6 +46,6 @@ public class Activity {
     @OneToMany(mappedBy="activity",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
-    private List<TicketType> ticketType;
+    private List<TicketType> ticketTypes;
 
 }

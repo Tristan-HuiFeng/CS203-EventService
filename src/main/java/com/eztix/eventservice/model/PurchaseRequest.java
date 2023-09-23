@@ -12,7 +12,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "PurchaseRequest")
+@Entity(name = "purchase_request")
 @Table(name = "PURCHASE_REQUEST")
 public class PurchaseRequest {
 

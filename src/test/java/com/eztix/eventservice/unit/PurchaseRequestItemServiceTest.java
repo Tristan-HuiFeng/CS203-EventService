@@ -6,7 +6,6 @@ import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.PurchaseRequestItem;
-import com.eztix.eventservice.model.PurchaseRequestItemId;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.PurchaseRequestItemRepository;

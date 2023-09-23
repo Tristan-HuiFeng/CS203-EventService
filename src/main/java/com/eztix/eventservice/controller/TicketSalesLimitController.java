@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
 import com.eztix.eventservice.service.TicketSalesLimitService;
 
 @RestController
@@ -39,11 +38,10 @@ public class TicketSalesLimitController {
     }
 
     //Update TicketSalesLimit
-    @PutMapping("/updateTicketSalesLimit/{ticketSalesLimit_id}")
-    public ResponseEntity<TicketSalesLimit> updateTicketSalesLimit (@PathVariable Long ticketSalesLimit_id, @RequestBody TicketSalesLimit ticketSalesLimit) {
-        TicketSalesLimitId id = ticketSalesLimit.getId();
-        id.setId(ticketSalesLimit_id);
-        ticketSalesLimit.setId(id);
+    @PutMapping("/updateTicketSalesLimit/{ticket_sales_limit_id}")
+    public ResponseEntity<TicketSalesLimit> updateTicketSalesLimit (@PathVariable Long ticket_sales_limit_id, @RequestBody TicketSalesLimit ticketSalesLimit) {
+
+        ticketSalesLimit.setId(ticket_sales_limit_id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketSalesLimitService.updateTicketSalesLimit(ticketSalesLimit));
     }

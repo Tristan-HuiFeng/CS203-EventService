@@ -6,7 +6,6 @@ import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketSalesLimitId;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketSalesLimitRepository;
 import com.eztix.eventservice.service.TicketSalesLimitService;
@@ -49,7 +48,6 @@ class TicketSalesLimitServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -57,7 +55,6 @@ class TicketSalesLimitServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -121,7 +118,6 @@ class TicketSalesLimitServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -129,7 +125,6 @@ class TicketSalesLimitServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -148,19 +143,16 @@ class TicketSalesLimitServiceTest {
         // salesRoundRepository.save(salesRound);
 
         TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId();
-        ticketSalesLimitId.setSalesRound(salesRound);
-        ticketSalesLimitId.setTicketType(ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
+        ticketSalesLimit.setId(1L);
         ticketSalesLimit.setLimitVacancy(0);
         ticketSalesLimit.setOccupiedVacancy(0);
 
-        given(ticketSalesLimitRepository.findById(ticketSalesLimit.getId().getId()))
+        given(ticketSalesLimitRepository.findById(ticketSalesLimit.getId()))
                 .willReturn(Optional.of(ticketSalesLimit));
 
         // when
         TicketSalesLimit retrievedTicketSalesLimit = testTicketSalesLimitService
-                .getTicketSalesLimitById(ticketSalesLimit.getId().getId());
+                .getTicketSalesLimitById(ticketSalesLimit.getId());
         // then
         assertThat(retrievedTicketSalesLimit).isEqualTo(ticketSalesLimit);
 
@@ -180,7 +172,6 @@ class TicketSalesLimitServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -188,7 +179,6 @@ class TicketSalesLimitServiceTest {
         // activityRepository.save(activity);
 
         TicketType ticketType = new TicketType();
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -207,10 +197,6 @@ class TicketSalesLimitServiceTest {
         // salesRoundRepository.save(salesRound);
 
         TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId();
-        ticketSalesLimitId.setSalesRound(salesRound);
-        ticketSalesLimitId.setTicketType(ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
         ticketSalesLimit.setLimitVacancy(0);
         ticketSalesLimit.setOccupiedVacancy(0);
 
@@ -236,7 +222,6 @@ class TicketSalesLimitServiceTest {
         // eventRepository.save(event);
 
         Activity activity = new Activity();
-        activity.setName("Test Activity");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
@@ -245,7 +230,6 @@ class TicketSalesLimitServiceTest {
 
         TicketType ticketType = new TicketType();
         ticketType.setId(1L);
-        ticketType.setDescription("test description");
         ticketType.setOccupiedCount(0);
         ticketType.setPrice(0);
         ticketType.setReservedCount(0);
@@ -265,8 +249,7 @@ class TicketSalesLimitServiceTest {
         // salesRoundRepository.save(salesRound);
 
         TicketSalesLimit ticketSalesLimit = new TicketSalesLimit();
-        TicketSalesLimitId ticketSalesLimitId = new TicketSalesLimitId(1L, salesRound, ticketType);
-        ticketSalesLimit.setId(ticketSalesLimitId);
+        ticketSalesLimit.setId(1L);
         ticketSalesLimit.setLimitVacancy(0);
         ticketSalesLimit.setOccupiedVacancy(0);
 

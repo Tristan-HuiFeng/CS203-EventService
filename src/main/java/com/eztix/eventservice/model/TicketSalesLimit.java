@@ -1,4 +1,4 @@
-    package com.eztix.eventservice.model;
+package com.eztix.eventservice.model;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,15 +13,15 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "TicketSalesLimit")
+@Entity
 @Table(name = "TICKET_SALES_LIMIT")
-@IdClass(TicketSalesLimitId.class)
 public class TicketSalesLimit {
 
     @Id
-    @NotNull
+    @SequenceGenerator(name = "ticket_sales_limit_sequence", sequenceName = "ticket_sales_limit_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticket_sales_limit_sequence")
     @Schema(hidden = true)
-    private TicketSalesLimitId id;
+    private Long id;
 
     @NotNull
     @Column(name = "limit_vacancy")
@@ -32,11 +32,14 @@ public class TicketSalesLimit {
     private int occupiedVacancy;
 
     @ManyToOne
-    @JoinColumn(name = "salesRound_id")
-    private SalesRound salesRound;
+    @NotNull
+    @JoinColumn(name = "ticket_type_id")
+    private TicketType ticketType;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType_id")
-    private TicketType ticketType;
+    @NotNull
+    @JoinColumn(name = "sales_round_id")
+    private SalesRound salesRound;
+
 }
 

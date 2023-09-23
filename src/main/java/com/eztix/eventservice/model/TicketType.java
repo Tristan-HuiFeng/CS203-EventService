@@ -1,25 +1,27 @@
-    package com.eztix.eventservice.model;
+package com.eztix.eventservice.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.List;
 
-@Getter
+
+    @Getter
 @Setter
 @Builder
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name="TicketType")
+@Entity
 @Table(name= "TICKET_TYPE")
 public class TicketType {
 
     @Id
-    @SequenceGenerator(name = "ticketType_sequence", sequenceName = "ticketType_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticketType_sequence")
+    @SequenceGenerator(name = "ticket_type_sequence", sequenceName = "ticket_type_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticket_type_sequence")
     @Schema(hidden = true)
     private Long id;
 
@@ -43,13 +45,15 @@ public class TicketType {
     @Column(name = "reserved_count")
     private int reservedCount;
 
-    @NotNull
-    @Column(name = "description")
-    private String description;
-
     @ManyToOne
     @NotNull
     @JoinColumn(name = "activity_id")
     private Activity activity;
+
+    @OneToMany(mappedBy="ticketType", fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<TicketSalesLimit> ticketSalesLimits;
+
 
 }

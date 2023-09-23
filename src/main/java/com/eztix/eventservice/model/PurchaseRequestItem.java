@@ -13,30 +13,32 @@ import lombok.*;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "PurchaseRequestItem")
+@Entity(name = "purchase_request_item")
 @Table(name = "PURCHASE_REQUEST_ITEM")
-@IdClass(PurchaseRequestItemId.class)
 public class PurchaseRequestItem {
 
     @Id
+    @SequenceGenerator(name = "purchase_request_item_sequence", sequenceName = "purchase_request_item_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_request_item_sequence")
     @NotNull
     @Schema(hidden = true)
-    private PurchaseRequestItemId id;
+    private Long id;
 
     @NotNull
-    @Column(name = "quantity_requestd")
+    @Column(name = "quantity_request")
     private int quantityRequested;
 
     @NotNull
     @Column(name = "quantity_approved")
-    private int quanitityApproved;
+    private int quantityApproved;
 
     @ManyToOne
-    @JoinColumn(name = "ticketType_id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     @ManyToOne
-    @JoinColumn(name = "purchaseRequest_id")
+    @JoinColumn(name = "purchase_request_id")
     private PurchaseRequest purchaseRequest;
+
 }
 

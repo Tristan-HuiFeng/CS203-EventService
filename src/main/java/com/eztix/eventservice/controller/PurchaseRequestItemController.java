@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.PurchaseRequestItem;
-import com.eztix.eventservice.model.PurchaseRequestItemId;
 import com.eztix.eventservice.service.PurchaseRequestItemService;
 
 @RestController
@@ -25,10 +24,10 @@ public class PurchaseRequestItemController {
     }
 
     //Get PurchaseRequestItem by id
-    @GetMapping ("/purchaseRequestItem/{purchaseRequestItem_id}")
-    public ResponseEntity<PurchaseRequestItem> getPurchaseRequestItemBySalesRoundIdAndTicketTypeId (@PathVariable Long purchaseRequestItem_id) {
+    @GetMapping ("/purchaseRequestItem/{PRItemId}")
+    public ResponseEntity<PurchaseRequestItem> getPurchaseRequestItemBySalesRoundIdAndTicketTypeId (@PathVariable Long PRItemId) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(purchaseRequestItemService.getPurchaseRequestItemById(purchaseRequestItem_id));
+               .body(purchaseRequestItemService.getPurchaseRequestItemById(PRItemId));
     }
 
     //Get all PurchaseRequestItems
@@ -39,11 +38,9 @@ public class PurchaseRequestItemController {
     }
 
     //Update PurchaseRequestItem
-    @PutMapping("/updatePurchaseRequestItem/{purchaseRequestItem_id}")
-    public ResponseEntity<PurchaseRequestItem> updatePurchaseRequestItem (@PathVariable Long purchaseRequestItem_id, @RequestBody PurchaseRequestItem purchaseRequestItem) {
-        PurchaseRequestItemId id = purchaseRequestItem.getId();
-        id.setId(purchaseRequestItem_id);
-        purchaseRequestItem.setId(id);
+    @PutMapping("/updatePurchaseRequestItem/{PRItemId}")
+    public ResponseEntity<PurchaseRequestItem> updatePurchaseRequestItem (@PathVariable Long PRItemId, @RequestBody PurchaseRequestItem purchaseRequestItem) {
+        purchaseRequestItem.setId(PRItemId);
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestItemService.updatePurchaseRequestItem(purchaseRequestItem));
     }
