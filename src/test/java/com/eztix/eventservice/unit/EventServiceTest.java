@@ -133,7 +133,7 @@ class EventServiceTest {
 
     @Test
     void getAllEvents() {
-        testEventService.getAllEvents();
-        verify(eventRepository).findAll();
+        testEventService.getAllEvents(true);
+        verify(eventRepository).findAllByIsFeaturedTrue();
     }
 }

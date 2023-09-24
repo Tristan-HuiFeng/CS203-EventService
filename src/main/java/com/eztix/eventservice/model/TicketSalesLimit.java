@@ -1,6 +1,7 @@
 package com.eztix.eventservice.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -31,11 +32,13 @@ public class TicketSalesLimit {
     @Column(name = "occupied_vacancy")
     private int occupiedVacancy;
 
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "sales_round_id")

@@ -1,5 +1,6 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -56,10 +57,12 @@ public class Event {
     @Column(name = "feature_sequence")
     private Integer featureSequence;
 
-    @OneToMany(mappedBy="event", fetch = FetchType.LAZY,
+    @JsonManagedReference
+    @OneToMany(mappedBy="event",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Activity> activities;
+
 
 
 }
