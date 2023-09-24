@@ -1,5 +1,7 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -45,11 +47,13 @@ public class TicketType {
     @Column(name = "reserved_count")
     private int reservedCount;
 
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "activity_id")
     private Activity activity;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="ticketType", fetch = FetchType.LAZY,
             orphanRemoval = true,
             cascade = CascadeType.ALL)

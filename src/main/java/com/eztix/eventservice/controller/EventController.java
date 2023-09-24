@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.EventDTO;
 import com.eztix.eventservice.model.Event;
 
 import com.eztix.eventservice.service.EventService;
@@ -38,9 +39,9 @@ public class EventController {
     }
 
     @GetMapping("/api/v1/event")
-    public ResponseEntity<Iterable<Event>>  getAllEvent() {
+    public ResponseEntity<Iterable<EventDTO>>  getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(eventService.getAllEvents());
+                .body(eventService.getAllEvents(featuredOnly));
     }
 
 }

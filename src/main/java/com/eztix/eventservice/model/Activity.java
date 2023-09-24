@@ -1,5 +1,8 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -38,11 +41,13 @@ public class Activity {
     @Column(name = "location")
     private String location;
 
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "event_id")
     private Event event;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="activity",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
