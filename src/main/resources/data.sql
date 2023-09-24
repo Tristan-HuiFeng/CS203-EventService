@@ -75,7 +75,7 @@ INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
 VALUES (0, "2023-12-17T12:00:00+08:00", "2023-12-17T16:00:00+08:00", "Singapore Indoor Stadium", 1);
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
-VALUES (1, "2023-12-17T12:00:00+08:00", "2023-12-18T16:00:00+08:00", "Singapore Indoor Stadium", 1);
+VALUES (1, "2023-12-18T12:00:00+08:00", "2023-12-18T16:00:00+08:00", "Singapore Indoor Stadium", 1);
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
 VALUES (2, "2023-12-19T12:00:00+08:00", "2023-12-19T16:00:00+08:00", "Singapore Indoor Stadium", 1);
