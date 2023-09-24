@@ -53,6 +53,10 @@ public class Event {
     private String seatMapURL;
 
     @NotNull
+    @Column(name = "location", columnDefinition = "TEXT")
+    private String location;
+
+    @NotNull
     @Column(name = "is_featured")
     private Boolean isFeatured;
 
@@ -64,6 +68,7 @@ public class Event {
 
     @Formula("(SELECT a.end_datetime FROM activity as a WHERE a.event_id = id ORDER BY a.end_datetime DESC LIMIT 1)")
     private OffsetDateTime end_datetime;
+
 
     @JsonManagedReference
     @OneToMany(mappedBy="event",
