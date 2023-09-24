@@ -37,10 +37,6 @@ public class Activity {
     @Column(name = "end_datetime")
     private OffsetDateTime  endDateTime;
 
-    @NotNull
-    @Column(name = "location")
-    private String location;
-
     @JsonBackReference
     @ManyToOne
     @NotNull
