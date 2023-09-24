@@ -2,10 +2,15 @@ package com.eztix.eventservice.service;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
+import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketTypeRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class TicketTypeService {
@@ -26,6 +31,15 @@ public class TicketTypeService {
 
         return ticketTypeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", id))
+        );
+
+    }
+
+
+    public Iterable<TicketType> getTicketTypeByActivityId(Long activityId) {
+
+        return ticketTypeRepository.findByActivityId(activityId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("activity with id %d does not have any ticket type.", activityId))
         );
 
     }
