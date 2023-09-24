@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController()
+@RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EventController {
 
     private final EventService eventService;
@@ -25,6 +26,7 @@ public class EventController {
 
     }
 
+    @CrossOrigin
     @GetMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -38,6 +40,7 @@ public class EventController {
                 .body(eventService.updateEvent(event));
     }
 
+    @CrossOrigin
     @GetMapping("/api/v1/event")
     public ResponseEntity<Iterable<Event>>  getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly) {
         return ResponseEntity.status(HttpStatus.OK)
