@@ -1,5 +1,6 @@
 package com.eztix.eventservice.service;
 
+import com.eztix.eventservice.dto.EventDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
@@ -39,8 +40,14 @@ public class EventService {
        return eventRepository.save(event);
     }
 
-    public Iterable<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public Iterable<EventDTO> getAllEvents(boolean featuredOnly) {
+        if (featuredOnly) {
+            return eventRepository.findAllByIsFeaturedTrue();
+        }
+        else{
+            return eventRepository.findAllEvent();
+        }
+
     }
 
     public void deleteAll() {

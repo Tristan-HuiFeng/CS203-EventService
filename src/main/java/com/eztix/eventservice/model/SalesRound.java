@@ -1,5 +1,6 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -47,6 +48,7 @@ public class SalesRound {
     @Column(name = "sales_type")
     private String salesType;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="salesRound", fetch = FetchType.LAZY,
             orphanRemoval = true,
             cascade = CascadeType.ALL)
