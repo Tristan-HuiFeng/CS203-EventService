@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.mapping.Set;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Getter
@@ -56,6 +58,12 @@ public class Event {
 
     @Column(name = "feature_sequence")
     private Integer featureSequence;
+
+    @Formula("(SELECT a.start_datetime FROM activity as a WHERE a.event_id = id ORDER BY a.start_datetime LIMIT 1)")
+    private OffsetDateTime start_datetime;
+
+    @Formula("(SELECT a.end_datetime FROM activity as a WHERE a.event_id = id ORDER BY a.end_datetime DESC LIMIT 1)")
+    private OffsetDateTime end_datetime;
 
     @JsonManagedReference
     @OneToMany(mappedBy="event",
