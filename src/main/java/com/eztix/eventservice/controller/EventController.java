@@ -39,7 +39,7 @@ public class EventController {
     }
 
     @GetMapping("/api/v1/event")
-    public ResponseEntity<Iterable<EventDTO>>  getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly) {
+    public ResponseEntity<Iterable<Event>>  getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(eventService.getAllEvents(featuredOnly));
     }
