@@ -19,7 +19,7 @@ VALUES(1, "Music Of The Spheres World Tour", "concert", "Coldplay", "Following t
 
                          DHL is the Official Logistics Partner of the Music Of The Spheres World Tour, supporting the band in their mission to cut the tour’s direct emissions by 50%.",
 
-                 		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/TwiceConcertBanner.jpg", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
+                 		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/coldplay.png", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
                  		TRUE, 2);
 
 INSERT INTO EVENT (id, name, category, artist, description, banner_url, seat_map_url, is_featured, feature_sequence)
@@ -28,7 +28,7 @@ VALUES(2, "The “Charlie” Live Experience", "concert", "Charlie Puth", " Char
                                                Recently, Puth released his highly anticipated third studio album, “CHARLIE” via Atlantic Records. Featuring hit singles “Left and Right [feat. Jung Kook of BTS], “That’s Hilarious” and “Light Switch,” the “expertly crafted collection” (ROLLING STONE) has surpassed 1 billion global streams and received critical praise around the world. Following the release of his “CHARLIE”, Puth set out for his ‘One Night Only’ tour, welcoming fans around the world up close and personal as he shares his latest album and his greatest hits.
 
                                                In 2020, Puth’s collaboration with Gabby Barrett on their “I Hope” remix earned him his fourth top 10 track on the Billboard Hot 100, hit number one on the Billboard “Adult Pop Songs” chart, and won a 2021 Billboard Music Award for “Top Collaboration”. Puth also co-wrote and produced The Kid Laroi and Justin Bieber’s record-breaking single, “Stay”, which quickly become one of the biggest songs of 2021 and holds the title for the longest-reigning No. 1 on the Billboard Global 200 chart and the first to lead it for double-digits - spending a total of eleven weeks at the top of the chart.",
-		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/coldplay.png", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
+		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/charlieputh.jpeg", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
 		TRUE, 3);
 
 
@@ -38,7 +38,7 @@ VALUES(3, "HallyuPopFest Singapore 2023", "concert", "HallyuPopFest", " HallyuPo
                                                                         K-Pop legend Taeyang who made his debut in 2006 as a member of the South Korean boyband BIGBANG, is set to deliver an electrifying performance that you won't want to miss. It’s been over 5 years since Taeyang’s last performance in Singapore, you can look forward to the live band performance of his latest songs like VIBE and Shoong! along with other popular hits.
 
                                                                         Other fan favorites on the line-up include SF9, Kwon Eunbi, Kep1er and DKZ. Don't miss this incredible opportunity to experience the sensational SF9, witness up-and-coming star Kwon Eunbi - a former member of IZ*ONE, Kep1er’s Singapore debut and support the promising journey of DKZ!",
-		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/Hallyupopfest.pngHallyupopfest.png", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
+		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/Hallyupopfest.png", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
 		TRUE, 4);
 
 INSERT INTO EVENT (id, name, category, artist, description, banner_url, seat_map_url, is_featured)
@@ -80,6 +80,23 @@ VALUES (1, "2023-12-18T12:00:00+08:00", "2023-12-18T16:00:00+08:00", "Singapore 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
 VALUES (2, "2023-12-19T12:00:00+08:00", "2023-12-19T16:00:00+08:00", "Singapore Indoor Stadium", 1);
 
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (3, "2023-12-20T12:00:00+08:00", "2023-12-23T16:00:00+08:00", "Singapore Indoor Stadium", 0);
+
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (4, "2024-01-15T12:00:00+08:00", "2023-01-17T16:00:00+08:00", "Singapore Indoor Stadium", 2);
+
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (5, "2023-01-16T12:00:00+08:00", "2023-01-18T16:00:00+08:00", "Singapore Indoor Stadium", 3);
+
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (6, "2023-01-19T12:00:00+08:00", "2023-01-21T16:00:00+08:00", "Singapore Indoor Stadium", 4);
+
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (7, "2023-02-13T12:00:00+08:00", "2023-02-17T16:00:00+08:00", "Singapore Indoor Stadium", 5);
+
+INSERT INTO ACTIVITY (id, start_datetime, end_datetime, location, event_id)
+VALUES (8, "2023-02-20T12:00:00+08:00", "2023-02-25T16:00:00+08:00", "Singapore Indoor Stadium", 6);
 
 UPDATE ticket_type_seq
 SET next_val = 101;

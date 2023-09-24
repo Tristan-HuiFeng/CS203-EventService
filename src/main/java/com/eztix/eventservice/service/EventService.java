@@ -40,12 +40,12 @@ public class EventService {
        return eventRepository.save(event);
     }
 
-    public Iterable<EventDTO> getAllEvents(boolean featuredOnly) {
+    public Iterable<Event> getAllEvents(boolean featuredOnly) {
         if (featuredOnly) {
-            return eventRepository.findAllByIsFeaturedTrue();
+            return eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence();
         }
         else{
-            return eventRepository.findAllEvent();
+            return eventRepository.findAll();
         }
 
     }
