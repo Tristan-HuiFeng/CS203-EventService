@@ -7,6 +7,8 @@ import com.eztix.eventservice.repository.SalesRoundRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class SalesRoundService {
 
@@ -26,6 +28,14 @@ public class SalesRoundService {
 
         return salesRoundRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("sales round with id %d does not exist.", id))
+        );
+
+    }
+
+    public Iterable<SalesRound> getSalesRoundByEventId(Long activityId) {
+
+        return salesRoundRepository.findByActivityId(activityId).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("activity with id %d does not have any sales round.", activityId))
         );
 
     }

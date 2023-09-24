@@ -30,12 +30,20 @@ public class SalesRoundController {
                .body(salesRoundService.getSalesRoundById(id));
     }
 
+    @GetMapping ("/api/v1/activity/{activityId}/sales-round")
+    public ResponseEntity<Iterable<SalesRound>> getSalesRoundByEventId (@PathVariable Long activityId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(salesRoundService.getSalesRoundByEventId(activityId));
+    }
+
     //Get all SalesRounds
     @GetMapping("/api/v1/sales-round")
     public ResponseEntity<Iterable<SalesRound>> getAllSalesRound () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(salesRoundService.getAllSalesRounds());
     }
+
+
 
     //Update SalesRound
     @PutMapping("/api/v1/sales-round/{id}")

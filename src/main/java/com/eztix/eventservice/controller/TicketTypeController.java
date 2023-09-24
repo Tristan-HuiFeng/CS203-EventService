@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.model.SalesRound;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,12 @@ public class TicketTypeController {
     public ResponseEntity<Iterable<TicketType>> getAllTicketType () {
         return ResponseEntity.status(HttpStatus.OK)
               .body(ticketTypeService.getAllTicketTypes());
+    }
+
+    @GetMapping("/api/v1/activity/{activityId}/ticket-type")
+    public ResponseEntity<Iterable<TicketType>> getSalesRoundByEventId (@PathVariable Long activityId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ticketTypeService.getTicketTypeByActivityId(activityId));
     }
 
     //Update TicketType
