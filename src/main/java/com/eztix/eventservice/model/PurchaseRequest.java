@@ -1,10 +1,14 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
+
+import java.util.List;
 
 @EqualsAndHashCode
 @Getter
@@ -26,17 +30,23 @@ public class PurchaseRequest {
     @Column(name = "status")
     private String status;
 
-    @NotNull
     @Column(name = "queue_number")
     private Long queueNumber;
 
+    @NotNull
+    @Column(name = "customer_id")
+    private String customerId;
+
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "salesRound_id")
     private SalesRound salesRound;
 
-    @NotNull
-    @Column(name = "customer_id")
-    private String customer;
+    @JsonManagedReference
+    @OneToMany(mappedBy="purchaseRequest",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<PurchaseRequestItem> purchaseRequestItems;
 
 }

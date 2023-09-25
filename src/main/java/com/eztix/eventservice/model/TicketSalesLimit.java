@@ -35,13 +35,13 @@ public class TicketSalesLimit {
     @JsonBackReference
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "ticket_type_id")
+    @JoinColumn(name = "ticketType_id")
     private TicketType ticketType;
 
     @JsonBackReference
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "sales_round_id")
+    @JoinColumn(name = "salesRound_id")
     private SalesRound salesRound;
 
 }
