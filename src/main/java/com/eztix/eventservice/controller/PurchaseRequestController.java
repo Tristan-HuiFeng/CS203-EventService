@@ -1,11 +1,15 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.PurchaseRequestDTO;
+import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.service.PurchaseRequestService;
+
+import java.util.List;
 
 @RestController
 public class PurchaseRequestController {
@@ -18,7 +22,8 @@ public class PurchaseRequestController {
 
     //Add a new PurchaseRequest
     @PostMapping("/api/v1/purchase-request")
-    public ResponseEntity<PurchaseRequest> addPurchaseRequest (@RequestBody PurchaseRequest purchaseRequest) {
+    public ResponseEntity<PurchaseRequest> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest) {
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest));
     }

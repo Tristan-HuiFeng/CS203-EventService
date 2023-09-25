@@ -54,5 +54,12 @@ public class SalesRound {
             cascade = CascadeType.ALL)
     private List<TicketSalesLimit> ticketSalesLimits;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy="salesRound", fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<PurchaseRequest> purchaseRequests;
+
+
 
 }
