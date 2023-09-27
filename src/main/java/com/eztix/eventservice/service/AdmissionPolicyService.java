@@ -3,27 +3,33 @@ package com.eztix.eventservice.service;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.AdmissionPolicy;
+import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.AdmissionPolicyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class AdmissionPolicyService {
     private final AdmissionPolicyRepository admissionPolicyRepository;
-    public AdmissionPolicyService (AdmissionPolicyRepository admissionPolicyRepository){
+    private final EventService eventService;
+
+    public AdmissionPolicyService (AdmissionPolicyRepository admissionPolicyRepository, EventService eventService){
         this.admissionPolicyRepository = admissionPolicyRepository;
+        this.eventService = eventService;
     }
 
-    public AdmissionPolicy getAdmissionPolicyById(Long admissionPolicyId){
-        return admissionPolicyRepository.findById(admissionPolicyId).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("admission policy with id %d does not exist", admissionPolicyId)));
+    public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
+
+        Event event = eventService.getEventById(eventId);
+        return event.getAdmissionPolicies();
     }
 
-    public Iterable<AdmissionPolicy> getAllAdmissionPolicy(){
-        return admissionPolicyRepository.findAll();
-    }
 
-    public AdmissionPolicy addNewAdmissionPolicy(AdmissionPolicy admissionPolicy){
+    public AdmissionPolicy addNewAdmissionPolicy(Long eventId, AdmissionPolicy admissionPolicy){
+        Event event = eventService.getEventById(eventId);
+        admissionPolicy.setEvent(event);
         return admissionPolicyRepository.save(admissionPolicy);
     }
 
@@ -39,7 +45,11 @@ public class AdmissionPolicyService {
         return admissionPolicyRepository.save(admissionPolicy);
     }
 
-
-
+    public void deleteAdmissionPolicy(Long admissionPolicyId) {
+        if (admissionPolicyId == null) {
+            throw new RequestValidationException("admission policy id cannot be null.");
+        }
+        admissionPolicyRepository.deleteById(admissionPolicyId);
+    }
 
 }

@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class AdmissionPolicyController {
     private final AdmissionPolicyService admissionPolicyService;
@@ -15,25 +17,27 @@ public class AdmissionPolicyController {
         this.admissionPolicyService = admissionPolicyService;
     }
 
-    @GetMapping("/api/v1/admission-policy/{id}")
-    public ResponseEntity<AdmissionPolicy>getAdmissionPolicyById(@PathVariable Long iD){
+    @GetMapping("/api/v1/{eventId}/admission-policy")
+    public ResponseEntity<List<AdmissionPolicy>>getAdmissionPolicyByEventId(@PathVariable Long eventId){
         return ResponseEntity.status(HttpStatus.OK)
-                .body(admissionPolicyService.getAdmissionPolicyById(iD));
+                .body(admissionPolicyService.getAllAdmissionPolicyByEventId(eventId));
     }
 
-    @GetMapping("/api/v1/admission-policy")
-    public ResponseEntity<Iterable<AdmissionPolicy>> getAllAdmissionPolicy(){
-        return ResponseEntity.status(HttpStatus.OK).body(admissionPolicyService.getAllAdmissionPolicy());
-    }
-
-    @PostMapping("/api/v1/admission-policy")
-    public ResponseEntity<AdmissionPolicy> addAdmissionPolicy(@RequestBody AdmissionPolicy admissionPolicy){
-        return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(admissionPolicy));
+    @PostMapping("/api/v1/{eventId}/admission-policy")
+    public ResponseEntity<AdmissionPolicy> addAdmissionPolicy(@PathVariable Long eventId,@RequestBody AdmissionPolicy admissionPolicy){
+        return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(eventId, admissionPolicy));
     }
 
     @PutMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy> updateAdmissionPolicy(@PathVariable Long iD, @RequestBody AdmissionPolicy admissionPolicy){
         admissionPolicy.setId(iD);
         return ResponseEntity.status(HttpStatus.OK).body(admissionPolicyService.updateAdmissionPolicy(admissionPolicy));
+    }
+
+    @DeleteMapping("/api/v1/admission-policy/{admissionPolicyId}")
+    public ResponseEntity<String> deleteAdmissionPolicy(@PathVariable Long admissionPolicyId) {
+        admissionPolicyService.deleteAdmissionPolicy(admissionPolicyId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(String.format("admission policy with id %d has been deleted", admissionPolicyId));
     }
 }
