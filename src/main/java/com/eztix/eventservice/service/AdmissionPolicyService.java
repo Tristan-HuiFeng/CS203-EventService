@@ -26,7 +26,6 @@ public class AdmissionPolicyService {
         return event.getAdmissionPolicies();
     }
 
-
     public AdmissionPolicy addNewAdmissionPolicy(Long eventId, AdmissionPolicy admissionPolicy){
         Event event = eventService.getEventById(eventId);
         admissionPolicy.setEvent(event);
