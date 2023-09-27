@@ -18,10 +18,10 @@ public class TicketTypeController {
     }
 
     //Add a new Ticket
-    @PostMapping("/api/v1/ticket-type")
-    public ResponseEntity<TicketType> addTicketType (@RequestBody TicketType ticketType) {
+    @PostMapping("/api/v1/activity/{activityId}/ticket-type")
+    public ResponseEntity<TicketType> addTicketType (@PathVariable Long activityId, @RequestBody TicketType ticketType) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ticketTypeService.addNewTicketType(ticketType));
+                .body(ticketTypeService.addNewTicketType(activityId, ticketType));
     }
 
     //Get TicketType by id
@@ -31,15 +31,8 @@ public class TicketTypeController {
                .body(ticketTypeService.getTicketTypeById(id));
     }
 
-    //Get all TicketTypes
-    @GetMapping("/api/v1/ticket-type")
-    public ResponseEntity<Iterable<TicketType>> getAllTicketType () {
-        return ResponseEntity.status(HttpStatus.OK)
-              .body(ticketTypeService.getAllTicketTypes());
-    }
-
     @GetMapping("/api/v1/activity/{activityId}/ticket-type")
-    public ResponseEntity<Iterable<TicketType>> getSalesRoundByEventId (@PathVariable Long activityId) {
+    public ResponseEntity<Iterable<TicketType>> getTicketTypeByActivityId (@PathVariable Long activityId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ticketTypeService.getTicketTypeByActivityId(activityId));
     }
