@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.offset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +64,6 @@ public class ActivityServiceIT {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
 
         // when
         ResultActions resultActions = mockMvc.perform(post("/api/v1/activity").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
@@ -97,19 +97,19 @@ public class ActivityServiceIT {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
         activityRepository.save(activity);
 
-        activity.setLocation("Location New");
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
+        activity.setStartDateTime(now);
         // when
         ResultActions resultActions = mockMvc.perform(put("/api/v1/activity/{id}", activity.getId()).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(activity)));
 
         // then
         MockHttpServletResponse result = resultActions.andExpect(status().isOk()).andDo(print()).andReturn().getResponse();
 
-        String name = JsonPath.parse(result.getContentAsString()).read("$.activityName", String.class);
+        String datetime = JsonPath.parse(result.getContentAsString()).read("$.startDateTime", String.class);
 
-        assertThat(name).isEqualTo(activity.getLocation());
+        assertThat(datetime).isEqualTo(activity.getStartDateTime());
 
     }
 

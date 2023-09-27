@@ -6,6 +6,7 @@ import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.service.ActivityService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -30,11 +31,11 @@ class ActivityServiceTest {
     @InjectMocks
     private ActivityService testActivityService;
 
+    private Event event;
 
-    @Test
-    void givenNewActivity_whenAddActivity_thenSuccess() {
-        // given
-        Event event = new Event();
+    @BeforeAll
+    void setup() {
+        event = new Event();
         event.setId(1L);
         event.setName("Test Event");
         event.setCategory("concert");
@@ -42,7 +43,13 @@ class ActivityServiceTest {
         event.setDescription("This is a test event");
         event.setBannerURL("urk1");
         event.setSeatMapURL("url2");
+        event.setLocation("location");
         event.setIsFeatured(false);
+    }
+
+    @Test
+    void givenNewActivity_whenAddActivity_thenSuccess() {
+        // given
 
         Activity activity = new Activity();
         activity.setId(1L);
@@ -160,9 +167,5 @@ class ActivityServiceTest {
 
     }
 
-    @Test
-    void getAllEvents() {
-        testActivityService.getAllActivity();
-        verify(activityRepository).findAll();
-    }
+
 }

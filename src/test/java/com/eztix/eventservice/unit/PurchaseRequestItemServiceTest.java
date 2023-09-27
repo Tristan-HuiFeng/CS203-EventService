@@ -210,7 +210,6 @@ class PurchaseRequestItemServiceTest {
         // salesRoundRepository.save(salesRound);
 
         PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setCustomer("test customer");
         purchaseRequest.setQueueNumber(1L);
         purchaseRequest.setSalesRound(salesRound);
         purchaseRequest.setStatus("test status");

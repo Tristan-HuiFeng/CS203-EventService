@@ -27,8 +27,8 @@ public class SalesRound {
 
     @ManyToOne
     @NotNull
-    @JoinColumn(name = "activity_id")
-    private Activity activity;
+    @JoinColumn(name = "event_id")
+    private Event event;
 
     @NotNull
     @Column(name = "round_start")

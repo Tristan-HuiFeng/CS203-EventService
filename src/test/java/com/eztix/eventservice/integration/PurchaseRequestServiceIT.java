@@ -69,7 +69,6 @@ public class PurchaseRequestServiceIT {
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                activity.setLocation("Test Location");
                 activityRepository.save(activity);
 
                 SalesRound salesRound = new SalesRound();
@@ -84,7 +83,6 @@ public class PurchaseRequestServiceIT {
 
                 PurchaseRequest purchaseRequest = new PurchaseRequest();
                 purchaseRequest.setId(1L);
-                purchaseRequest.setCustomer("test customer");
                 purchaseRequest.setQueueNumber(1L);
                 purchaseRequest.setSalesRound(salesRound);
                 purchaseRequest.setStatus("test status");
@@ -128,7 +126,6 @@ public class PurchaseRequestServiceIT {
                 activity.setEvent(event);
                 activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
                 activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-                activity.setLocation("Test Location");
                 activityRepository.save(activity);
 
                 SalesRound salesRound = new SalesRound();
@@ -143,7 +140,6 @@ public class PurchaseRequestServiceIT {
 
                 PurchaseRequest purchaseRequest = new PurchaseRequest();
                 purchaseRequest.setId(1L);
-                purchaseRequest.setCustomer("test customer");
                 purchaseRequest.setQueueNumber(1L);
                 purchaseRequest.setSalesRound(salesRound);
                 purchaseRequest.setStatus("test status");

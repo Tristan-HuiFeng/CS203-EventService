@@ -65,7 +65,6 @@ public class SalesRoundServiceIT {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
         activityRepository.save(activity);
         
         SalesRound salesRound = new SalesRound();
@@ -116,7 +115,6 @@ public class SalesRoundServiceIT {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        activity.setLocation("Test Location");
         activityRepository.save(activity);
         
         SalesRound salesRound = new SalesRound();
