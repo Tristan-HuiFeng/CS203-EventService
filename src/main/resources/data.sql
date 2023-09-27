@@ -114,14 +114,14 @@ VALUES (2, "CAT C", 200, 500, 0, 0, 0);
 UPDATE sales_round_seq
 SET next_val = 101;
 
-INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, activity_id)
-VALUES (0, "Round 1 General", "2023-09-29T08:00:00+08:00", "2023-10-04T22:00:00+08:00", "2023-10-05T08:00:00+08:00", "2023-10-05T22:00:00+08:00", 0);
+INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
+VALUES (0, "Round 1 General", "2023-09-29T08:00:00+08:00", "2023-10-04T22:00:00+08:00", "2023-10-05T08:00:00+08:00", "2023-10-05T22:00:00+08:00", 1);
 
-INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, activity_id)
-VALUES (1, "Round 1 General", "2023-10-06T08:00:00+08:00", "2023-10-11T22:00:00+08:00", "2023-10-12T08:00:00+08:00", "2023-10-12T22:00:00+08:00", 0);
+INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
+VALUES (1, "Round 1 General", "2023-10-06T08:00:00+08:00", "2023-10-11T22:00:00+08:00", "2023-10-12T08:00:00+08:00", "2023-10-12T22:00:00+08:00", 1);
 
-INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, activity_id)
-VALUES (2, "Round 1 General", "2023-10-13T08:00:00+08:00", "2023-10-18T22:00:00+08:00", "2023-10-19T08:00:00+08:00", "2023-10-19T22:00:00+08:00", 0);
+INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
+VALUES (2, "Round 1 General", "2023-10-13T08:00:00+08:00", "2023-10-18T22:00:00+08:00", "2023-10-19T08:00:00+08:00", "2023-10-19T22:00:00+08:00", 1);
 
 
 UPDATE ticket_sales_limit_seq

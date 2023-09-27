@@ -6,6 +6,8 @@ import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.service.ActivityService;
+import com.eztix.eventservice.service.EventService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -29,12 +31,14 @@ class ActivityServiceTest {
     private ActivityRepository activityRepository;
     @InjectMocks
     private ActivityService testActivityService;
+    @Mock
+    private EventService eventService;
 
+    static private Event event;
 
-    @Test
-    void givenNewActivity_whenAddActivity_thenSuccess() {
-        // given
-        Event event = new Event();
+    @BeforeAll
+    static void setup() {
+        event = new Event();
         event.setId(1L);
         event.setName("Test Event");
         event.setCategory("concert");
@@ -42,13 +46,20 @@ class ActivityServiceTest {
         event.setDescription("This is a test event");
         event.setBannerURL("urk1");
         event.setSeatMapURL("url2");
+        event.setLocation("location");
         event.setIsFeatured(false);
+    }
+
+    @Test
+    void givenNewActivity_whenAddActivity_thenSuccess() {
+        // given
 
         Activity activity = new Activity();
         activity.setId(1L);
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        given(eventService.getEventById(1L)).willReturn(this.event);
 
         // when
         testActivityService.addNewActivity(1L, activity);
@@ -81,15 +92,6 @@ class ActivityServiceTest {
     void givenActivityExist_whenRetrieve_thenSuccessful() {
 
         // given
-        Event event = new Event();
-        event.setId(1L);
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
 
         Activity activity = new Activity();
         activity.setId(1L);
@@ -110,15 +112,6 @@ class ActivityServiceTest {
     @Test
     void givenNullId_whenUpdate_throwRequestValidationException() {
         // given
-        Event event = new Event();
-        event.setId(1L);
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
 
         Activity activity = new Activity();
         activity.setEvent(event);
@@ -135,15 +128,6 @@ class ActivityServiceTest {
     @Test
     void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
         // given
-        Event event = new Event();
-        event.setId(1L);
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
 
         Activity activity = new Activity();
         activity.setId(1L);
@@ -160,9 +144,5 @@ class ActivityServiceTest {
 
     }
 
-    @Test
-    void getAllEvents() {
-        testActivityService.getAllActivity();
-        verify(activityRepository).findAll();
-    }
+
 }
