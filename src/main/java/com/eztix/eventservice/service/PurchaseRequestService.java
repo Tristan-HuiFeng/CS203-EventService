@@ -14,7 +14,10 @@ import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.MethodNotAllowedException;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,14 @@ public class PurchaseRequestService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("sales round with id %d not found.", purchaseRequestDTO.getSalesRoundId())
                 ));
+
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
+
+        if (salesRound.getRoundEnd().isAfter(now) || salesRound.getRoundEnd().isBefore(now)) {
+            throw new RequestValidationException("request rejected due to sales round not ongoing.");
+        }
+
+
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest = new PurchaseRequest();
@@ -113,6 +124,12 @@ public class PurchaseRequestService {
         }
 
         PurchaseRequest currentPurchaseRequest = this.getPurchaseRequestById(purchaseRequest.getId());
+
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
+
+        if (purchaseRequest.getSalesRound().getRoundEnd().isAfter(now) || purchaseRequest.getSalesRound().getRoundEnd().isBefore(now)) {
+            throw new RequestValidationException("request rejected due to sales round not ongoing.");
+        }
 
         int sum = 0;
         List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
