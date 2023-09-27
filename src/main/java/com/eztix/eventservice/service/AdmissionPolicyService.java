@@ -22,8 +22,9 @@ public class AdmissionPolicyService {
 
     public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
 
-        Event event = eventService.getEventById(eventId);
-        return event.getAdmissionPolicies();
+        return admissionPolicyRepository.findAllByEventId(eventId).orElseThrow(() ->
+                    new ResourceNotFoundException(String.format("event with id %d does not have admission policy", eventId))
+                );
     }
 
     public AdmissionPolicy addNewAdmissionPolicy(Long eventId, AdmissionPolicy admissionPolicy){

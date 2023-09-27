@@ -132,8 +132,15 @@ class EventServiceTest {
     }
 
     @Test
-    void getAllEvents() {
+    void getAllEventsFeatured() {
         testEventService.getAllEvents(true);
-        verify(eventRepository).findAllByIsFeaturedTrue();
+        verify(eventRepository).findAllByIsFeaturedTrueOrderByFeatureSequence();
     }
+
+    @Test
+    void getAllEventsNotFeatured() {
+        testEventService.getAllEvents(false);
+        verify(eventRepository).findAll();
+    }
+
 }
