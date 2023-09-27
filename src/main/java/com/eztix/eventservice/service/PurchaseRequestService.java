@@ -43,6 +43,11 @@ public class PurchaseRequestService {
         if (purchaseRequestDTO.getSalesRoundId() == null) {
             throw new RequestValidationException("sales round id cannot be null.");
         }
+
+        if (purchaseRequestDTO.getPurchaseRequestItems().isEmpty()) {
+            throw new RequestValidationException("there cannot be 0 item in the purchase request.");
+        }
+
         // Get Sales Round
         SalesRound salesRound = salesRoundRepository.findById(purchaseRequestDTO.getSalesRoundId())
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -58,7 +63,8 @@ public class PurchaseRequestService {
         newPurchaseRequest.setSalesRound(salesRound);
 
         // Create a List of Purchase Request Item
-       List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
+        List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
+        int sum = 0;
 
         for (PurchaseRequestItemDTO temp: purchaseRequestDTO.getPurchaseRequestItems()) {
 
@@ -73,9 +79,15 @@ public class PurchaseRequestService {
             purchaseRequestItem.setQuantityRequested(temp.getQuantityRequested());
             purchaseRequestItem.setTicketType(ticketType);
             purchaseRequestItem.setPurchaseRequest(newPurchaseRequest);
+            sum += temp.getQuantityRequested();
 
             newPurchaseRequestItemList.add(purchaseRequestItem);
 
+        }
+        if (sum > 4) {
+            throw new RequestValidationException("purchase request exceed 4 ticket limit.");
+        } else if (sum < 0) {
+            throw new RequestValidationException("purchase request must have at least 1 ticket.");
         }
 
         // Add to New Purchase Request
@@ -93,11 +105,6 @@ public class PurchaseRequestService {
 
     }
 
-    // Get all PurchaseRequest
-    public Iterable<PurchaseRequest> getAllPurchaseRequests() {
-        return purchaseRequestRepository.findAll();
-    }
-
     // Update PurchaseRequest
     @Transactional
     public PurchaseRequest updatePurchaseRequest(PurchaseRequest purchaseRequest) {
@@ -105,10 +112,37 @@ public class PurchaseRequestService {
             throw new RequestValidationException("purchase request id cannot be null.");
         }
 
-        purchaseRequestRepository.findById(purchaseRequest.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request with id %d does not exist.", purchaseRequest.getId())));
+        PurchaseRequest currentPurchaseRequest = this.getPurchaseRequestById(purchaseRequest.getId());
 
-        return purchaseRequestRepository.save(purchaseRequest);
+        int sum = 0;
+        List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
+
+        for (PurchaseRequestItem temp: purchaseRequest.getPurchaseRequestItems()) {
+
+            if (temp.getTicketType() == null) {
+                throw new RequestValidationException("ticket type cannot be null.");
+            }
+
+            PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
+            purchaseRequestItem.setQuantityApproved(0);
+            purchaseRequestItem.setQuantityRequested(temp.getQuantityRequested());
+            purchaseRequestItem.setTicketType(temp.getTicketType());
+            purchaseRequestItem.setPurchaseRequest(currentPurchaseRequest);
+            sum += temp.getQuantityRequested();
+
+            newPurchaseRequestItemList.add(purchaseRequestItem);
+
+        }
+
+        if (sum > 4) {
+            throw new RequestValidationException("purchase request exceed 4 ticket limit.");
+        } else if (sum < 0) {
+            throw new RequestValidationException("purchase request must have at least 1 ticket.");
+        }
+
+        currentPurchaseRequest.setPurchaseRequestItems(newPurchaseRequestItemList);
+
+        return purchaseRequestRepository.save(currentPurchaseRequest);
     }
 
     // Delete all PurchaseRequest
