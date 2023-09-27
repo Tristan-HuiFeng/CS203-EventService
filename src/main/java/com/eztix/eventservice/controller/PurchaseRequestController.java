@@ -35,13 +35,6 @@ public class PurchaseRequestController {
                .body(purchaseRequestService.getPurchaseRequestById(id));
     }
 
-    //Get all PurchaseRequests
-    @GetMapping("/api/v1/purchase-request")
-    public ResponseEntity<Iterable<PurchaseRequest>> getAllPurchaseRequest () {
-        return ResponseEntity.status(HttpStatus.OK)
-              .body(purchaseRequestService.getAllPurchaseRequests());
-    }
-
     //Update PurchaseRequest
     @PutMapping("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long id, @RequestBody PurchaseRequest purchaseRequest) {

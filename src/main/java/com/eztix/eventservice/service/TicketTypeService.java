@@ -2,8 +2,10 @@ package com.eztix.eventservice.service;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
+import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
+import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +18,25 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class TicketTypeService {
 
     private final TicketTypeRepository ticketTypeRepository;
+    private final ActivityService activityService;
 
-    public TicketTypeService(TicketTypeRepository ticketTypeRepository) {
+    public TicketTypeService(TicketTypeRepository ticketTypeRepository, ActivityService activityService) {
         this.ticketTypeRepository = ticketTypeRepository;
+        this.activityService = activityService;
     }
 
     // Add new TicketType
-    public TicketType addNewTicketType(TicketType ticketType) {
+    public TicketType addNewTicketType(Long activityId, TicketType ticketType) {
+
+        if (ticketType.getId() != null) {
+            throw new RequestValidationException("not allowed to specify id for new ticket type found");
+        }
+
+        Activity activity = activityService.getActivityById(activityId);
+        ticketType.setActivity(activity);
+
         return ticketTypeRepository.save(ticketType);
+
     }
 
     // Get TicketType by id
@@ -35,18 +48,12 @@ public class TicketTypeService {
 
     }
 
-
     public Iterable<TicketType> getTicketTypeByActivityId(Long activityId) {
 
         return ticketTypeRepository.findByActivityId(activityId).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("activity with id %d does not have any ticket type.", activityId))
         );
 
-    }
-
-    // Get all TicketTypes
-    public Iterable<TicketType> getAllTicketTypes() {
-        return ticketTypeRepository.findAll();
     }
 
     // Update TicketType
