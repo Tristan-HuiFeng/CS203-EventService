@@ -21,14 +21,9 @@ public class ActivityController {
                 .body(activityService.getActivityById(activityId));
     }
 
-    @GetMapping("/api/v1/activity")
-    public ResponseEntity<Iterable<Activity>> getAllActivity(){
-        return ResponseEntity.status(HttpStatus.OK).body(activityService.getAllActivity());
-    }
-
-    @PostMapping("/api/v1/activity")
-    public ResponseEntity<Activity> addActivity(@RequestBody Activity activity) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(activity));
+    @PostMapping("/api/v1/event/{eventId}/activity")
+    public ResponseEntity<Activity> addActivity(@PathVariable Long eventId, @RequestBody Activity activity) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(eventId, activity));
     }
 
     @PutMapping("/api/v1/activity/{activityId}")
@@ -37,6 +32,11 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.OK).body(activityService.updateActivity(activity));
     }
 
+    @DeleteMapping("/api/v1/activity/{activityId}")
+    public ResponseEntity<String> deleteActivity(@PathVariable Long activityId) {
+        activityService.deleteActivity(activityId);
 
+        return ResponseEntity.status(HttpStatus.OK).body(String.format("activity with id %d has been deleted", activityId));
+    }
 
 }

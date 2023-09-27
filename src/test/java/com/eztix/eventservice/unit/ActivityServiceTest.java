@@ -35,6 +35,7 @@ class ActivityServiceTest {
     void givenNewActivity_whenAddActivity_thenSuccess() {
         // given
         Event event = new Event();
+        event.setId(1L);
         event.setName("Test Event");
         event.setCategory("concert");
         event.setArtist("artist1");
@@ -45,13 +46,12 @@ class ActivityServiceTest {
 
         Activity activity = new Activity();
         activity.setId(1L);
-        activity.setLocation("Test Location");
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
 
         // when
-        testActivityService.addNewActivity(activity);
+        testActivityService.addNewActivity(1L, activity);
 
         // then
         ArgumentCaptor<Activity> activityArgumentCaptor =
