@@ -1,5 +1,6 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +23,7 @@ public class AdmissionPolicy {
     private Long id;
 
     @NotNull
-    @Column(name = "Description", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @NotNull
@@ -30,9 +31,10 @@ public class AdmissionPolicy {
     private String name;
 
     @NotNull
-    @Column(name = "Policy_Order")
+    @Column(name = "policy_order")
     private Short policyOrder;
 
+    @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "event_id")

@@ -1,10 +1,10 @@
 package com.eztix.eventservice.service;
 
-import com.eztix.eventservice.dto.EventDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.EventRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ public class EventService {
 
     @Transactional
     public Event updateEvent(Event event) {
-        if (event.getId() == null) {
+        if (event == null || event.getId() == null) {
             throw new RequestValidationException("event id cannot be null.");
         }
 

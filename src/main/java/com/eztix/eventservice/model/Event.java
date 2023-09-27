@@ -69,13 +69,16 @@ public class Event {
     @Formula("(SELECT a.end_datetime FROM activity as a WHERE a.event_id = id ORDER BY a.end_datetime DESC LIMIT 1)")
     private OffsetDateTime end_datetime;
 
-
     @JsonManagedReference
     @OneToMany(mappedBy="event",
             orphanRemoval = true,
             cascade = CascadeType.ALL)
     private List<Activity> activities;
 
-
+    @JsonManagedReference
+    @OneToMany(mappedBy="event",
+            orphanRemoval = true,
+            cascade = CascadeType.ALL)
+    private List<AdmissionPolicy> admissionPolicies;
 
 }

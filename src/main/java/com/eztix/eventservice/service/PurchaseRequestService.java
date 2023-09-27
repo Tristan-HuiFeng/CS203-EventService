@@ -45,7 +45,9 @@ public class PurchaseRequestService {
         }
         // Get Sales Round
         SalesRound salesRound = salesRoundRepository.findById(purchaseRequestDTO.getSalesRoundId())
-                .orElseThrow(() -> new ResourceNotFoundException("sales round id not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        String.format("sales round with id %d not found.", purchaseRequestDTO.getSalesRoundId())
+                ));
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest = new PurchaseRequest();
