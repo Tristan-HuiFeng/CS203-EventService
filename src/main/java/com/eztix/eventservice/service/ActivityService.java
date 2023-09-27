@@ -43,11 +43,6 @@ public class ActivityService {
                 new ResourceNotFoundException(String.format("activity with id %d does not exist.", activity.getId()))
         );
 
-        long activityId = activity.getId();
-        Optional<Activity> result = activityRepository.findById(activityId);
-        if (result.isEmpty()){
-            throw new ResourceNotFoundException(String.format("activity with id %d not found.", activityId));
-        }
         return activityRepository.save(activity);
    }
 

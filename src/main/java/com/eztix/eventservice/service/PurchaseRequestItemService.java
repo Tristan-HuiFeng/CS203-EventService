@@ -7,6 +7,8 @@ import com.eztix.eventservice.repository.PurchaseRequestItemRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class PurchaseRequestItemService {
 
@@ -46,6 +48,10 @@ public class PurchaseRequestItemService {
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("purchase request item with id %d does not exist.", purchaseRequestItem.getId())));
 
         return purchaseRequestItemRepository.save(purchaseRequestItem);
+    }
+
+    public void validatePurchaseRequestItemList(List<PurchaseRequestItem> purchaseRequestItemList) {
+
     }
 
     // Delete all PurchaseRequestItem
