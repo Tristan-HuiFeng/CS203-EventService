@@ -1,5 +1,7 @@
 package com.eztix.eventservice.unit;
 
+import com.eztix.eventservice.model.Activity;
+import com.eztix.eventservice.service.ActivityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -7,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -27,7 +31,8 @@ public class TicketTypeServiceTest {
     private TicketTypeRepository ticketTypeRepository;
     @InjectMocks
     private TicketTypeService testTicketTypeService;
-
+    @Mock
+    private ActivityService activityService;
 
     @Test
     void givenNewTicketType_whenAddTicketType_thenSuccess() {
@@ -38,9 +43,10 @@ public class TicketTypeServiceTest {
         ticketType.setReservedCount(0);
         ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
+        given(activityService.getActivityById(1L)).willReturn(new Activity());
 
         // when
-        testTicketTypeService.addNewTicketType(ticketType);
+        testTicketTypeService.addNewTicketType(1L, ticketType);
 
         // then
         ArgumentCaptor<TicketType> ticketTypeArgumentCaptor =
@@ -125,9 +131,21 @@ public class TicketTypeServiceTest {
     }
 
     @Test
-    void getAllTicketTypes() {
-        testTicketTypeService.getAllTicketTypes();
-        verify(ticketTypeRepository).findAll();
+    void getAllTicketTypesByActivityId() {
+        TicketType ticketType = new TicketType();
+        ticketType.setId(1L);
+        ticketType.setOccupiedCount(0);
+        ticketType.setPrice(0);
+        ticketType.setTotalVacancy(0);
+        ticketType.setType("test type");
+
+        List<TicketType> ticketTypeList = new ArrayList<>();
+        ticketTypeList.add(ticketType);
+
+        given(ticketTypeRepository.findByActivityId(1L)).willReturn(Optional.of(ticketTypeList));
+
+        testTicketTypeService.getTicketTypeByActivityId(1L);
+        verify(ticketTypeRepository).findByActivityId(1L);
     }    
 
 

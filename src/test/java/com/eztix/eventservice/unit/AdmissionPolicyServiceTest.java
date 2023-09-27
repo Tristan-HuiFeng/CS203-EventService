@@ -6,6 +6,8 @@ import com.eztix.eventservice.model.AdmissionPolicy;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.AdmissionPolicyRepository;
 import com.eztix.eventservice.service.AdmissionPolicyService;
+import com.eztix.eventservice.service.EventService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -14,6 +16,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -29,11 +33,13 @@ public class AdmissionPolicyServiceTest {
     private AdmissionPolicyRepository admissionPolicyRepository;
     @InjectMocks
     private AdmissionPolicyService testAdmissionPolicyService;
+    @Mock
+    private EventService eventService;
+    private static Event event;
 
-    @Test
-    void givenNewAdmissionPolicy_whenAddAdmissionPolicy_thenSuccess(){
-        // given
-        Event event = new Event();
+    @BeforeAll
+    static void setup(){
+        event = new Event();
         event.setName("Test Event");
         event.setCategory("concert");
         event.setArtist("artist1");
@@ -41,17 +47,21 @@ public class AdmissionPolicyServiceTest {
         event.setBannerURL("urk1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
+    }
+    @Test
+    void givenNewAdmissionPolicy_whenAddAdmissionPolicy_thenSuccess(){
+        // given
 
         AdmissionPolicy admissionPolicy = new AdmissionPolicy();
         admissionPolicy.setId(1L);
         admissionPolicy.setName("Test admission policy");
-        admissionPolicy.setEvent(event);
         admissionPolicy.setDescription("This is a test policy");
-        Short s = 2;
-        admissionPolicy.setPolicyOrder(s);
+        admissionPolicy.setPolicyOrder((short) 1);
+
+        given(eventService.getEventById(1L)).willReturn(this.event);
 
         // when
-        testAdmissionPolicyService.addNewAdmissionPolicy(admissionPolicy);
+        testAdmissionPolicyService.addNewAdmissionPolicy(1L, admissionPolicy);
 
         // then
         ArgumentCaptor<AdmissionPolicy> admissionPolicyArgumentCaptor =
@@ -68,54 +78,18 @@ public class AdmissionPolicyServiceTest {
     @Test
     void givenIdNotInDB_whenRetrieveById_throwResourcesNotFoundException() {
         // given
-        given(admissionPolicyRepository.findById(1L)).willReturn(Optional.empty());
+        given(admissionPolicyRepository.findAllByEventId(1L)).willReturn(Optional.empty());
         // when
         // then
-        assertThatThrownBy(() -> testAdmissionPolicyService.getAdmissionPolicyById(1L))
+        assertThatThrownBy(() -> testAdmissionPolicyService.getAllAdmissionPolicyByEventId(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("admission policy with id %d does not exist", 1L);
+                .hasMessageContaining("event with id %d does not have admission policy", 1L);
     }
 
-    @Test
-    void givenAdmissionPolicyExist_whenRetrieve_thenSuccessful(){
-        // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("urk1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-
-        AdmissionPolicy admissionPolicy = new AdmissionPolicy();
-        admissionPolicy.setId(1L);
-        admissionPolicy.setName("Test admission policy");
-        admissionPolicy.setEvent(event);
-        admissionPolicy.setDescription("This is a test policy");
-        Short s = 2;
-        admissionPolicy.setPolicyOrder(s);
-
-        // when
-
-        given(admissionPolicyRepository.findById(admissionPolicy.getId())).willReturn(Optional.of(admissionPolicy));
-
-        AdmissionPolicy retrievedAdmissionPolicy = testAdmissionPolicyService.getAdmissionPolicyById(admissionPolicy.getId());
-        // then
-        assertThat(retrievedAdmissionPolicy).isEqualTo(admissionPolicy);
-    }
 
     @Test
     void givenNullId_whenUpdate_throwRequestValidationException(){
         // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("urk1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
 
         AdmissionPolicy admissionPolicy = new AdmissionPolicy();
         admissionPolicy.setName("Test admission policy");
@@ -130,17 +104,10 @@ public class AdmissionPolicyServiceTest {
                 .isInstanceOf(RequestValidationException.class)
                 .hasMessageContaining("admission policy id cannot be null.");
     }
+
     @Test
     void givenIdNotInDB_whenUpdate_throwResourceNotFoundException(){
         // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("urk1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
 
         AdmissionPolicy admissionPolicy = new AdmissionPolicy();
         admissionPolicy.setId(1L);
@@ -161,8 +128,19 @@ public class AdmissionPolicyServiceTest {
 
     @Test
     void getAllAdmissionPolicy(){
-        testAdmissionPolicyService.getAllAdmissionPolicy();
-        verify(admissionPolicyRepository).findAll();
+
+        AdmissionPolicy admissionPolicy = new AdmissionPolicy();
+        admissionPolicy.setId(1L);
+        admissionPolicy.setName("Test admission policy");
+        admissionPolicy.setEvent(event);
+        admissionPolicy.setDescription("This is a test policy");
+        List<AdmissionPolicy> admissionPolicyList = new ArrayList<>();
+
+        admissionPolicyList.add(admissionPolicy);
+
+        given(admissionPolicyRepository.findAllByEventId(1L)).willReturn(Optional.of(admissionPolicyList));
+        testAdmissionPolicyService.getAllAdmissionPolicyByEventId(1L);
+        verify(admissionPolicyRepository).findAllByEventId(1L);
     }
 
 
