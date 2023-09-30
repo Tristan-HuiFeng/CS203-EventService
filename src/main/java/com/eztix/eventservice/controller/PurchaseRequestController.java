@@ -1,15 +1,12 @@
 package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
-import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.service.PurchaseRequestService;
-
-import java.util.List;
 
 @RestController
 public class PurchaseRequestController {

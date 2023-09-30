@@ -14,7 +14,6 @@ import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
