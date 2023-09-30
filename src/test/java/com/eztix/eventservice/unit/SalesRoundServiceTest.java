@@ -21,7 +21,6 @@ import static org.mockito.Mockito.verify;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
-import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.repository.SalesRoundRepository;
