@@ -12,13 +12,15 @@ import com.eztix.eventservice.repository.PurchaseRequestItemRepository;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PurchaseRequestService {
@@ -28,11 +30,10 @@ public class PurchaseRequestService {
     private final TicketTypeRepository ticketTypeRepository;
     private final PurchaseRequestItemRepository purchaseRequestItemRepository;
 
-
     public PurchaseRequestService(PurchaseRequestRepository purchaseRequestRepository,
-                                  SalesRoundRepository salesRoundRepository,
-                                  TicketTypeRepository ticketTypeRepository,
-                                  PurchaseRequestItemRepository purchaseRequestItemRepository) {
+            SalesRoundRepository salesRoundRepository,
+            TicketTypeRepository ticketTypeRepository,
+            PurchaseRequestItemRepository purchaseRequestItemRepository) {
         this.purchaseRequestRepository = purchaseRequestRepository;
         this.salesRoundRepository = salesRoundRepository;
         this.ticketTypeRepository = ticketTypeRepository;
@@ -53,8 +54,7 @@ public class PurchaseRequestService {
         // Get Sales Round
         SalesRound salesRound = salesRoundRepository.findById(purchaseRequestDTO.getSalesRoundId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("sales round with id %d not found.", purchaseRequestDTO.getSalesRoundId())
-                ));
+                        String.format("sales round with id %d not found.", purchaseRequestDTO.getSalesRoundId())));
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
@@ -62,13 +62,10 @@ public class PurchaseRequestService {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
 
-
-
         // New Purchase Request
         PurchaseRequest newPurchaseRequest = new PurchaseRequest();
         newPurchaseRequest.setStatus("pending");
         newPurchaseRequest.setCustomerId("Default TODO");
-
 
         newPurchaseRequest.setSalesRound(salesRound);
 
@@ -76,7 +73,7 @@ public class PurchaseRequestService {
         List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
         int sum = 0;
 
-        for (PurchaseRequestItemDTO temp: purchaseRequestDTO.getPurchaseRequestItems()) {
+        for (PurchaseRequestItemDTO temp : purchaseRequestDTO.getPurchaseRequestItems()) {
 
             if (temp.getTicketTypeId() == null) {
                 throw new RequestValidationException("ticket type id cannot be null.");
@@ -109,9 +106,8 @@ public class PurchaseRequestService {
     // Get PurchaseRequest by id
     public PurchaseRequest getPurchaseRequestById(Long id) {
 
-        return purchaseRequestRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException(String.format("purchase request with id %d does not exist.", id))
-        );
+        return purchaseRequestRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(String.format("purchase request with id %d does not exist.", id)));
 
     }
 
@@ -126,14 +122,15 @@ public class PurchaseRequestService {
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
-        if (purchaseRequest.getSalesRound().getRoundEnd().isAfter(now) || purchaseRequest.getSalesRound().getRoundEnd().isBefore(now)) {
+        if (purchaseRequest.getSalesRound().getRoundEnd().isAfter(now)
+                || purchaseRequest.getSalesRound().getRoundEnd().isBefore(now)) {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
 
         int sum = 0;
         List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
 
-        for (PurchaseRequestItem temp: purchaseRequest.getPurchaseRequestItems()) {
+        for (PurchaseRequestItem temp : purchaseRequest.getPurchaseRequestItems()) {
 
             if (temp.getTicketType() == null) {
                 throw new RequestValidationException("ticket type cannot be null.");
@@ -159,6 +156,39 @@ public class PurchaseRequestService {
         currentPurchaseRequest.setPurchaseRequestItems(newPurchaseRequestItemList);
 
         return purchaseRequestRepository.save(currentPurchaseRequest);
+    }
+
+    // PR algorithm to assign queue number
+    public void assignQueueNumber(Long salesRoundId) throws ResourceNotFoundException{
+        Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
+        if (!allPurchaseRequests.isPresent()) {
+            throw new ResourceNotFoundException(String.format("purchase request with sales round id %d does not exist.", salesRoundId));
+        }
+        Stream<PurchaseRequest> streamOfPR = allPurchaseRequests.get();
+        long size = streamOfPR.count();
+        List<Long> rng = new ArrayList<>();
+        long i = 1;
+        while (i <= size) {
+            rng.add(i++);
+        }
+        Collections.shuffle(rng, new Random(System.currentTimeMillis()));
+        Iterator<Long> rngIterator = rng.iterator();
+        List<PurchaseRequest> prToSave = new ArrayList<>();
+        streamOfPR.forEach(pr -> {
+            pr.setQueueNumber(rngIterator.next());
+            prToSave.add(pr);
+
+            if (prToSave.size() % 50 == 0) {
+                purchaseRequestRepository.saveAll(prToSave);
+            }
+            // purchaseRequestRepository.save(pr);
+        });
+
+        if (!prToSave.isEmpty()) {
+            purchaseRequestRepository.saveAll(prToSave);
+        }
+
+        return;
     }
 
     // Delete all PurchaseRequest
