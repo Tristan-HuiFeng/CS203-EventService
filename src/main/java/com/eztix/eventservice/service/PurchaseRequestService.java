@@ -158,11 +158,14 @@ public class PurchaseRequestService {
         return purchaseRequestRepository.save(currentPurchaseRequest);
     }
 
-    // PR algorithm to assign queue number
-    public void assignQueueNumber(Long salesRoundId) throws ResourceNotFoundException{
+    // PR algorithm to process purchase requests by assign queue number
+    public void processPurchaseRequest(Long salesRoundId) throws ResourceNotFoundException{
         Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
         if (!allPurchaseRequests.isPresent()) {
-            throw new ResourceNotFoundException(String.format("purchase request with sales round id %d does not exist.", salesRoundId));
+            if (!salesRoundRepository.findById(salesRoundId).isPresent()) {
+                throw new ResourceNotFoundException(String.format("sales round with id %d does not exist.", salesRoundId));
+            }
+            throw new ResourceNotFoundException(String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
         }
         Stream<PurchaseRequest> streamOfPR = allPurchaseRequests.get();
         long size = streamOfPR.count();
@@ -177,11 +180,9 @@ public class PurchaseRequestService {
         streamOfPR.forEach(pr -> {
             pr.setQueueNumber(rngIterator.next());
             prToSave.add(pr);
-
             if (prToSave.size() % 50 == 0) {
                 purchaseRequestRepository.saveAll(prToSave);
             }
-            // purchaseRequestRepository.save(pr);
         });
 
         if (!prToSave.isEmpty()) {
