@@ -159,6 +159,7 @@ public class PurchaseRequestService {
     }
 
     // PR algorithm to process purchase requests by assign queue number
+    @Transactional
     public void processPurchaseRequest(Long salesRoundId) throws ResourceNotFoundException{
         Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
         if (!allPurchaseRequests.isPresent()) {
