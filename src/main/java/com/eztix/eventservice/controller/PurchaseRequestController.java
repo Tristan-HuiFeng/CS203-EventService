@@ -1,6 +1,8 @@
 package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
+import com.eztix.eventservice.exception.ResourceNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,19 @@ public class PurchaseRequestController {
         purchaseRequest.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
+    }
+
+    //Process PurchaseRequest
+    @PutMapping("/api/v1/process-pr/salesRound_id")
+    public ResponseEntity<PurchaseRequest> processPurchaseRequest (@PathVariable Long salesRoundId) {
+        try {
+            purchaseRequestService.processPurchaseRequest(salesRoundId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }
