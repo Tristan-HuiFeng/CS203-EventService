@@ -23,6 +23,8 @@ import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import javax.swing.text.html.Option;
+
 @Service
 public class PurchaseRequestService {
 
@@ -169,8 +171,11 @@ public class PurchaseRequestService {
         // Check if any purchase requests are retrieved
         if (!allPurchaseRequests.isPresent()) {
 
+            // Retrieve sales round
+            Optional<SalesRound> salesRound = salesRoundRepository.findById(salesRoundId);
+
             // If no purchase requests retrieved, check if sales round exists, throw relevant exception
-            if (!salesRoundRepository.findById(salesRoundId).isPresent()) {
+            if (!salesRound.isPresent()) {
                 throw new ResourceNotFoundException(String.format("sales round with id %d does not exist.", salesRoundId));
             }
             throw new ResourceNotFoundException(String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
@@ -178,33 +183,7 @@ public class PurchaseRequestService {
 
         // Algorithm
         Stream<PurchaseRequest> streamOfPR = allPurchaseRequests.get();
-        long size = streamOfPR.count();
-        List<Long> rng = new ArrayList<>();
-        long i = 1;
-        while (i <= size) {
-            rng.add(i++);
-        }
-        Collections.shuffle(rng, new SecureRandom()));
-        Iterator<Long> rngIterator = rng.iterator();
-        List<PurchaseRequest> prToSave = new ArrayList<>();
-        streamOfPR.forEach(pr -> {
-            pr.setQueueNumber(rngIterator.next());
-            prToSave.add(pr);
-
-        // included a try catch block in case any logic in error handling is missed out
-            // try {
-        // save purchase requests in batches of 50 to reduce database operations
-            if (prToSave.size() % 50 == 0) {
-                purchaseRequestRepository.saveAll(prToSave);
-            }
-            // } catch (Exception e) {
-            //     throw e;
-            // }
-        });
-
-        if (!prToSave.isEmpty()) {
-            purchaseRequestRepository.saveAll(prToSave);
-        }
+        algorithm(streamOfPR);
 
         return;
     }
@@ -212,6 +191,32 @@ public class PurchaseRequestService {
     // Delete all PurchaseRequest
     public void deleteAllPurchaseRequests() {
         purchaseRequestRepository.deleteAll();
+    }
+
+    // Algorithm
+    public void algorithm (Stream<PurchaseRequest> streamOfPR) {
+        long size = streamOfPR.count();
+        List<Long> rng = new ArrayList<>();
+        long i = 1;
+        while (i <= size) {
+            rng.add(i++);
+        }
+        Collections.shuffle(rng, new SecureRandom());
+        Iterator<Long> rngIterator = rng.iterator();
+        List<PurchaseRequest> prToSave = new ArrayList<>();
+        streamOfPR.forEach(pr -> {
+            pr.setQueueNumber(rngIterator.next());
+            prToSave.add(pr);
+
+        // save purchase requests in batches of 50 to reduce database operations
+        if (prToSave.size() % 50 == 0) {
+            purchaseRequestRepository.saveAll(prToSave);
+        }
+        });
+
+        if (!prToSave.isEmpty()) {
+            purchaseRequestRepository.saveAll(prToSave);
+        }
     }
 
 }
