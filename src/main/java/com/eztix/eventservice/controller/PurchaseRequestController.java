@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.service.PurchaseRequestService;
 
+import jakarta.transaction.Transactional;
+
 @RestController
 public class PurchaseRequestController {
 
@@ -44,10 +46,11 @@ public class PurchaseRequestController {
     }
 
     // Process PurchaseRequest
+    @Transactional(rollbackOn = Exception.class)
     @PutMapping("/api/v1/purchase-request/process-pr/{salesRoundId}")
     public ResponseEntity<String> processPurchaseRequest(@PathVariable Long salesRoundId) {
         try {
-            purchaseRequestService.processPurchaseRequest(salesRoundId);
+            purchaseRequestService.processPurchaseRequests(salesRoundId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found: " + e.getMessage());

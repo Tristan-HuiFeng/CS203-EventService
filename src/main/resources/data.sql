@@ -135,3 +135,15 @@ VALUES (1,  150, 0, 0, 1);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
 VALUES (2,  200, 0, 0, 2);
+
+UPDATE purchase_request_seq
+SET next_val = 101;
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
+VALUES (0, 0, 0, "rubbish");
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
+VALUES (1, 0, 1, "rubbish");
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
+VALUES (2, 0, 2, "rubbish");

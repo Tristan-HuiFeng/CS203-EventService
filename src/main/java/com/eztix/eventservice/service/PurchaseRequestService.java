@@ -13,8 +13,14 @@ import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
@@ -162,51 +168,19 @@ public class PurchaseRequestService {
         return purchaseRequestRepository.save(currentPurchaseRequest);
     }
 
-    // PR algorithm to process purchase requests by assign queue number
-    public void processPurchaseRequest(Long salesRoundId) throws ResourceNotFoundException {
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
+    public void processPurchaseRequests(Long salesRoundId) {
+        // Get the total count of items for the given sales round
+        long totalItemCount = purchaseRequestRepository.countBySalesRoundId(salesRoundId);
 
-        // Retrieve purchase requests
-        Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository
-                .findBySalesRoundId(salesRoundId);
-
-        // Check if any purchase requests are retrieved
-        if (!allPurchaseRequests.isPresent()) {
-
-            // Retrieve sales round
-            Optional<SalesRound> salesRound = salesRoundRepository.findById(salesRoundId);
-
-            // If no purchase requests retrieved, check if sales round exists, throw relevant exception
-            if (!salesRound.isPresent()) {
-                throw new ResourceNotFoundException(
-                        String.format("sales round with id %d does not exist.", salesRoundId));
-            }
-            throw new ResourceNotFoundException(
-                    String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
+        // Nothing to process
+        if (totalItemCount == 0) {
+            return;
         }
 
         // Algorithm
-        Stream<PurchaseRequest> streamOfPR = allPurchaseRequests.get();
-        algorithm(streamOfPR);
-
-        return;
-    }
-
-    // Delete all PurchaseRequest
-    public void deleteAllPurchaseRequests() {
-        purchaseRequestRepository.deleteAll();
-    }
-
-    @Transactional
-    public void algorithm(Stream<PurchaseRequest> streamOfPR) {
-        // Collect the stream elements into a list
-        List<PurchaseRequest> purchaseRequests = streamOfPR.collect(Collectors.toList());
-
-        // Get the size of the list
-        long size = purchaseRequests.size();
-
-        // Create a list of shuffled indices
         List<Long> rng = new ArrayList<>();
-        for (long i = 1; i <= size; i++) {
+        for (long i = 1; i <= totalItemCount; i++) {
             rng.add(i);
         }
         Collections.shuffle(rng, new SecureRandom());
@@ -214,9 +188,32 @@ public class PurchaseRequestService {
         // Create an iterator for shuffled indices
         Iterator<Long> rngIterator = rng.iterator();
 
+        int pageNumber = 0;
+        do {
+            // Retrieve a page of purchase requests using pagination
+            PageRequest pageRequest = PageRequest.of(pageNumber, 50);
+            Page<PurchaseRequest> page = retrievePurchaseRequestPage(salesRoundId, pageRequest);
+
+            List<PurchaseRequest> purchaseRequests = page.getContent();
+
+            // Assign Queue Number and Save in batches
+            assignQueueNumAndSave(purchaseRequests, rngIterator);
+
+            pageNumber++; // Move to the next page
+
+        } while (pageNumber * 50 < totalItemCount); // Continue processing until all items are processed
+    }
+
+    // Method to retrieve a page of purchase requests 
+    private Page<PurchaseRequest> retrievePurchaseRequestPage(Long salesRoundId, PageRequest pageRequest) {
+        return purchaseRequestRepository.findBySalesRoundId(salesRoundId, pageRequest);
+    }
+
+    // Assign and save
+    private void assignQueueNumAndSave(List<PurchaseRequest> purchaseRequests, Iterator<Long> rngIterator) {
+        // Process the elements and set queue numbers
         List<PurchaseRequest> prToSave = new ArrayList<>();
 
-        // Process the elements and set queue numbers
         for (PurchaseRequest pr : purchaseRequests) {
             pr.setQueueNumber(rngIterator.next());
             prToSave.add(pr);
@@ -232,6 +229,11 @@ public class PurchaseRequestService {
         if (!prToSave.isEmpty()) {
             purchaseRequestRepository.saveAll(prToSave);
         }
+    }
+
+    // Delete all PurchaseRequest
+    public void deleteAllPurchaseRequests() {
+        purchaseRequestRepository.deleteAll();
     }
 
 }
