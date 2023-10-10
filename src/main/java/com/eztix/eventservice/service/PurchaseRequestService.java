@@ -175,7 +175,11 @@ public class PurchaseRequestService {
 
         // Nothing to process
         if (totalItemCount == 0) {
-            return;
+
+            if (salesRoundRepository.findById(salesRoundId).isPresent()) {
+                throw new ResourceNotFoundException(String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
+            }
+            throw new ResourceNotFoundException(String.format("sales round with id %d does not exist.", salesRoundId));
         }
 
         // Algorithm
