@@ -20,6 +20,7 @@ import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -61,7 +62,7 @@ public class PurchaseRequestService {
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
-        if (salesRound.getRoundEnd().isAfter(now) || salesRound.getRoundEnd().isBefore(now)) {
+        if (salesRound.getRoundStart().isAfter(now) || salesRound.getRoundEnd().isBefore(now)) {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
 
@@ -125,7 +126,7 @@ public class PurchaseRequestService {
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
-        if (purchaseRequest.getSalesRound().getRoundEnd().isAfter(now)
+        if (purchaseRequest.getSalesRound().getRoundStart().isAfter(now)
                 || purchaseRequest.getSalesRound().getRoundEnd().isBefore(now)) {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
@@ -162,11 +163,11 @@ public class PurchaseRequestService {
     }
 
     // PR algorithm to process purchase requests by assign queue number
-    @Transactional(rollbackFor = Exception.class)
-    public void processPurchaseRequest(Long salesRoundId) throws ResourceNotFoundException{
+    public void processPurchaseRequest(Long salesRoundId) throws ResourceNotFoundException {
 
         // Retrieve purchase requests
-        Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
+        Optional<java.util.stream.Stream<PurchaseRequest>> allPurchaseRequests = purchaseRequestRepository
+                .findBySalesRoundId(salesRoundId);
 
         // Check if any purchase requests are retrieved
         if (!allPurchaseRequests.isPresent()) {
@@ -176,9 +177,11 @@ public class PurchaseRequestService {
 
             // If no purchase requests retrieved, check if sales round exists, throw relevant exception
             if (!salesRound.isPresent()) {
-                throw new ResourceNotFoundException(String.format("sales round with id %d does not exist.", salesRoundId));
+                throw new ResourceNotFoundException(
+                        String.format("sales round with id %d does not exist.", salesRoundId));
             }
-            throw new ResourceNotFoundException(String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
+            throw new ResourceNotFoundException(
+                    String.format("purchase requests with sales round id %d do not exist.", salesRoundId));
         }
 
         // Algorithm
@@ -193,27 +196,39 @@ public class PurchaseRequestService {
         purchaseRequestRepository.deleteAll();
     }
 
-    // Algorithm
-    public void algorithm (Stream<PurchaseRequest> streamOfPR) {
-        long size = streamOfPR.count();
+    @Transactional
+    public void algorithm(Stream<PurchaseRequest> streamOfPR) {
+        // Collect the stream elements into a list
+        List<PurchaseRequest> purchaseRequests = streamOfPR.collect(Collectors.toList());
+
+        // Get the size of the list
+        long size = purchaseRequests.size();
+
+        // Create a list of shuffled indices
         List<Long> rng = new ArrayList<>();
-        long i = 1;
-        while (i <= size) {
-            rng.add(i++);
+        for (long i = 1; i <= size; i++) {
+            rng.add(i);
         }
         Collections.shuffle(rng, new SecureRandom());
+
+        // Create an iterator for shuffled indices
         Iterator<Long> rngIterator = rng.iterator();
+
         List<PurchaseRequest> prToSave = new ArrayList<>();
-        streamOfPR.forEach(pr -> {
+
+        // Process the elements and set queue numbers
+        for (PurchaseRequest pr : purchaseRequests) {
             pr.setQueueNumber(rngIterator.next());
             prToSave.add(pr);
 
-        // save purchase requests in batches of 50 to reduce database operations
-        if (prToSave.size() % 50 == 0) {
-            purchaseRequestRepository.saveAll(prToSave);
+            // Save purchase requests in batches of 50 to reduce database operations
+            if (prToSave.size() % 50 == 0) {
+                purchaseRequestRepository.saveAll(prToSave);
+                prToSave.clear();
+            }
         }
-        });
 
+        // Save any remaining purchase requests
         if (!prToSave.isEmpty()) {
             purchaseRequestRepository.saveAll(prToSave);
         }

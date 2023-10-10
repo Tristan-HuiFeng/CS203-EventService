@@ -19,39 +19,40 @@ public class PurchaseRequestController {
         this.purchaseRequestService = purchaseRequestService;
     }
 
-    //Add a new PurchaseRequest
+    // Add a new PurchaseRequest
     @PostMapping("/api/v1/purchase-request")
-    public ResponseEntity<PurchaseRequest> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest) {
+    public ResponseEntity<PurchaseRequest> addPurchaseRequest(@RequestBody PurchaseRequestDTO purchaseRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest));
     }
 
-    //Get PurchaseRequest by id
-    @GetMapping ("/api/v1/purchase-request/{id}")
-    public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
+    // Get PurchaseRequest by id
+    @GetMapping("/api/v1/purchase-request/{id}")
+    public ResponseEntity<PurchaseRequest> getPurchaseRequestById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(purchaseRequestService.getPurchaseRequestById(id));
+                .body(purchaseRequestService.getPurchaseRequestById(id));
     }
 
-    //Update PurchaseRequest
+    // Update PurchaseRequest
     @PutMapping("/api/v1/purchase-request/{id}")
-    public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long id, @RequestBody PurchaseRequest purchaseRequest) {
+    public ResponseEntity<PurchaseRequest> updatePurchaseRequest(@PathVariable Long id,
+            @RequestBody PurchaseRequest purchaseRequest) {
         purchaseRequest.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
-              .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
+                .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
     }
 
-    //Process PurchaseRequest
-    @PutMapping("/api/v1/process-pr/salesRound_id")
-    public ResponseEntity<PurchaseRequest> processPurchaseRequest (@PathVariable Long salesRoundId) {
+    // Process PurchaseRequest
+    @PutMapping("/api/v1/purchase-request/process-pr/{salesRoundId}")
+    public ResponseEntity<String> processPurchaseRequest(@PathVariable Long salesRoundId) {
         try {
             purchaseRequestService.processPurchaseRequest(salesRoundId);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad request: " + e.getMessage());
         }
     }
 
