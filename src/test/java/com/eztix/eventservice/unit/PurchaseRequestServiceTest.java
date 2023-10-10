@@ -18,6 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -32,6 +35,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
@@ -120,10 +124,9 @@ class PurchaseRequestServiceTest {
     @Test
     void givenSalesRoundIdNotInDB_whenProcessPR_throwResourceNotFoundException() {
         // given
-        given(purchaseRequestRepository.findBySalesRoundId(1L)).willReturn(Optional.empty());
         // when
         // then
-        assertThatThrownBy(() -> testPurchaseRequestService.processPurchaseRequest(1L))
+        assertThatThrownBy(() -> testPurchaseRequestService.processPurchaseRequests(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("sales round with id %d does not exist.", 1L);
 
@@ -138,29 +141,27 @@ class PurchaseRequestServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-
+    
         List<TicketSalesLimit> ticketSalesLimitList = new ArrayList<>();
         ticketSalesLimitList.add(new TicketSalesLimit());
         salesRound.setTicketSalesLimits(ticketSalesLimitList);
-
+    
         given(eventService.getEventById(1L)).willReturn(new Event());
         testSalesRoundService.addNewSalesRound(1L, salesRound);
-
+    
         given(salesRoundRepository.findById(salesRound.getId()))
                 .willReturn(Optional.of(salesRound));
-
-        given(purchaseRequestRepository.findBySalesRoundId(salesRound.getId())).willReturn(Optional.empty());
+    
         // when
-        SalesRound retrievedSalesRound = testSalesRoundService
-                .getSalesRoundById(salesRound.getId());
-
+        SalesRound retrievedSalesRound = testSalesRoundService.getSalesRoundById(salesRound.getId());
+    
         // then
         assertThat(retrievedSalesRound).isEqualTo(salesRound);
-        assertThatThrownBy(() -> testPurchaseRequestService.processPurchaseRequest(salesRound.getId()))
+        assertThatThrownBy(() -> testPurchaseRequestService.processPurchaseRequests(salesRound.getId()))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessageContaining("purchase requests with sales round id %d do not exist.", salesRound.getId());
-
+                .hasMessageContaining(String.format("purchase requests with sales round id %d do not exist.", salesRound.getId()));
     }
+    
 
     // issue: line 189: java.lang.IllegalStateException: stream has already been operated upon or closed
     @Test
@@ -173,35 +174,38 @@ class PurchaseRequestServiceTest {
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
         salesRound.setId(1L);
-
+    
         List<TicketSalesLimit> ticketSalesLimitList = new ArrayList<>();
         ticketSalesLimitList.add(new TicketSalesLimit());
         salesRound.setTicketSalesLimits(ticketSalesLimitList);
-
-        // given(eventService.getEventById(1L)).willReturn(new Event());
-
-        // given(salesRoundRepository.findById(salesRound.getId()).get())
-        // .willReturn(salesRound);
-
+    
         List<PurchaseRequest> purchaseRequests = createSamplePurchaseRequests(10, salesRound);
-
-        // after pr process 1
-        testPurchaseRequestService.algorithm(purchaseRequests.stream());
-        long[] queueNumAfterProcess1 = new long[10];
-        for (int i = 1; i <= 10; i++) {
-            queueNumAfterProcess1[i] = purchaseRequests.get(i).getQueueNumber();
-        }
-
-        // after pr process 2
-        testPurchaseRequestService.algorithm(purchaseRequests.stream());
-        long[] queueNumAfterProcess2 = new long[10];
-        for (int i = 1; i <= 10; i++) {
-            queueNumAfterProcess2[i] = purchaseRequests.get(i).getQueueNumber();
-        }
-
+    
+        // Mock the behavior of the purchaseRequestRepository
+        when(purchaseRequestRepository.countBySalesRoundId(1L)).thenReturn(10L);
+    
+        when(purchaseRequestRepository.findBySalesRoundId(anyLong(), any(PageRequest.class)))
+                .thenReturn(new PageImpl<>(purchaseRequests.subList(0, 5), PageRequest.of(0, 5), 10))
+                .thenReturn(new PageImpl<>(purchaseRequests.subList(5, 10), PageRequest.of(1, 5), 10));
+    
+        // Process the PurchaseRequests using the algorithm
+        testPurchaseRequestService.processPurchaseRequests(1L);
+    
+        // Extract queue numbers after processing
+        List<Long> queueNumAfterProcess1 = purchaseRequests.stream()
+                .map(PurchaseRequest::getQueueNumber)
+                .collect(Collectors.toList());
+    
+        // Process the PurchaseRequests again using the algorithm
+        testPurchaseRequestService.processPurchaseRequests(1L);
+    
+        // Extract queue numbers after processing the second time
+        List<Long> queueNumAfterProcess2 = purchaseRequests.stream()
+                .map(PurchaseRequest::getQueueNumber)
+                .collect(Collectors.toList());
+    
         // then
         assertNotEquals(queueNumAfterProcess1, queueNumAfterProcess2);
-
     }
 
     private List<PurchaseRequest> createSamplePurchaseRequests(int count, SalesRound salesRound) {
