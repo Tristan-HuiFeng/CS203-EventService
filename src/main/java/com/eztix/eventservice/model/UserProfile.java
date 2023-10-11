@@ -1,11 +1,14 @@
 package com.eztix.eventservice.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.Immutable;
+
+import java.time.LocalDate;
+import java.util.*;
 
 import java.time.OffsetDateTime;
 
@@ -68,10 +71,12 @@ public class UserProfile {
 
     @NotNull
     @Column(name = "birthday")
-    private OffsetDateTime birthday;
+    private LocalDate birthday;
 
-    @NotNull
-    @Column(name = "payment_method")
-    private String payment;
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "user_profile",
+//        orphanRemoval = true,
+//        cascade = CascadeType.ALL)
+//    private List<PaymentMethod> payment_methods;
 
 }

@@ -17,4 +17,6 @@ public interface UserProfileRepository extends CrudRepository<UserProfile, Long>
             nativeQuery = true
     )
     Iterable<UserProfile> findAllByIsEmployee();
+
+    boolean existsUserProfileByEmail(String email);
 }

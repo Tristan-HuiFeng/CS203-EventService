@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.PasswordDTO;
 import com.eztix.eventservice.model.UserProfile;
 import com.eztix.eventservice.service.UserProfileService;
 import jakarta.validation.Valid;
@@ -47,10 +48,9 @@ public class UserProfileController {
 
     // update user password
     @PutMapping("/api/v1/userprofile/{id}/password")
-    public ResponseEntity<String> updatePassword(@Valid @PathVariable Long id, @RequestParam("old password") String oldPassword,
-                                                 @RequestParam("new password") String newPassword){
+    public ResponseEntity<String> updatePassword(@RequestBody PasswordDTO passwordDTO){
         return ResponseEntity.status(HttpStatus.OK).
-                body(userProfileService.updatePassword(id, oldPassword, newPassword));
+                body(userProfileService.updatePassword(passwordDTO));
 
     }
 

@@ -1,10 +1,12 @@
 package com.eztix.eventservice.service;
 
 import com.eztix.eventservice.controller.UserProfileController;
+import com.eztix.eventservice.dto.PasswordDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.UserProfile;
 import com.eztix.eventservice.repository.UserProfileRepository;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -29,7 +31,7 @@ public class UserProfileService {
             return userProfileRepository.findAllByIsActive();
         }
         else{
-            return null;
+            throw new ResourceNotFoundException("no active users found");
         }
     }
 
@@ -43,6 +45,14 @@ public class UserProfileService {
     }
 
     public UserProfile addNewUserProfile(UserProfile userProfile){
+        boolean existsEmail = userProfileRepository
+                .existsUserProfileByEmail(userProfile.getEmail());
+
+        if (existsEmail){
+            throw new RequestValidationException(
+                    "email " + userProfile.getEmail() + "taken"
+            );
+        }
         return userProfileRepository.save(userProfile);
     }
 
@@ -55,12 +65,18 @@ public class UserProfileService {
                 new ResourceNotFoundException(String.format("profile with id %d does not exist", userProfile.getId())));
         return userProfileRepository.save(userProfile);
     }
-    public boolean oldPasswordIsValid(UserProfile user, String oldPassword){
+    public boolean oldPasswordIsValid(@NotNull UserProfile user, String oldPassword){
         return user.getPassword().equals(oldPassword);
     }
 
     @Transactional
-    public String updatePassword(Long id, String oldPassword, String newPassword){
+    public String updatePassword(PasswordDTO passwordDTO){
+        String oldPassword = passwordDTO.getOldPassword();
+        String newPassword = passwordDTO.getNewPassword();
+        Long id = passwordDTO.getUserId();
+        if (oldPassword.length() < 8 || newPassword.length() < 8){
+            throw new RequestValidationException("password must be at least 8 characters long");
+        }
         Optional<UserProfile> user = userProfileRepository.findById(id);
         if (user.isPresent()){
             UserProfile current = user.get();
@@ -70,7 +86,7 @@ public class UserProfileService {
                 return "successful password change";
             }
             else{
-                return "invalid old password";
+                throw new RequestValidationException("invalid old password");
             }
         }
         else{
