@@ -135,3 +135,18 @@ VALUES (1,  150, 0, 0, 1);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
 VALUES (2,  200, 0, 0, 2);
+
+UPDATE  user_profile_seq
+SET next_val = 101;
+INSERT INTO USER_PROFILE (id, first_name, last_name, email, password, is_employee, blocked, active, contact_number, postal_code, country_residence, birthday)
+VALUES
+(0, 'John', 'Doe', 'john.doe@example.com', 'password1', true, false, true, '1234567890', '12345', 'USA', '1980-01-01'),
+(1, 'Jane', 'Doe', 'jane.doe@example.com', 'password2', true, false, true, '0987654321', '67890', 'USA', '1985-02-02'),
+(2,'Alice', 'Smith', 'alice.smith@example.com', 'password3', false, false, true, '1122334455', '23456', 'USA', '1990-03-03'),
+(3, 'Bob', 'Johnson', 'bob.johnson@example.com', 'password4', false, false, true, '5544332211', '34567', 'USA', '1995-04-04'),
+(4, 'Charlie', 'Brown', 'charlie.brown@example.com', 'password5', false, false, true, '9988776655', '45678', 'USA', '2000-05-05'),
+(5, 'Mary', 'Jane', 'mary.jane@example.com', 'password6', false, false, true, '6677889900', '56789', 'USA', '2005-06-06'),
+(6, 'James', 'Bond', 'james.bond@example.com', 'password7', true, false, true, '7766554433', '67890', 'USA', '2010-07-07'),
+(7, 'Wonder', 'Woman', 'wonder.woman@example.com', 'password8', true, false, true, '8877665544', '78901', 'USA', '2015-08-08'),
+(8, 'Super', 'Man', 'super.man@example.com', 'password9', true, false, true, '9988776655', '89012', 'USA', '2020-09-09'),
+(9, 'Spider', 'Man', 'spider.man@example.com', 'password10', true, false, true, '0099887766', '90123', 'USA', '2025-10-10');
