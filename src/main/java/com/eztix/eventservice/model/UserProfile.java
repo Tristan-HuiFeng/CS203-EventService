@@ -19,8 +19,9 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "USER_PROFILE")
 @Entity(name = "user_profile")
+@Table(name = "USER_PROFILE")
+
 public class UserProfile {
 
     @Id
