@@ -2,6 +2,7 @@ package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.model.AdmissionPolicy;
 import com.eztix.eventservice.service.AdmissionPolicyService;
+import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class AdmissionPolicyController {
     private final AdmissionPolicyService admissionPolicyService;
 
-    public AdmissionPolicyController(AdmissionPolicyService admissionPolicyService){
-        this.admissionPolicyService = admissionPolicyService;
-    }
 
     @GetMapping("/api/v1/{eventId}/admission-policy")
     public ResponseEntity<List<AdmissionPolicy>>getAdmissionPolicyByEventId(@PathVariable Long eventId){

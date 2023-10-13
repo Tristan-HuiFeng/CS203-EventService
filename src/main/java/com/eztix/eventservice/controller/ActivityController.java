@@ -2,18 +2,16 @@ package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.service.ActivityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 public class ActivityController {
 
     private final ActivityService activityService;
-
-    public ActivityController(ActivityService activityService) {
-        this.activityService = activityService;
-    }
 
     @GetMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long activityId){

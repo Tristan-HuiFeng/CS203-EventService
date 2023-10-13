@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.Formula;
-import org.hibernate.mapping.Set;
 
 import java.time.OffsetDateTime;
 import java.util.List;
