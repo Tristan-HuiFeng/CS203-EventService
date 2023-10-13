@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "purchase_request")

@@ -4,17 +4,15 @@ import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.TicketSalesLimit;
 import com.eztix.eventservice.repository.TicketSalesLimitRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class TicketSalesLimitService {
 
     private final TicketSalesLimitRepository ticketSalesLimitRepository;
-
-    public TicketSalesLimitService(TicketSalesLimitRepository ticketSalesLimitRepository) {
-        this.ticketSalesLimitRepository = ticketSalesLimitRepository;
-    }
 
     // Add new TicketSalesLimit
     public TicketSalesLimit addNewTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
