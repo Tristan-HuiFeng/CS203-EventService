@@ -12,6 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 @Getter
 @Setter
+@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

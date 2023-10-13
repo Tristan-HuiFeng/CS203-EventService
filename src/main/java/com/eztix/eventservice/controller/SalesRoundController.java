@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,13 +9,9 @@ import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.service.SalesRoundService;
 
 @RestController
+@RequiredArgsConstructor
 public class SalesRoundController {
-
     private final SalesRoundService salesRoundService;
-
-    public SalesRoundController(SalesRoundService salesRoundService) {
-        this.salesRoundService = salesRoundService;
-    }
 
     //Add a new SalesRound
     @PostMapping("/api/v1/event/{eventId}/sales-round")

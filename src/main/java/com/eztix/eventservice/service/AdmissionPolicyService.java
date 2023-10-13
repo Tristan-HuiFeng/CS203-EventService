@@ -5,23 +5,19 @@ import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.AdmissionPolicy;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.AdmissionPolicyRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AdmissionPolicyService {
     private final AdmissionPolicyRepository admissionPolicyRepository;
     private final EventService eventService;
 
-    public AdmissionPolicyService (AdmissionPolicyRepository admissionPolicyRepository, EventService eventService){
-        this.admissionPolicyRepository = admissionPolicyRepository;
-        this.eventService = eventService;
-    }
-
     public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
-
         return admissionPolicyRepository.findAllByEventId(eventId).orElseThrow(() ->
                     new ResourceNotFoundException(String.format("event with id %d does not have admission policy", eventId))
                 );
@@ -30,6 +26,7 @@ public class AdmissionPolicyService {
     public AdmissionPolicy addNewAdmissionPolicy(Long eventId, AdmissionPolicy admissionPolicy){
         Event event = eventService.getEventById(eventId);
         admissionPolicy.setEvent(event);
+
         return admissionPolicyRepository.save(admissionPolicy);
     }
 
@@ -49,6 +46,7 @@ public class AdmissionPolicyService {
         if (admissionPolicyId == null) {
             throw new RequestValidationException("admission policy id cannot be null.");
         }
+
         admissionPolicyRepository.deleteById(admissionPolicyId);
     }
 

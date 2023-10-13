@@ -7,6 +7,7 @@ import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
+@RequiredArgsConstructor
 public class TicketTypeService {
 
     private final TicketTypeRepository ticketTypeRepository;
     private final ActivityService activityService;
-
-    public TicketTypeService(TicketTypeRepository ticketTypeRepository, ActivityService activityService) {
-        this.ticketTypeRepository = ticketTypeRepository;
-        this.activityService = activityService;
-    }
 
     // Add new TicketType
     public TicketType addNewTicketType(Long activityId, TicketType ticketType) {

@@ -5,17 +5,15 @@ import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.EventRepository;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
 
     private final EventRepository eventRepository;
-
-    public EventService(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
-    }
 
     public Event addNewEvent(Event event) {
         return eventRepository.save(event);
@@ -37,17 +35,12 @@ public class EventService {
                 new ResourceNotFoundException(String.format("event with id %d does not exist.", event.getId()))
         );
 
-       return eventRepository.save(event);
+        return eventRepository.save(event);
     }
 
     public Iterable<Event> getAllEvents(boolean featuredOnly) {
-        if (featuredOnly) {
-            return eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence();
-        }
-        else{
-            return eventRepository.findAll();
-        }
-
+        return featuredOnly ? eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence() :
+                eventRepository.findAll();
     }
 
     public void deleteAll() {

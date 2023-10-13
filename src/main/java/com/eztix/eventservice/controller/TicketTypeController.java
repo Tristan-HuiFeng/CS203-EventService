@@ -1,6 +1,7 @@
 package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.model.SalesRound;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +10,9 @@ import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.service.TicketTypeService;
 
 @RestController
+@RequiredArgsConstructor
 public class TicketTypeController {
-
     private final TicketTypeService ticketTypeService;
-
-    public TicketTypeController(TicketTypeService ticketTypeService) {
-        this.ticketTypeService = ticketTypeService;
-    }
 
     //Add a new Ticket
     @PostMapping("/api/v1/activity/{activityId}/ticket-type")

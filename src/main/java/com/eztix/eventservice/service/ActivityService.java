@@ -5,20 +5,17 @@ import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.ActivityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService {
     private final ActivityRepository activityRepository;
     private final EventService eventService;
-
-    public ActivityService(ActivityRepository activityRepository, EventService eventService) {
-        this.activityRepository = activityRepository;
-        this.eventService = eventService;
-    }
 
     public Activity getActivityById(Long id){
             return activityRepository.findById(id).orElseThrow(() ->

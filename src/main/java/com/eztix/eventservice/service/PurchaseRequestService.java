@@ -8,37 +8,24 @@ import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.PurchaseRequestItem;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
-import com.eztix.eventservice.repository.PurchaseRequestItemRepository;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
-import com.eztix.eventservice.repository.SalesRoundRepository;
-import com.eztix.eventservice.repository.TicketTypeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
+@RequiredArgsConstructor
 public class PurchaseRequestService {
 
     private final PurchaseRequestRepository purchaseRequestRepository;
-    private final SalesRoundRepository salesRoundRepository;
-    private final TicketTypeRepository ticketTypeRepository;
-    private final PurchaseRequestItemRepository purchaseRequestItemRepository;
-
-
-    public PurchaseRequestService(PurchaseRequestRepository purchaseRequestRepository,
-                                  SalesRoundRepository salesRoundRepository,
-                                  TicketTypeRepository ticketTypeRepository,
-                                  PurchaseRequestItemRepository purchaseRequestItemRepository) {
-        this.purchaseRequestRepository = purchaseRequestRepository;
-        this.salesRoundRepository = salesRoundRepository;
-        this.ticketTypeRepository = ticketTypeRepository;
-        this.purchaseRequestItemRepository = purchaseRequestItemRepository;
-    }
+    private final SalesRoundService salesRoundService;
+    private final TicketTypeService ticketTypeService;
 
     // Add new PurchaseRequest
     public PurchaseRequest addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO) {
@@ -52,10 +39,7 @@ public class PurchaseRequestService {
         }
 
         // Get Sales Round
-        SalesRound salesRound = salesRoundRepository.findById(purchaseRequestDTO.getSalesRoundId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("sales round with id %d not found.", purchaseRequestDTO.getSalesRoundId())
-                ));
+        SalesRound salesRound = salesRoundService.getSalesRoundById(purchaseRequestDTO.getSalesRoundId());
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
@@ -63,45 +47,12 @@ public class PurchaseRequestService {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
 
-
-
         // New Purchase Request
-        PurchaseRequest newPurchaseRequest = new PurchaseRequest();
-        newPurchaseRequest.setStatus("pending");
-        newPurchaseRequest.setCustomerId("Default TODO");
+        PurchaseRequest newPurchaseRequest =
+                PurchaseRequest.builder().status("pending").customerId("Default TODO").salesRound(salesRound).build();
 
-
-        newPurchaseRequest.setSalesRound(salesRound);
-
-        // Create a List of Purchase Request Item
-        List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
-        int sum = 0;
-
-        for (PurchaseRequestItemDTO temp: purchaseRequestDTO.getPurchaseRequestItems()) {
-
-            if (temp.getTicketTypeId() == null) {
-                throw new RequestValidationException("ticket type id cannot be null.");
-            }
-            TicketType ticketType = ticketTypeRepository.findById(temp.getTicketTypeId())
-                    .orElseThrow(() -> new ResourceNotFoundException("ticket type id not found."));
-
-            PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
-            purchaseRequestItem.setQuantityApproved(0);
-            purchaseRequestItem.setQuantityRequested(temp.getQuantityRequested());
-            purchaseRequestItem.setTicketType(ticketType);
-            purchaseRequestItem.setPurchaseRequest(newPurchaseRequest);
-            sum += temp.getQuantityRequested();
-
-            newPurchaseRequestItemList.add(purchaseRequestItem);
-
-        }
-        if (sum > 4) {
-            throw new RequestValidationException("purchase request exceed 4 ticket limit.");
-        } else if (sum < 0) {
-            throw new RequestValidationException("purchase request must have at least 1 ticket.");
-        }
-
-        // Add to New Purchase Request
+        List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
+                newPurchaseRequest);
         newPurchaseRequest.setPurchaseRequestItems(newPurchaseRequestItemList);
 
         return purchaseRequestRepository.save(newPurchaseRequest);
@@ -134,7 +85,7 @@ public class PurchaseRequestService {
         int sum = 0;
         List<PurchaseRequestItem> newPurchaseRequestItemList = new ArrayList<>();
 
-        for (PurchaseRequestItem temp: purchaseRequest.getPurchaseRequestItems()) {
+        for (PurchaseRequestItem temp : purchaseRequest.getPurchaseRequestItems()) {
 
             if (temp.getTicketType() == null) {
                 throw new RequestValidationException("ticket type cannot be null.");
@@ -167,4 +118,58 @@ public class PurchaseRequestService {
         purchaseRequestRepository.deleteAll();
     }
 
+    private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequestDTO purchaseRequestDTO,
+                                                          PurchaseRequest newPurchaseRequest) {
+        AtomicInteger sum = new AtomicInteger();
+
+        List<PurchaseRequestItem> newPurchaseRequestItemList =
+                purchaseRequestDTO.getPurchaseRequestItems().stream().map(prItem -> {
+                    if (prItem.getTicketTypeId() == null) {
+                        throw new RequestValidationException("ticket type id cannot be null.");
+                    }
+                    TicketType ticketType = ticketTypeService.getTicketTypeById(prItem.getTicketTypeId());
+                    sum.addAndGet(prItem.getQuantityRequested());
+
+                    return PurchaseRequestItem.builder()
+                            .quantityApproved(0)
+                            .quantityRequested(prItem.getQuantityRequested())
+                            .ticketType(ticketType)
+                            .purchaseRequest(newPurchaseRequest)
+                            .build();
+                }).toList();
+
+        checkTicketLimit(sum);
+
+        return newPurchaseRequestItemList;
+    }
+
+    private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequest purchaseRequest,
+                                                          PurchaseRequest currentPurchaseRequest) {
+        AtomicInteger sum = new AtomicInteger();
+        List<PurchaseRequestItem> newPurchaseRequestItemList =
+                purchaseRequest.getPurchaseRequestItems().stream().map(prItem -> {
+                    if (prItem.getTicketType() == null) {
+                        throw new RequestValidationException("ticket type cannot be null.");
+                    }
+                    sum.addAndGet(prItem.getQuantityRequested());
+
+                    return PurchaseRequestItem.builder()
+                            .quantityApproved(0)
+                            .quantityRequested(prItem.getQuantityRequested())
+                            .ticketType(prItem.getTicketType())
+                            .purchaseRequest(currentPurchaseRequest).build();
+                }).toList();
+
+        checkTicketLimit(sum);
+
+        return newPurchaseRequestItemList;
+    }
+
+    private void checkTicketLimit(AtomicInteger sum) {
+        if (sum.get() > 4) {
+            throw new RequestValidationException("purchase request exceed 4 ticket limit.");
+        } else if (sum.get() < 0) {
+            throw new RequestValidationException("purchase request must have at least 1 ticket.");
+        }
+    }
 }

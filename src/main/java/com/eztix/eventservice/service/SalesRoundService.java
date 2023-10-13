@@ -5,21 +5,18 @@ import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.repository.SalesRoundRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class SalesRoundService {
 
     private final SalesRoundRepository salesRoundRepository;
     private final EventService eventService;
-
-    public SalesRoundService(SalesRoundRepository salesRoundRepository, EventService eventService) {
-        this.salesRoundRepository = salesRoundRepository;
-        this.eventService = eventService;
-    }
 
     // Add new SalesRound
     public SalesRound addNewSalesRound(Long eventId, SalesRound salesRound) {
