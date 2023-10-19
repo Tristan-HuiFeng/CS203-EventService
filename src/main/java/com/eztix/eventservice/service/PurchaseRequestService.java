@@ -3,13 +3,11 @@ package com.eztix.eventservice.service;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
-import com.eztix.eventservice.model.PurchaseRequest;
-import com.eztix.eventservice.model.PurchaseRequestItem;
-import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.model.TicketType;
+import com.eztix.eventservice.model.*;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
@@ -30,9 +25,12 @@ import java.util.stream.LongStream;
 public class PurchaseRequestService {
 
     private final PurchaseRequestRepository purchaseRequestRepository;
-    @Setter
-    private SalesRoundService salesRoundService;
     private final TicketTypeService ticketTypeService;
+    private final TicketSalesLimitService ticketSalesLimitService;
+    private final PurchaseRequestItemService purchaseRequestItemService;
+    @Setter
+    @Autowired
+    private SalesRoundService salesRoundService;
 
     // Add new PurchaseRequest
     public PurchaseRequest addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO) {
@@ -131,15 +129,51 @@ public class PurchaseRequestService {
         Collections.shuffle(rng, new SecureRandom());
         Iterator<Long> rngIterator = rng.iterator();
 
+        // Run through all ticket sales limit to figure out current round max for each ticket
+        Iterable<TicketSalesLimit> ticketSalesLimitIterable = ticketSalesLimitService.getTicketSalesLimitBySalesRoundId(salesRoundId);
+        Map<Long, Integer> ticketTypeToVacancyMap = new HashMap<>();
+
+        ticketSalesLimitIterable.forEach(ticketSalesLimit -> {
+            ticketTypeToVacancyMap.put(ticketSalesLimit.getTicketType().getId(), ticketSalesLimit.getLimitVacancy());
+        });
+
         // Stream through all the PRs under a sales round to assign queue numbers
-                purchaseRequestRepository.findBySalesRoundId(salesRoundId)
-                        .peek(pr -> pr.setQueueNumber(rngIterator.next())) // Set Queue Number for each
-                        .sorted((a, b) -> Math.toIntExact(a.getQueueNumber() - b.getQueueNumber()))
-                        .forEach(pr ->{
-                            // Do something here
-                        }); // Sort them by
+        purchaseRequestRepository.findBySalesRoundId(salesRoundId)
+                .peek(pr -> pr.setQueueNumber(rngIterator.next())) // Set Queue Number for each
+                .sorted((a, b) -> Math.toIntExact(a.getQueueNumber() - b.getQueueNumber()))
+                // Now for each of them, modify the quantity approved based on the window limit
+                .forEach(pr -> {
+                    pr.getPurchaseRequestItems().forEach(prItem -> {
+                        TicketType ticketType = prItem.getTicketType();
+                        int remaining = ticketTypeToVacancyMap.get(ticketType.getId());
+                        int requested = prItem.getQuantityRequested();
+
+                        if(remaining >= requested){
+                            ticketTypeToVacancyMap.put(ticketType.getId(), remaining - requested);
+                            PurchaseRequestItem newPrItem = PurchaseRequestItem.builder()
+                                    .id(prItem.getId())
+                                    .quantityRequested(prItem.getQuantityRequested())
+                                    .quantityRequested(prItem.getQuantityRequested())
+                                    .ticketType(ticketType)
+                                    .purchaseRequest(pr)
+                                    .build();
+                            purchaseRequestItemService.updatePurchaseRequestItem(newPrItem);
+                        }else if(remaining > 0){
+                            ticketTypeToVacancyMap.put(ticketType.getId(), 0);
+                            PurchaseRequestItem newPrItem = PurchaseRequestItem.builder()
+                                    .id(prItem.getId())
+                                    .quantityRequested(prItem.getQuantityRequested())
+                                    .quantityRequested(remaining)
+                                    .ticketType(ticketType)
+                                    .purchaseRequest(pr)
+                                    .build();
+                            purchaseRequestItemService.updatePurchaseRequestItem(newPrItem);
+                        }
+                    });
+                });
 
     }
+
     // Delete all PurchaseRequest
     public void deleteAllPurchaseRequests() {
         purchaseRequestRepository.deleteAll();
