@@ -23,15 +23,8 @@ public class TicketTypeService {
     private final ActivityService activityService;
 
     // Add new TicketType
-    public TicketType addNewTicketType(Long activityId, TicketType ticketType) {
-
-        if (ticketType.getId() != null) {
-            throw new RequestValidationException("not allowed to specify id for new ticket type found");
-        }
-
-        Activity activity = activityService.getActivityById(activityId);
+    public TicketType addNewTicketType(Activity activity, TicketType ticketType) {
         ticketType.setActivity(activity);
-
         return ticketTypeRepository.save(ticketType);
 
     }

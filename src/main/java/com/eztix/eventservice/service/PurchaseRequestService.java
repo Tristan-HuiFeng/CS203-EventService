@@ -9,6 +9,7 @@ import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 @Service
 @RequiredArgsConstructor
 public class PurchaseRequestService {
 
     private final PurchaseRequestRepository purchaseRequestRepository;
-    private final SalesRoundService salesRoundService;
+    @Setter
+    private SalesRoundService salesRoundService;
     private final TicketTypeService ticketTypeService;
 
     // Add new PurchaseRequest
@@ -121,22 +125,19 @@ public class PurchaseRequestService {
         // Get the total count of items for the given sales round
         long totalItemCount = purchaseRequestRepository.countBySalesRoundId(salesRoundId);
 
-        // Algorithm
-        List<Long> rng = new ArrayList<>();
-        for (long i = 1; i <= totalItemCount; i++) {
-            rng.add(i);
-        }
-        Collections.shuffle(rng, new SecureRandom());
 
-        // Create an iterator for shuffled indices
+        // Create a list of RNG to be used for randomization
+        List<Long> rng = LongStream.range(0L, totalItemCount).boxed().collect(Collectors.toList());
+        Collections.shuffle(rng, new SecureRandom());
         Iterator<Long> rngIterator = rng.iterator();
 
         // Stream through all the PRs under a sales round to assign queue numbers
-//        Stream<PurchaseRequest> prStream =
                 purchaseRequestRepository.findBySalesRoundId(salesRoundId)
                         .peek(pr -> pr.setQueueNumber(rngIterator.next())) // Set Queue Number for each
                         .sorted((a, b) -> Math.toIntExact(a.getQueueNumber() - b.getQueueNumber()))
-                        .forEach(purchaseRequestRepository::save); // Sort them by
+                        .forEach(pr ->{
+                            // Do something here
+                        }); // Sort them by
 
     }
     // Delete all PurchaseRequest
