@@ -15,7 +15,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ActivityService {
     private final ActivityRepository activityRepository;
-    private final EventService eventService;
 
     public Activity getActivityById(Long id){
             return activityRepository.findById(id).orElseThrow(() ->
@@ -23,8 +22,7 @@ public class ActivityService {
             );
     }
 
-    public Activity addNewActivity(Long eventId, Activity activity) {
-        Event event = eventService.getEventById(eventId);
+    public Activity addNewActivity(Event event, Activity activity) {
         activity.setEvent(event);
 
         return activityRepository.save(activity);

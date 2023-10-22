@@ -1,5 +1,6 @@
 package com.eztix.eventservice.service;
 
+import com.eztix.eventservice.dto.request.NewAdmissionPolicy;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.AdmissionPolicy;
@@ -15,7 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdmissionPolicyService {
     private final AdmissionPolicyRepository admissionPolicyRepository;
-    private final EventService eventService;
 
     public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
         return admissionPolicyRepository.findAllByEventId(eventId).orElseThrow(() ->
@@ -23,10 +23,8 @@ public class AdmissionPolicyService {
                 );
     }
 
-    public AdmissionPolicy addNewAdmissionPolicy(Long eventId, AdmissionPolicy admissionPolicy){
-        Event event = eventService.getEventById(eventId);
+    public AdmissionPolicy addNewAdmissionPolicy(Event event, AdmissionPolicy admissionPolicy){
         admissionPolicy.setEvent(event);
-
         return admissionPolicyRepository.save(admissionPolicy);
     }
 

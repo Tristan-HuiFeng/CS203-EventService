@@ -28,6 +28,10 @@ public class TicketSalesLimitService {
 
     }
 
+    public Iterable<TicketSalesLimit> getTicketSalesLimitBySalesRoundId(Long salesRoundId){
+        return ticketSalesLimitRepository.findBySalesRoundId(salesRoundId);
+    }
+
     // Get all TicketSalesLimit
     public Iterable<TicketSalesLimit> getAllTicketSalesLimits() {
         return ticketSalesLimitRepository.findAll();
