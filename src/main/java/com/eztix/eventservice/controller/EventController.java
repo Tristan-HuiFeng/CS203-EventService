@@ -1,6 +1,7 @@
 package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.dto.EventDTO;
+import com.eztix.eventservice.dto.request.NewEvent;
 import com.eztix.eventservice.model.Event;
 
 import com.eztix.eventservice.service.EventService;
@@ -17,10 +18,10 @@ public class EventController {
     private final EventService eventService;
 
     @PostMapping("/api/v1/event")
-    public ResponseEntity<Event> addEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> addEvent(@RequestBody NewEvent newEvent) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(eventService.addNewEvent(event));
+                .body(eventService.addNewEvent(newEvent));
 
     }
 

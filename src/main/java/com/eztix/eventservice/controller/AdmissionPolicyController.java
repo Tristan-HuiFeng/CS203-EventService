@@ -22,10 +22,10 @@ public class AdmissionPolicyController {
                 .body(admissionPolicyService.getAllAdmissionPolicyByEventId(eventId));
     }
 
-    @PostMapping("/api/v1/{eventId}/admission-policy")
-    public ResponseEntity<AdmissionPolicy> addAdmissionPolicy(@PathVariable Long eventId, @RequestBody AdmissionPolicy admissionPolicy){
-        return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(eventId, admissionPolicy));
-    }
+//    @PostMapping("/api/v1/{eventId}/admission-policy")
+//    public ResponseEntity<AdmissionPolicy> addAdmissionPolicy(@PathVariable Long eventId, @RequestBody AdmissionPolicy admissionPolicy){
+//        return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(eventId, admissionPolicy));
+//    }
 
     @PutMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy> updateAdmissionPolicy(@PathVariable Long admissionPolicyId, @RequestBody AdmissionPolicy admissionPolicy){

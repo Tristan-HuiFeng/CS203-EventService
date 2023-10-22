@@ -19,10 +19,10 @@ public class ActivityController {
                 .body(activityService.getActivityById(activityId));
     }
 
-    @PostMapping("/api/v1/event/{eventId}/activity")
-    public ResponseEntity<Activity> addActivity(@PathVariable Long eventId, @RequestBody Activity activity) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(eventId, activity));
-    }
+//    @PostMapping("/api/v1/event/{eventId}/activity")
+//    public ResponseEntity<Activity> addActivity(@PathVariable Long eventId, @RequestBody Activity activity) {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(eventId, activity));
+//    }
 
     @PutMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> updateActivity(@PathVariable Long activityId, @RequestBody Activity activity ){

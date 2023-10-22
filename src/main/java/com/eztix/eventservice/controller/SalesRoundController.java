@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.request.NewSalesRound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,9 @@ public class SalesRoundController {
 
     //Add a new SalesRound
     @PostMapping("/api/v1/event/{eventId}/sales-round")
-    public ResponseEntity<SalesRound> addSalesRound (@PathVariable Long eventId, @RequestBody SalesRound salesRound) {
+    public ResponseEntity<SalesRound[]> addSalesRound (@PathVariable Long eventId, @RequestBody NewSalesRound[] salesRounds) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(salesRoundService.addNewSalesRound(eventId, salesRound));
+                .body(salesRoundService.addSalesRounds(eventId, salesRounds));
     }
 
     //Get SalesRound by id
