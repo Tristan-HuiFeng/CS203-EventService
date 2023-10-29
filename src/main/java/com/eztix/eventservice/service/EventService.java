@@ -86,16 +86,24 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public Iterable<Event> getAllEvents(boolean featuredOnly, String category) {
+    public Iterable<Event> getAllEvents(boolean featuredOnly, String category, String search) {
 
         if (featuredOnly) {
             return eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence();
         }
         if (!category.equals("none")) {
+            if (!search.equals("none")) {
+                return eventRepository.findAllByCategoryAndNameContainingOrDescriptionContaining(category, search, search);
+            }
             return eventRepository.findAllByCategory(category);
+        }
+
+        if (!search.equals("none")) {
+            return eventRepository.findAllByNameContainingOrDescriptionContaining(search, search);
         }
         return eventRepository.findAll();
     }
+
 
     public void deleteAll() {
         eventRepository.deleteAll();
