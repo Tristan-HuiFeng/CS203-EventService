@@ -18,7 +18,7 @@ public class AdmissionPolicyService {
     private final AdmissionPolicyRepository admissionPolicyRepository;
 
     public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
-        return admissionPolicyRepository.findAllByEventId(eventId).orElseThrow(() ->
+        return admissionPolicyRepository.findAllByEventIdOrderByPolicyOrder(eventId).orElseThrow(() ->
                     new ResourceNotFoundException(String.format("event with id %d does not have admission policy", eventId))
                 );
     }

@@ -67,6 +67,30 @@ VALUES(6, "ONE OK ROCK Luxury Disease Asia Tour 2023", "concert", "ONE OK ROCK",
 		"https://cs203.s3.ap-southeast-1.amazonaws.com/event-image/oneokrock.jpg", "https://cs203.s3.ap-southeast-1.amazonaws.com/seat-map/SeatMap.jpg",
 		"Singapore Indoor Stadium", False);
 
+UPDATE admission_policy_seq
+SET next_val = 101;
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (0, 1, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (1, 1, 2, "There will be no admission for infants in arms and children below 3 years old.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (2, 1, 3, "Individuals aged 3 years old and above will be required to purchase a ticket for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (3, 1, 4, "Please note that if you are children under 12 years old by date of birth, you are not allowed into the standing pen areas due to safety reasons.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (4, 1, 5, "Please note that if you are individual with height below 1.2 meters, you are not allowed into the standing pen areas due to safety reasons.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (5, 1, 6, "No photography, videography and social media live streaming allowed.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (6, 1, 7, "No outside food and beverage are allowed into the venue.");
+
 
 UPDATE activity_seq
 SET next_val = 101;

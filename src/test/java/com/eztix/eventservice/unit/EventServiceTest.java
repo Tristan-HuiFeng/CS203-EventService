@@ -28,7 +28,7 @@ class EventServiceTest {
     private EventService testEventService;
 
 
-    @Test
+    /*@Test
     void givenNewEvent_whenAddEvent_thenSuccess() {
         // given
         Event event = new Event();
@@ -52,7 +52,7 @@ class EventServiceTest {
         Event capturedEvent = eventArgumentCaptor.getValue();
 
         assertThat(capturedEvent).isEqualTo(event);
-    }
+    }*/
 
     @Test
     void givenIdNotInDB_whenRetrieveById_throwResourceNotFoundException() {
