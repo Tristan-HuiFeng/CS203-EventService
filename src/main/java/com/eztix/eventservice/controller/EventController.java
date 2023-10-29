@@ -1,6 +1,5 @@
 package com.eztix.eventservice.controller;
 
-import com.eztix.eventservice.dto.EventDTO;
 import com.eztix.eventservice.dto.request.NewEvent;
 import com.eztix.eventservice.model.Event;
 

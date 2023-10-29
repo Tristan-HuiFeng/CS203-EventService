@@ -1,6 +1,5 @@
 package com.eztix.eventservice.controller;
 
-import com.eztix.eventservice.model.SalesRound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
