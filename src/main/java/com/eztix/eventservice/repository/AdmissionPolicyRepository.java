@@ -1,7 +1,6 @@
 package com.eztix.eventservice.repository;
 
 import com.eztix.eventservice.model.AdmissionPolicy;
-import com.eztix.eventservice.model.Event;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

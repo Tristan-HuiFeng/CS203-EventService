@@ -3,8 +3,6 @@ package com.eztix.eventservice.repository;
 import com.eztix.eventservice.model.SalesRound;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.util.Streamable;
-
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
