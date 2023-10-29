@@ -19,12 +19,14 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class PurchaseRequestController {
 
     private final PurchaseRequestService purchaseRequestService;
 
     //Add a new PurchaseRequest
+    @CrossOrigin
     @PostMapping("/api/v1/purchase-request")
     public ResponseEntity<PurchaseRequestCreation> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest, Authentication authentication) {
 
