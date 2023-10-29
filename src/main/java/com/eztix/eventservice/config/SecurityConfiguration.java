@@ -23,6 +23,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain clientFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
 
