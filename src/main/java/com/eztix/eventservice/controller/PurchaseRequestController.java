@@ -2,16 +2,12 @@ package com.eztix.eventservice.controller;
 
 import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
-import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
 import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
 import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
-import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.PurchaseRequest;
