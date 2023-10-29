@@ -85,6 +85,7 @@ public class PurchaseRequestService {
 
         return EventConfirmationDTO.builder()
                 .name(event.getName())
+                .location(event.getLocation())
                 .description(event.getDescription())
                 .bannerURL(event.getBannerURL())
                 .salesRound(SalesRoundConfirmationDTO.builder()
