@@ -40,7 +40,6 @@ public class EventService {
             i.getAndIncrement();
             AdmissionPolicy inputAP = AdmissionPolicy.builder()
                     .description(policy.getDescription())
-                    .name(policy.getName())
                     .policyOrder(i.shortValue())
                     .build();
             admissionPolicyService.addNewAdmissionPolicy(savedEvent, inputAP);

@@ -27,10 +27,6 @@ public class AdmissionPolicy {
     private String description;
 
     @NotNull
-    @Column(name = "name")
-    private String name;
-
-    @NotNull
     @Column(name = "policy_order")
     private Short policyOrder;
 

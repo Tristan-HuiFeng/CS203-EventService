@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class AdmissionPolicyController {
+
     private final AdmissionPolicyService admissionPolicyService;
 
-
-    @GetMapping("/api/v1/{eventId}/admission-policy")
+    @CrossOrigin
+    @GetMapping("/api/v1/event/{eventId}/admission-policy")
     public ResponseEntity<List<AdmissionPolicy>>getAdmissionPolicyByEventId(@PathVariable Long eventId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(admissionPolicyService.getAllAdmissionPolicyByEventId(eventId));
