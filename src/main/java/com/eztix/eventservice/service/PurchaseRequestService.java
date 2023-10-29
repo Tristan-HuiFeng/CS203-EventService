@@ -84,6 +84,9 @@ public class PurchaseRequestService {
         Event event = purchaseRequest.getSalesRound().getEvent();
 
         return EventConfirmationDTO.builder()
+                .id(event.getId())
+                .endDateTime(event.getEnd_datetime())
+                .startDateTime(event.getStart_datetime())
                 .name(event.getName())
                 .location(event.getLocation())
                 .description(event.getDescription())
