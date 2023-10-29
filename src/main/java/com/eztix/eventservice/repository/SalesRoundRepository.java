@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface SalesRoundRepository extends CrudRepository<SalesRound, Long> {
 
     Optional<Iterable<SalesRound>> findByEventId(Long activityId);
+
+    Optional<SalesRound> findSalesRoundById(Long salesRoundId);
 }

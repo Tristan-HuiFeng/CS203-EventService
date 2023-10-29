@@ -5,6 +5,7 @@ import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.*;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
+import com.eztix.eventservice.repository.SalesRoundRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,7 @@ public class PurchaseRequestService {
     private final TicketTypeService ticketTypeService;
     private final TicketSalesLimitService ticketSalesLimitService;
     private final PurchaseRequestItemService purchaseRequestItemService;
-    @Setter
-    @Autowired
-    private SalesRoundService salesRoundService;
+    private final SalesRoundRepository salesRoundRepository;
 
     // Add new PurchaseRequest
     public PurchaseRequest addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO) {
@@ -44,7 +43,8 @@ public class PurchaseRequestService {
         }
 
         // Get Sales Round
-        SalesRound salesRound = salesRoundService.getSalesRoundById(purchaseRequestDTO.getSalesRoundId());
+        SalesRound salesRound = salesRoundRepository.findSalesRoundById(purchaseRequestDTO.getSalesRoundId())
+                .orElseThrow();
 
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
@@ -130,7 +130,8 @@ public class PurchaseRequestService {
         Iterator<Long> rngIterator = rng.iterator();
 
         // Run through all ticket sales limit to figure out current round max for each ticket
-        Iterable<TicketSalesLimit> ticketSalesLimitIterable = ticketSalesLimitService.getTicketSalesLimitBySalesRoundId(salesRoundId);
+        Iterable<TicketSalesLimit> ticketSalesLimitIterable =
+                ticketSalesLimitService.getTicketSalesLimitBySalesRoundId(salesRoundId);
         Map<Long, Integer> ticketTypeToVacancyMap = new HashMap<>();
 
         ticketSalesLimitIterable.forEach(ticketSalesLimit -> {
@@ -148,7 +149,7 @@ public class PurchaseRequestService {
                         int remaining = ticketTypeToVacancyMap.get(ticketType.getId());
                         int requested = prItem.getQuantityRequested();
 
-                        if(remaining >= requested){
+                        if (remaining >= requested) {
                             ticketTypeToVacancyMap.put(ticketType.getId(), remaining - requested);
                             PurchaseRequestItem newPrItem = PurchaseRequestItem.builder()
                                     .id(prItem.getId())
@@ -158,7 +159,7 @@ public class PurchaseRequestService {
                                     .purchaseRequest(pr)
                                     .build();
                             purchaseRequestItemService.updatePurchaseRequestItem(newPrItem);
-                        }else if(remaining > 0){
+                        } else if (remaining > 0) {
                             ticketTypeToVacancyMap.put(ticketType.getId(), 0);
                             PurchaseRequestItem newPrItem = PurchaseRequestItem.builder()
                                     .id(prItem.getId())
