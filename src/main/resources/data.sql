@@ -159,3 +159,22 @@ VALUES (1,  150, 0, 0, 1);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
 VALUES (2,  200, 0, 0, 2);
+
+
+UPDATE purchase_request_seq
+SET next_val = 101;
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
+VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", "processing");
+
+UPDATE purchase_request_item_seq
+SET next_val = 101;
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (0,  1, 0, 0, 0);
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (1,  1, 0, 0, 1);
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (2,  2, 0, 0, 2);
