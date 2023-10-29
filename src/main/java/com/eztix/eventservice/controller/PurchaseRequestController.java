@@ -1,15 +1,21 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
+import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.service.PurchaseRequestService;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -20,10 +26,10 @@ public class PurchaseRequestController {
 
     //Add a new PurchaseRequest
     @PostMapping("/api/v1/purchase-request")
-    public ResponseEntity<PurchaseRequest> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest) {
+    public ResponseEntity<PurchaseRequestCreation> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest, Authentication authentication) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest));
+                .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest, authentication.getName()));
     }
 
     //Get PurchaseRequest by id
