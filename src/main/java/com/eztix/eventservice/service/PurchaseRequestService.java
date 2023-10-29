@@ -1,9 +1,11 @@
 package com.eztix.eventservice.service;
 
+import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.*;
+import com.eztix.eventservice.repository.EventRepository;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +34,14 @@ public class PurchaseRequestService {
     private final SalesRoundRepository salesRoundRepository;
 
     // Add new PurchaseRequest
-    public PurchaseRequest addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO) {
+    public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
 
-        if (purchaseRequestDTO.getSalesRoundId() == null) {
-            throw new RequestValidationException("sales round id cannot be null.");
+        if (purchaseRequestDTO.getEventId() == null) {
+            throw new RequestValidationException("event id cannot be null.");
+        }
+
+        if (userId == null) {
+            throw new RequestValidationException("must contain valid user id");
         }
 
         if (purchaseRequestDTO.getPurchaseRequestItems().isEmpty()) {
@@ -43,24 +49,26 @@ public class PurchaseRequestService {
         }
 
         // Get Sales Round
-        SalesRound salesRound = salesRoundRepository.findSalesRoundById(purchaseRequestDTO.getSalesRoundId())
-                .orElseThrow();
-
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Asia/Singapore"));
 
-        if (salesRound.getRoundEnd().isAfter(now) || salesRound.getRoundEnd().isBefore(now)) {
+        SalesRound salesRound = salesRoundRepository.findTop1ByEventIdAndRoundStartLessThanAndRoundEndGreaterThan(purchaseRequestDTO.getEventId(), now, now)
+                .orElseThrow();
+
+        if (now.isAfter(salesRound.getRoundEnd()) || now.isBefore(salesRound.getRoundStart())) {
             throw new RequestValidationException("request rejected due to sales round not ongoing.");
         }
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().status("pending").customerId("Default TODO").salesRound(salesRound).build();
+                PurchaseRequest.builder().status("pending").customerId(userId).salesRound(salesRound).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
         newPurchaseRequest.setPurchaseRequestItems(newPurchaseRequestItemList);
 
-        return purchaseRequestRepository.save(newPurchaseRequest);
+        newPurchaseRequest = purchaseRequestRepository.save(newPurchaseRequest);
+
+        return PurchaseRequestCreation.builder().purchaseRequestId(newPurchaseRequest.getId()).build();
     }
 
     // Get PurchaseRequest by id

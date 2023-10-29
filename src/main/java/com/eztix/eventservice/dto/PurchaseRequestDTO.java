@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class PurchaseRequestDTO {
 
-    private Long salesRoundId;
+    private Long eventId;
 
     //private String customerId;
 
