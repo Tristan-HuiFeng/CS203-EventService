@@ -4,6 +4,7 @@ import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
 import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,11 @@ public class PurchaseRequestController {
                 .body(purchaseRequestService.getPurchaseRequestConfirmation(id));
     }
 
+    @GetMapping("/api/v1/purchase-request")
+    public ResponseEntity<List<PurchaseRequestRetrievalDTO>> getPurchaseRequestByUserId(Authentication authentication){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(purchaseRequestService.getPurchaseRequestByUserId(authentication.getName()));
+    }
 
     @GetMapping ("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
