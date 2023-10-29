@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class PurchaseRequestRetrievalDTO {
 
+    Long id;
+
     String eventName;
 
     Long queueNumber;

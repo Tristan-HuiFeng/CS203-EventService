@@ -122,6 +122,7 @@ public class PurchaseRequestService {
 
         return purchaseRequestRepository.findByCustomerIdOrderByStatusAsc(customerId)
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
+                        .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
                         .status(pr.getStatus())
                         .bannerURL(pr.getSalesRound().getEvent().getName())
