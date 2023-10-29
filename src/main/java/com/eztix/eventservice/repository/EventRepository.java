@@ -12,6 +12,8 @@ public interface EventRepository extends CrudRepository<Event, Long>, PagingAndS
 
     List<Event> findAllByIsFeaturedTrueOrderByFeatureSequence();
 
+    List<Event> findAllByCategory(String category);
+
     @Query(value = """
                     SELECT
                     e.id as id,

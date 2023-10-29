@@ -41,9 +41,10 @@ public class EventController {
 
     @CrossOrigin
     @GetMapping("/api/v1/event")
-    public ResponseEntity<Iterable<Event>> getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly) {
+    public ResponseEntity<Iterable<Event>> getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly,
+                                                       @RequestParam(required = false, defaultValue = "none") String category) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(eventService.getAllEvents(featuredOnly));
+                .body(eventService.getAllEvents(featuredOnly, category));
     }
 
 }

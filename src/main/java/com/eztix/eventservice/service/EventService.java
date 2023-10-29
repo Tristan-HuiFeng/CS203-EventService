@@ -87,9 +87,15 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public Iterable<Event> getAllEvents(boolean featuredOnly) {
-        return featuredOnly ? eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence() :
-                eventRepository.findAll();
+    public Iterable<Event> getAllEvents(boolean featuredOnly, String category) {
+
+        if (featuredOnly) {
+            return eventRepository.findAllByIsFeaturedTrueOrderByFeatureSequence();
+        }
+        if (!category.equals("none")) {
+            return eventRepository.findAllByCategory(category);
+        }
+        return eventRepository.findAll();
     }
 
     public void deleteAll() {
