@@ -6,6 +6,7 @@ import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestItemConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.SalesRoundConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.*;
@@ -13,6 +14,7 @@ import com.eztix.eventservice.repository.EventRepository;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.converters.models.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +36,6 @@ public class PurchaseRequestService {
     private final TicketSalesLimitService ticketSalesLimitService;
     private final PurchaseRequestItemService purchaseRequestItemService;
     private final SalesRoundRepository salesRoundRepository;
-    private final EventRepository eventRepository;
 
     // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
@@ -111,6 +112,22 @@ public class PurchaseRequestService {
                         .build())
                 .build();
 
+    }
+
+    @Transactional
+    public List<PurchaseRequestRetrievalDTO> getPurchaseRequestByUserId(String customerId){
+        if (customerId == null) {
+            throw new RequestValidationException("must contain valid customer id");
+        }
+
+        return purchaseRequestRepository.findByCustomerIdOrderByStatusAsc(customerId)
+                .map(pr -> PurchaseRequestRetrievalDTO.builder()
+                        .eventName(pr.getSalesRound().getEvent().getName())
+                        .status(pr.getStatus())
+                        .bannerURL(pr.getSalesRound().getEvent().getName())
+                        .queueNumber(pr.getQueueNumber())
+                        .build())
+                .toList();
     }
 
     // Get PurchaseRequest by id
