@@ -2,6 +2,10 @@ package com.eztix.eventservice.service;
 
 import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
+import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
+import com.eztix.eventservice.dto.confirmation.PurchaseRequestConfirmationDTO;
+import com.eztix.eventservice.dto.confirmation.PurchaseRequestItemConfirmationDTO;
+import com.eztix.eventservice.dto.confirmation.SalesRoundConfirmationDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.*;
@@ -9,8 +13,6 @@ import com.eztix.eventservice.repository.EventRepository;
 import com.eztix.eventservice.repository.PurchaseRequestRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ public class PurchaseRequestService {
     private final TicketSalesLimitService ticketSalesLimitService;
     private final PurchaseRequestItemService purchaseRequestItemService;
     private final SalesRoundRepository salesRoundRepository;
+    private final EventRepository eventRepository;
 
     // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
@@ -69,6 +72,41 @@ public class PurchaseRequestService {
         newPurchaseRequest = purchaseRequestRepository.save(newPurchaseRequest);
 
         return PurchaseRequestCreation.builder().purchaseRequestId(newPurchaseRequest.getId()).build();
+    }
+
+    public EventConfirmationDTO getPurchaseRequestConfirmation(Long purchaseRequestId) {
+
+        PurchaseRequest purchaseRequest = purchaseRequestRepository.findById(purchaseRequestId)
+                .orElseThrow();
+
+        SalesRound salesRound = purchaseRequest.getSalesRound();
+
+        Event event = purchaseRequest.getSalesRound().getEvent();
+
+        return EventConfirmationDTO.builder()
+                .name(event.getName())
+                .description(event.getDescription())
+                .bannerURL(event.getBannerURL())
+                .salesRound(SalesRoundConfirmationDTO.builder()
+                        .roundStart(salesRound.getRoundStart())
+                        .roundEnd(salesRound.getRoundEnd())
+                        .salesType(salesRound.getSalesType())
+                        .build())
+                .purchaseRequest(PurchaseRequestConfirmationDTO.builder()
+                        .id(purchaseRequestId)
+                        .status(purchaseRequest.getStatus())
+                        .purchaseRequestItems(purchaseRequest.getPurchaseRequestItems().stream().map(prItem ->
+                                PurchaseRequestItemConfirmationDTO.builder()
+                                        .price(prItem.getTicketType().getPrice() * prItem.getQuantityRequested())
+                                        .ticketType(prItem.getTicketType().getType())
+                                        .quantityRequested(prItem.getQuantityRequested())
+                                        .eventStartDateTime(prItem.getTicketType().getActivity().getStartDateTime())
+                                        .eventEndDateTime(prItem.getTicketType().getActivity().getEndDateTime())
+                                        .build())
+                                .toList())
+                        .build())
+                .build();
+
     }
 
     // Get PurchaseRequest by id
