@@ -47,4 +47,5 @@ public class EventController {
                 .body(eventService.getAllEvents(featuredOnly, category));
     }
 
+
 }
