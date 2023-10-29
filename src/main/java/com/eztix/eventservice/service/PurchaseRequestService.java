@@ -125,7 +125,7 @@ public class PurchaseRequestService {
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
                         .status(pr.getStatus())
-                        .bannerURL(pr.getSalesRound().getEvent().getName())
+                        .bannerURL(pr.getSalesRound().getEvent().getBannerURL())
                         .queueNumber(pr.getQueueNumber())
                         .build())
                 .toList();
