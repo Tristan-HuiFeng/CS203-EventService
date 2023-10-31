@@ -120,7 +120,7 @@ public class PurchaseRequestService {
             throw new RequestValidationException("must contain valid customer id");
         }
 
-        return purchaseRequestRepository.findByCustomerIdOrderByStatusAsc(customerId)
+        return purchaseRequestRepository.findByCustomerIdOrderByStatusDesc(customerId)
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
