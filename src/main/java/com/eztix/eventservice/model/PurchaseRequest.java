@@ -30,20 +30,16 @@ public class PurchaseRequest {
     @NotNull
     @Column(name = "status")
     private String status;
-
     @Column(name = "queue_number")
     private Long queueNumber;
-
     @NotNull
     @Column(name = "customer_id")
     private String customerId;
-
     @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "salesRound_id")
     private SalesRound salesRound;
-
     @JsonManagedReference
     @OneToMany(mappedBy="purchaseRequest",
             orphanRemoval = true,
