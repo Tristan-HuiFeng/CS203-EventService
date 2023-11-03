@@ -1,6 +1,5 @@
 package com.eztix.eventservice.unit;
 
-import com.eztix.eventservice.model.TicketSalesLimit;
 import com.eztix.eventservice.service.EventService;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +20,6 @@ import java.util.Optional;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,7 +31,6 @@ import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.repository.EventRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.service.SalesRoundService;
 import com.eztix.eventservice.service.TicketSalesLimitService;
@@ -81,9 +78,6 @@ public class SalesRoundServiceTest {
         // given
         NewSalesRound[] salesRounds = createMockNewSalesRounds();
         NewSalesRound salesRound = salesRounds[0];
-        // List<SalesRound> salesRoundList = new ArrayList<>();
-        // SalesRound inputSalesRound = newSalesRoundToSalesRound(salesRound);
-        // salesRoundList.add(inputSalesRound);
 
         SalesRound returnedSalesRound = newSalesRoundToSalesRound(salesRound, event);
 
@@ -120,21 +114,10 @@ public class SalesRoundServiceTest {
     void givenSalesRoundExist_whenRetrieve_thenSuccessful() {
 
         // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-        // eventRepository.save(event);
-
         Activity activity = new Activity();
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        // activityRepository.save(activity);
 
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -142,7 +125,6 @@ public class SalesRoundServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        // salesRound.setActivity(activity);
 
         given(salesRoundRepository.findById(salesRound.getId())).willReturn(Optional.of(salesRound));
 
@@ -157,21 +139,10 @@ public class SalesRoundServiceTest {
     @Test
     void givenNullId_whenUpdate_throwRequestValidationException() {
         // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-        // eventRepository.save(event);
-
         Activity activity = new Activity();
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        // activityRepository.save(activity);
 
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -179,7 +150,7 @@ public class SalesRoundServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        // salesRound.setActivity(activity);
+
         // when
         // then
         assertThatThrownBy(() -> testSalesRoundService.updateSalesRound(salesRound))
@@ -191,21 +162,10 @@ public class SalesRoundServiceTest {
     @Test
     void givenIdNotInDB_whenUpdate_throwRequestNotFoundException() {
         // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-        // eventRepository.save(event);
-
         Activity activity = new Activity();
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        // activityRepository.save(activity);
 
         SalesRound salesRound = new SalesRound();
         salesRound.setId(1L);
@@ -214,7 +174,6 @@ public class SalesRoundServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        // salesRound.setActivity(activity);
 
         given(salesRoundRepository.findById(1L)).willReturn(Optional.empty());
         // when
