@@ -11,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.scheduling.TaskScheduler;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -19,26 +20,40 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import com.eztix.eventservice.dto.request.NewSalesRound;
+import com.eztix.eventservice.dto.request.NewTicketSalesLimit;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.model.SalesRound;
+import com.eztix.eventservice.repository.EventRepository;
 import com.eztix.eventservice.repository.SalesRoundRepository;
 import com.eztix.eventservice.service.SalesRoundService;
+import com.eztix.eventservice.service.TicketSalesLimitService;
+import com.eztix.eventservice.service.TicketTypeService;
 
 @ExtendWith(MockitoExtension.class)
 public class SalesRoundServiceTest {
 
     @Mock
+    private TaskScheduler taskScheduler;
+    @Mock
+    private TicketSalesLimitService ticketSalesLimitService;
+    @Mock
+    private TicketTypeService ticketTypeService;
+    @Mock
+    private EventService eventService;
+    @Mock
     private SalesRoundRepository salesRoundRepository;
     @InjectMocks
     private SalesRoundService testSalesRoundService;
-    @Mock
-    private static EventService eventService;
 
     static private Event event;
 
@@ -55,37 +70,37 @@ public class SalesRoundServiceTest {
         event.setLocation("location");
         event.setIsFeatured(false);
     }
+    @BeforeEach
+    void setup1() {
+        testSalesRoundService.setEventService(eventService);
+    }
+    
 
     @Test
     void givenNewSalesRound_whenAddSalesRound_thenSuccess() {
         // given
-        
-        SalesRound salesRound = new SalesRound();
-        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setSalesType("test sales type");
-        List<TicketSalesLimit> ticketSalesLimitList = new ArrayList<>();
-        ticketSalesLimitList.add(new TicketSalesLimit());
-        salesRound.setTicketSalesLimits(ticketSalesLimitList);
+        NewSalesRound[] salesRounds = createMockNewSalesRounds();
+        NewSalesRound salesRound = salesRounds[0];
+        // List<SalesRound> salesRoundList = new ArrayList<>();
+        // SalesRound inputSalesRound = newSalesRoundToSalesRound(salesRound);
+        // salesRoundList.add(inputSalesRound);
 
-        given(eventService.getEventById(1L)).willReturn(event);
+        SalesRound returnedSalesRound = newSalesRoundToSalesRound(salesRound, event);
 
-
+        when(salesRoundRepository.save(any(SalesRound.class))).thenReturn(returnedSalesRound);
 
         // when
-        testSalesRoundService.addNewSalesRound(1L, salesRound);
+        testSalesRoundService.addSalesRounds(1L, salesRounds);
 
         // then
-        ArgumentCaptor<SalesRound> salesRoundArgumentCaptor =
-                ArgumentCaptor.forClass(SalesRound.class);
+        ArgumentCaptor<SalesRound> salesRoundArgumentCaptor = ArgumentCaptor.forClass(SalesRound.class);
 
         verify(salesRoundRepository).save(salesRoundArgumentCaptor.capture());
 
         SalesRound capturedSalesRound = salesRoundArgumentCaptor.getValue();
+        capturedSalesRound.setEvent(event);
 
-        assertThat(capturedSalesRound).isEqualTo(salesRound);
+        assertThat(capturedSalesRound).isEqualTo(returnedSalesRound);
     }
 
     @Test
@@ -120,14 +135,14 @@ public class SalesRoundServiceTest {
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         // activityRepository.save(activity);
-        
+
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        //salesRound.setActivity(activity);
+        // salesRound.setActivity(activity);
 
         given(salesRoundRepository.findById(salesRound.getId())).willReturn(Optional.of(salesRound));
 
@@ -157,14 +172,14 @@ public class SalesRoundServiceTest {
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         // activityRepository.save(activity);
-        
+
         SalesRound salesRound = new SalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        //salesRound.setActivity(activity);
+        // salesRound.setActivity(activity);
         // when
         // then
         assertThatThrownBy(() -> testSalesRoundService.updateSalesRound(salesRound))
@@ -191,7 +206,7 @@ public class SalesRoundServiceTest {
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         // activityRepository.save(activity);
-        
+
         SalesRound salesRound = new SalesRound();
         salesRound.setId(1L);
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
@@ -199,7 +214,7 @@ public class SalesRoundServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-        //salesRound.setActivity(activity);
+        // salesRound.setActivity(activity);
 
         given(salesRoundRepository.findById(1L)).willReturn(Optional.empty());
         // when
@@ -226,7 +241,36 @@ public class SalesRoundServiceTest {
         given(salesRoundRepository.findByEventId(1L)).willReturn(Optional.of(salesRoundList));
         testSalesRoundService.getSalesRoundByEventId(1L);
         verify(salesRoundRepository).findByEventId(1L);
-    }    
+    }
 
+    private NewSalesRound[] createMockNewSalesRounds() {
+        NewSalesRound salesRound = new NewSalesRound();
+        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setSalesType("test sales type");
+        List<NewTicketSalesLimit> ticketSalesLimitList = new ArrayList<>();
+        ticketSalesLimitList.add(new NewTicketSalesLimit());
+        salesRound.setTicketSalesLimitList(ticketSalesLimitList);
+
+        NewSalesRound[] salesRounds = { salesRound };
+        return salesRounds;
+    }
+
+    private SalesRound newSalesRoundToSalesRound(NewSalesRound salesRound, Event event) {
+
+
+        SalesRound result = SalesRound.builder()
+                .roundStart(salesRound.getRoundStart())
+                .roundEnd(salesRound.getRoundEnd())
+                .purchaseStart(salesRound.getPurchaseStart())
+                .purchaseEnd(salesRound.getPurchaseEnd())
+                .salesType(salesRound.getSalesType())
+                .build();
+        result.setEvent(event);
+
+        return result;
+    }
 
 }
