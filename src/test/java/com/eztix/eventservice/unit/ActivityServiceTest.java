@@ -59,10 +59,9 @@ class ActivityServiceTest {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        given(eventService.getEventById(1L)).willReturn(this.event);
 
         // when
-        testActivityService.addNewActivity(1L, activity);
+        testActivityService.addNewActivity(event, activity);
 
         // then
         ArgumentCaptor<Activity> activityArgumentCaptor =

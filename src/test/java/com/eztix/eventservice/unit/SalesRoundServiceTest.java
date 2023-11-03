@@ -2,6 +2,9 @@ package com.eztix.eventservice.unit;
 
 import com.eztix.eventservice.model.TicketSalesLimit;
 import com.eztix.eventservice.service.EventService;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -37,6 +40,22 @@ public class SalesRoundServiceTest {
     @Mock
     private static EventService eventService;
 
+    static private Event event;
+
+    @BeforeAll
+    static void setup() {
+        event = new Event();
+        event.setId(1L);
+        event.setName("Test Event");
+        event.setCategory("concert");
+        event.setArtist("artist1");
+        event.setDescription("This is a test event");
+        event.setBannerURL("urk1");
+        event.setSeatMapURL("url2");
+        event.setLocation("location");
+        event.setIsFeatured(false);
+    }
+
     @Test
     void givenNewSalesRound_whenAddSalesRound_thenSuccess() {
         // given
@@ -47,13 +66,13 @@ public class SalesRoundServiceTest {
         salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
         salesRound.setSalesType("test sales type");
-
         List<TicketSalesLimit> ticketSalesLimitList = new ArrayList<>();
         ticketSalesLimitList.add(new TicketSalesLimit());
-
         salesRound.setTicketSalesLimits(ticketSalesLimitList);
 
-        given(eventService.getEventById(1L)).willReturn(new Event());
+        given(eventService.getEventById(1L)).willReturn(event);
+
+
 
         // when
         testSalesRoundService.addNewSalesRound(1L, salesRound);
