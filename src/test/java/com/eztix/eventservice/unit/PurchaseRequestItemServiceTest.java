@@ -2,12 +2,7 @@ package com.eztix.eventservice.unit;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
-import com.eztix.eventservice.model.Activity;
-import com.eztix.eventservice.model.Event;
-import com.eztix.eventservice.model.PurchaseRequest;
 import com.eztix.eventservice.model.PurchaseRequestItem;
-import com.eztix.eventservice.model.SalesRound;
-import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.PurchaseRequestItemRepository;
 import com.eztix.eventservice.service.PurchaseRequestItemService;
 
@@ -18,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
