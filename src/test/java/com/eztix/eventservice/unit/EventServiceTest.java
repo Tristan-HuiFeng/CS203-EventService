@@ -164,4 +164,10 @@ class EventServiceTest {
         verify(eventRepository).findAll();
     }
 
+    @Test
+    void deleteAllEvents() {
+        testEventService.deleteAll();
+        verify(eventRepository).deleteAll();
+    }
+
 }
