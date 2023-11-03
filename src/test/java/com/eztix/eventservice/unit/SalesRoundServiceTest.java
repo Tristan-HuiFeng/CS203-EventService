@@ -243,6 +243,12 @@ public class SalesRoundServiceTest {
         verify(salesRoundRepository).findByEventId(1L);
     }
 
+    @Test
+    void deleteAllSalesRounds() {
+        testSalesRoundService.deleteAllSalesRounds();
+        verify(salesRoundRepository).deleteAll();   
+    }
+
     private NewSalesRound[] createMockNewSalesRounds() {
         NewSalesRound salesRound = new NewSalesRound();
         salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
