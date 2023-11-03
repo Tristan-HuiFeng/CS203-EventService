@@ -144,5 +144,22 @@ class ActivityServiceTest {
 
     }
 
+    @Test
+    void givenNullId_whenDelete_throwRequestValidationException() {
+        // given
+
+        Activity activity = new Activity();
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+
+        // when
+        // then
+        assertThatThrownBy(() -> testActivityService.deleteActivity(activity.getId()))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessageContaining("activity id cannot be null.");
+
+    }
+
 
 }
