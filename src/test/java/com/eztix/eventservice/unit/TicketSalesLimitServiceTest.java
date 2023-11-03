@@ -127,4 +127,10 @@ class TicketSalesLimitServiceTest {
         testTicketSalesLimitService.getAllTicketSalesLimits();
         verify(ticketSalesLimitRepository).findAll();
     }
+    
+    @Test
+    void deleteAllTicketSalesLimits() {
+        testTicketSalesLimitService.deleteAllTicketSalesLimits();
+        verify(ticketSalesLimitRepository).deleteAll();
+    }
 }
