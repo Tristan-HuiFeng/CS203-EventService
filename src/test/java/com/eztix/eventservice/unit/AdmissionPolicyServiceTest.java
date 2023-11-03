@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
+import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.AdmissionPolicy;
 import com.eztix.eventservice.model.Event;
 import com.eztix.eventservice.repository.AdmissionPolicyRepository;
@@ -140,6 +143,23 @@ public class AdmissionPolicyServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(
                         String.format("admission policy with id %d does not exist", admissionPolicy.getId()));
+    }
+
+    @Test
+    void givenNullId_whenDelete_throwRequestValidationException() {
+        // given
+        AdmissionPolicy admissionPolicy = new AdmissionPolicy();
+        admissionPolicy.setEvent(event);
+        admissionPolicy.setDescription("This is a test policy");
+        Short s = 2;
+        admissionPolicy.setPolicyOrder(s);
+
+        // when
+        // then
+        assertThatThrownBy(() -> testAdmissionPolicyService.deleteAdmissionPolicy(admissionPolicy.getId()))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessageContaining("admission policy id cannot be null.");
+
     }
 
 }
