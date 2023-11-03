@@ -127,4 +127,10 @@ class PurchaseRequestItemServiceTest {
         testPurchaseRequestItemService.getAllPurchaseRequestItems();
         verify(purchaseRequestItemRepository).findAll();
     }
+
+    @Test
+    void deleteAllPurchaseRequestItems() {
+        testPurchaseRequestItemService.deleteAllPurchaseRequestItems();
+        verify(purchaseRequestItemRepository).deleteAll();
+    }
 }
