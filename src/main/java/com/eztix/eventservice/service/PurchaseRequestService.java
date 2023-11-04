@@ -266,8 +266,8 @@ public class PurchaseRequestService {
                 .ticketType(prItem.getTicketType().getType())
                 .price(prItem.getTicketType().getPrice())
                 .quantityRequested(prItem.getQuantityRequested())
-                .eventStartTime(prItem.getTicketType().getActivity().getStartDateTime())
-                .eventEndTime(prItem.getTicketType().getActivity().getEndDateTime())
+                .eventStartDateTime(prItem.getTicketType().getActivity().getStartDateTime())
+                .eventEndDateTime(prItem.getTicketType().getActivity().getEndDateTime())
                 .build();
 
     }
