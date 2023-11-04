@@ -249,6 +249,14 @@ public class PurchaseRequestService {
         purchaseRequestRepository.deleteAll();
     }
 
+
+    public void deletePurchaseRequest(long id) {
+
+        purchaseRequestRepository.deleteById(id);
+    }
+
+
+
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequestDTO purchaseRequestDTO,
                                                           PurchaseRequest newPurchaseRequest) {
         AtomicInteger sum = new AtomicInteger();
