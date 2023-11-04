@@ -58,4 +58,13 @@ public class PurchaseRequestController {
               .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
     }
 
+    @DeleteMapping("/api/v1/purchase-request/{id}")
+    public ResponseEntity<String> deletePurchaseRequestById (@PathVariable Long id) {
+
+        purchaseRequestService.deletePurchaseRequest(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("deleted successfully");
+    }
+
 }
