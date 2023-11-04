@@ -21,7 +21,7 @@ public class PurchaseRequestItemRetrivalDTO {
 
     private Integer quantityRequested;
 
-    private OffsetDateTime eventStartTime;
+    private OffsetDateTime eventStartDateTime;
 
-    private OffsetDateTime eventEndTime;
+    private OffsetDateTime eventEndDateTime;
 }
