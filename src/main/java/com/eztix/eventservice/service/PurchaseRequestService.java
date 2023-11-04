@@ -6,6 +6,7 @@ import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestItemConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.SalesRoundConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestItemRetrivalDTO;
 import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
@@ -255,6 +256,21 @@ public class PurchaseRequestService {
         purchaseRequestRepository.deleteById(id);
     }
 
+    public PurchaseRequestItemRetrivalDTO getPurchaseRequestItemById(Long id) {
+
+        PurchaseRequestItem prItem = purchaseRequestItemService.getPurchaseRequestItemById(id);
+
+
+        return PurchaseRequestItemRetrivalDTO.builder()
+                .id(prItem.getId())
+                .ticketType(prItem.getTicketType().getType())
+                .price(prItem.getTicketType().getPrice())
+                .quantityRequested(prItem.getQuantityRequested())
+                .eventStartTime(prItem.getTicketType().getActivity().getStartDateTime())
+                .eventEndTime(prItem.getTicketType().getActivity().getEndDateTime())
+                .build();
+
+    }
 
 
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequestDTO purchaseRequestDTO,

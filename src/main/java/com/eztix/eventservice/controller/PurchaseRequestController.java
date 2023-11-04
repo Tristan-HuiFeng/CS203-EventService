@@ -3,6 +3,7 @@ package com.eztix.eventservice.controller;
 import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestItemRetrivalDTO;
 import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,12 @@ public class PurchaseRequestController {
     public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(purchaseRequestService.getPurchaseRequestById(id));
+    }
+
+    @GetMapping ("/api/v1/purchase-request/item/{id}")
+    public ResponseEntity<PurchaseRequestItemRetrivalDTO> getPurchaseRequestItemById (@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(purchaseRequestService.getPurchaseRequestItemById(id));
     }
 
     //Update PurchaseRequest
