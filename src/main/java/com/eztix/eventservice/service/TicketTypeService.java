@@ -3,24 +3,17 @@ package com.eztix.eventservice.service;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Activity;
-import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketType;
-import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 @RequiredArgsConstructor
 public class TicketTypeService {
 
     private final TicketTypeRepository ticketTypeRepository;
-    private final ActivityService activityService;
 
     // Add new TicketType
     public TicketType addNewTicketType(Activity activity, TicketType ticketType) {
@@ -38,6 +31,7 @@ public class TicketTypeService {
 
     }
 
+    // Get TicketType iterable by activityId
     public Iterable<TicketType> getTicketTypeByActivityId(Long activityId) {
 
         return ticketTypeRepository.findByActivityId(activityId).orElseThrow(() ->

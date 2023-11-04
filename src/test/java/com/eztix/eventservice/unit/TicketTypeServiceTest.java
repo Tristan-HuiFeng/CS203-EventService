@@ -43,10 +43,9 @@ public class TicketTypeServiceTest {
         ticketType.setReservedCount(0);
         ticketType.setTotalVacancy(0);
         ticketType.setType("test type");
-        given(activityService.getActivityById(1L)).willReturn(new Activity());
 
         // when
-        testTicketTypeService.addNewTicketType(1L, ticketType);
+        testTicketTypeService.addNewTicketType(new Activity(), ticketType);
 
         // then
         ArgumentCaptor<TicketType> ticketTypeArgumentCaptor =
@@ -148,5 +147,10 @@ public class TicketTypeServiceTest {
         verify(ticketTypeRepository).findByActivityId(1L);
     }    
 
+    @Test
+    void deleteAllTicketTypes() {
+        testTicketTypeService.deleteAllTicketTypes();
+        verify(ticketTypeRepository).deleteAll();
+    }
 
 }
