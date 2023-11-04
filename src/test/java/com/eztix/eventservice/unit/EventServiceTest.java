@@ -1,5 +1,8 @@
 package com.eztix.eventservice.unit;
 
+import com.eztix.eventservice.dto.request.NewActivity;
+import com.eztix.eventservice.dto.request.NewAdmissionPolicy;
+import com.eztix.eventservice.dto.request.NewEvent;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Event;
@@ -12,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,10 +33,10 @@ class EventServiceTest {
     private EventService testEventService;
 
 
-    /*@Test
+    @Test
     void givenNewEvent_whenAddEvent_thenSuccess() {
         // given
-        Event event = new Event();
+        NewEvent event = new NewEvent();
         event.setName("Test Event");
         event.setCategory("concert");
         event.setArtist("artist1");
@@ -39,6 +44,11 @@ class EventServiceTest {
         event.setBannerURL("urk1");
         event.setSeatMapURL("url2");
         event.setIsFeatured(false);
+        event.setLocation("somewhere over the rainbow");
+        List<NewActivity> activities = new ArrayList<>();
+        event.setActivities(activities);
+        List<NewAdmissionPolicy> admissionPolicies = new ArrayList<>();
+        event.setAdmissionPolicies(admissionPolicies);
 
         // when
         testEventService.addNewEvent(event);
@@ -50,9 +60,20 @@ class EventServiceTest {
         verify(eventRepository).save(eventArgumentCaptor.capture());
 
         Event capturedEvent = eventArgumentCaptor.getValue();
+        NewEvent capturedNewEvent = new NewEvent();
+        capturedNewEvent.setName(capturedEvent.getName());
+        capturedNewEvent.setArtist(event.getArtist());
+        capturedNewEvent.setDescription(event.getDescription());
+        capturedNewEvent.setBannerURL(event.getBannerURL());
+        capturedNewEvent.setSeatMapURL(event.getSeatMapURL());
+        capturedNewEvent.setIsFeatured(event.getIsFeatured());
+        capturedNewEvent.setLocation(event.getLocation());
+        capturedNewEvent.setCategory(event.getCategory());
+        capturedNewEvent.setActivities(new ArrayList<>());
+        capturedNewEvent.setAdmissionPolicies(new ArrayList<>());
 
-        assertThat(capturedEvent).isEqualTo(event);
-    }*/
+        assertThat(event).isEqualTo(capturedNewEvent);
+    }
 
     @Test
     void givenIdNotInDB_whenRetrieveById_throwResourceNotFoundException() {
@@ -133,14 +154,20 @@ class EventServiceTest {
 
     @Test
     void getAllEventsFeatured() {
-        testEventService.getAllEvents(true, "none");
+        testEventService.getAllEvents(true, "none", "none");
         verify(eventRepository).findAllByIsFeaturedTrueOrderByFeatureSequence();
     }
 
     @Test
     void getAllEventsNotFeatured() {
-        testEventService.getAllEvents(false, "none");
+        testEventService.getAllEvents(false, "none", "none");
         verify(eventRepository).findAll();
+    }
+
+    @Test
+    void deleteAllEvents() {
+        testEventService.deleteAll();
+        verify(eventRepository).deleteAll();
     }
 
 }
