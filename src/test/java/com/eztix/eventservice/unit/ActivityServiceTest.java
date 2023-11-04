@@ -59,10 +59,9 @@ class ActivityServiceTest {
         activity.setEvent(event);
         activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
         activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        given(eventService.getEventById(1L)).willReturn(this.event);
 
         // when
-        testActivityService.addNewActivity(1L, activity);
+        testActivityService.addNewActivity(event, activity);
 
         // then
         ArgumentCaptor<Activity> activityArgumentCaptor =
@@ -141,6 +140,23 @@ class ActivityServiceTest {
         assertThatThrownBy(() -> testActivityService.updateActivity(activity))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining(String.format("activity with id %s does not exist.", activity.getId()));
+
+    }
+
+    @Test
+    void givenNullId_whenDelete_throwRequestValidationException() {
+        // given
+
+        Activity activity = new Activity();
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+
+        // when
+        // then
+        assertThatThrownBy(() -> testActivityService.deleteActivity(activity.getId()))
+                .isInstanceOf(RequestValidationException.class)
+                .hasMessageContaining("activity id cannot be null.");
 
     }
 

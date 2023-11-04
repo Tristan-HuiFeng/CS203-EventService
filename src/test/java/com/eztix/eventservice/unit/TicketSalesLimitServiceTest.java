@@ -2,11 +2,7 @@ package com.eztix.eventservice.unit;
 
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
-import com.eztix.eventservice.model.Activity;
-import com.eztix.eventservice.model.Event;
-import com.eztix.eventservice.model.SalesRound;
 import com.eztix.eventservice.model.TicketSalesLimit;
-import com.eztix.eventservice.model.TicketType;
 import com.eztix.eventservice.repository.TicketSalesLimitRepository;
 import com.eztix.eventservice.service.TicketSalesLimitService;
 
@@ -17,8 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -126,5 +120,11 @@ class TicketSalesLimitServiceTest {
     void getAllTicketSalesLimits() {
         testTicketSalesLimitService.getAllTicketSalesLimits();
         verify(ticketSalesLimitRepository).findAll();
+    }
+    
+    @Test
+    void deleteAllTicketSalesLimits() {
+        testTicketSalesLimitService.deleteAllTicketSalesLimits();
+        verify(ticketSalesLimitRepository).deleteAll();
     }
 }
