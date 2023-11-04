@@ -64,7 +64,7 @@ public class PurchaseRequestService {
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().status("pending").customerId(userId).salesRound(salesRound).build();
+                PurchaseRequest.builder().status("processing").customerId(userId).salesRound(salesRound).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
@@ -102,6 +102,7 @@ public class PurchaseRequestService {
                         .status(purchaseRequest.getStatus())
                         .purchaseRequestItems(purchaseRequest.getPurchaseRequestItems().stream().map(prItem ->
                                 PurchaseRequestItemConfirmationDTO.builder()
+                                        .id(prItem.getId())
                                         .price(prItem.getTicketType().getPrice() * prItem.getQuantityRequested())
                                         .ticketType(prItem.getTicketType().getType())
                                         .quantityRequested(prItem.getQuantityRequested())
