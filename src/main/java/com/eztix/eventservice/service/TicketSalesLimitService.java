@@ -14,11 +14,21 @@ public class TicketSalesLimitService {
 
     private final TicketSalesLimitRepository ticketSalesLimitRepository;
 
+    /**
+     * 
+     * @param ticketSalesLimit
+     * @return
+     */
     // Add new TicketSalesLimit
     public TicketSalesLimit addNewTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }
 
+    /**
+     * 
+     * @param ticketSalesLimit_id
+     * @return
+     */
     // Get TicketSalesLimit by id
     public TicketSalesLimit getTicketSalesLimitById(Long ticketSalesLimit_id) {
 
@@ -28,15 +38,29 @@ public class TicketSalesLimitService {
 
     }
 
+    /**
+     * 
+     * @param salesRoundId
+     * @return
+     */
     public Iterable<TicketSalesLimit> getTicketSalesLimitBySalesRoundId(Long salesRoundId){
         return ticketSalesLimitRepository.findBySalesRoundId(salesRoundId);
     }
 
+    /**
+     * 
+     * @return
+     */
     // Get all TicketSalesLimit
     public Iterable<TicketSalesLimit> getAllTicketSalesLimits() {
         return ticketSalesLimitRepository.findAll();
     }
 
+    /**
+     * 
+     * @param ticketSalesLimit
+     * @return
+     */
     // Update TicketSalesLimit
     @Transactional
     public TicketSalesLimit updateTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
@@ -50,6 +74,9 @@ public class TicketSalesLimitService {
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }
 
+    /**
+     * 
+     */
     // Delete all TicketSalesLimit
     public void deleteAllTicketSalesLimits() {
         ticketSalesLimitRepository.deleteAll();
