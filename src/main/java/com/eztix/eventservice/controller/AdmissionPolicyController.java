@@ -17,7 +17,7 @@ public class AdmissionPolicyController {
     private final AdmissionPolicyService admissionPolicyService;
 
     /**
-     * Retrieve an admission policy.
+     * Retrieve admission policies based on eventId.
      * 
      * @param eventId a long value representing the unique identifier of the Event of the AdmissionPolicy to retrieve.
      * @return a ResponseEntity containing the list of retrieved AdmissionPolicy and an OK status.

@@ -64,9 +64,9 @@ public class ActivityService {
 
    /**
     * Delete an activity.
-    *  If "id" is null, throw a RequestValidationException.
+    * If "id" is null, throw a RequestValidationException.
     * 
-    * @param activityId a long value representing the unique identifier of the Activity to retrieve.
+    * @param activityId a long value representing the unique identifier of the Activity to delete.
     */
    public void deleteActivity(Long activityId) {
         if (activityId == null) {
