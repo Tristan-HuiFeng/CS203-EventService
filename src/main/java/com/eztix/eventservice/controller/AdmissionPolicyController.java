@@ -17,13 +17,14 @@ public class AdmissionPolicyController {
     private final AdmissionPolicyService admissionPolicyService;
 
     /**
+     * Retrieve an admission policy.
      * 
-     * @param eventId
-     * @return
+     * @param eventId a long value representing the unique identifier of the Event of the AdmissionPolicy to retrieve.
+     * @return a ResponseEntity containing the list of retrieved AdmissionPolicy and an OK status.
      */
     @CrossOrigin
     @GetMapping("/api/v1/event/{eventId}/admission-policy")
-    public ResponseEntity<List<AdmissionPolicy>>getAdmissionPolicyByEventId(@PathVariable Long eventId){
+    public ResponseEntity<List<AdmissionPolicy>> getAdmissionPolicyByEventId(@PathVariable Long eventId){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(admissionPolicyService.getAllAdmissionPolicyByEventId(eventId));
     }
@@ -34,10 +35,11 @@ public class AdmissionPolicyController {
 //    }
 
     /**
+     * Update the info of an admission policy of an event.
      * 
-     * @param admissionPolicyId
-     * @param admissionPolicy
-     * @return
+     * @param admissionPolicyId a long value representing the unique identifier of the AdmissionPolicy to update.
+     * @param admissionPolicy an AdmissionPolicy object containing the new AdmissionPolicy info to be updated.
+     * @return a ResponseEntity containing the updated AdmissionPolicy and an OK status.
      */
     @PutMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy> updateAdmissionPolicy(@PathVariable Long admissionPolicyId, @RequestBody AdmissionPolicy admissionPolicy){
@@ -46,9 +48,10 @@ public class AdmissionPolicyController {
     }
 
     /**
+     * Delete an admission policy.
      * 
-     * @param admissionPolicyId
-     * @return
+     * @param admissionPolicyId a long value representing the unique identifier of the AdmissionPolicy to delete.
+     * @return a ResponseEntity containing a string that states the admission policy deleted and its unique identifier and an OK status.
      */
     @DeleteMapping("/api/v1/admission-policy/{admissionPolicyId}")
     public ResponseEntity<String> deleteAdmissionPolicy(@PathVariable Long admissionPolicyId) {
