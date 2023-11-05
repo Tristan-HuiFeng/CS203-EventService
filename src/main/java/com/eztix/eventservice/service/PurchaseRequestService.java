@@ -38,6 +38,22 @@ public class PurchaseRequestService {
     private final PurchaseRequestItemService purchaseRequestItemService;
     private final SalesRoundRepository salesRoundRepository;
 
+
+    public String getStatus(PurchaseRequest pr) {
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Singapore"));
+
+        if (pr.getIsPaid() || pr.getSalesRound().getPurchaseEnd().isBefore(now)) {
+            return "end";
+        }
+
+        if(pr.getSalesRound().getRoundEnd().isBefore(now)) {
+            return "processing";
+        }
+
+        return "submitted";
+
+    }
+
     // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
 
@@ -65,7 +81,7 @@ public class PurchaseRequestService {
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().status("processing").customerId(userId).salesRound(salesRound).build();
+                PurchaseRequest.builder().customerId(userId).salesRound(salesRound).submitDateTime(now).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
@@ -100,7 +116,7 @@ public class PurchaseRequestService {
                         .build())
                 .purchaseRequest(PurchaseRequestConfirmationDTO.builder()
                         .id(purchaseRequestId)
-                        .status(purchaseRequest.getStatus())
+                        .status(getStatus(purchaseRequest))
                         .purchaseRequestItems(purchaseRequest.getPurchaseRequestItems().stream().map(prItem ->
                                 PurchaseRequestItemConfirmationDTO.builder()
                                         .id(prItem.getId())
@@ -122,11 +138,11 @@ public class PurchaseRequestService {
             throw new RequestValidationException("must contain valid customer id");
         }
 
-        return purchaseRequestRepository.findByCustomerIdOrderByStatusDesc(customerId)
+        return purchaseRequestRepository.findByCustomerIdOrderBySubmitDateTimeDesc(customerId)
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
-                        .status(pr.getStatus())
+                        .status(getStatus(pr))
                         .bannerURL(pr.getSalesRound().getEvent().getBannerURL())
                         .queueNumber(pr.getQueueNumber())
                         .build())
