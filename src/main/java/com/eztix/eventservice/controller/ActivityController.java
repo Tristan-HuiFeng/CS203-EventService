@@ -13,6 +13,11 @@ public class ActivityController {
 
     private final ActivityService activityService;
 
+    /**
+     * 
+     * @param activityId
+     * @return
+     */
     @GetMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> getActivityById(@PathVariable Long activityId){
         return ResponseEntity.status(HttpStatus.OK)
@@ -24,12 +29,23 @@ public class ActivityController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(activityService.addNewActivity(eventId, activity));
 //    }
 
+    /**
+     * 
+     * @param activityId
+     * @param activity
+     * @return
+     */
     @PutMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<Activity> updateActivity(@PathVariable Long activityId, @RequestBody Activity activity ){
         activity.setId((activityId));
         return ResponseEntity.status(HttpStatus.OK).body(activityService.updateActivity(activity));
     }
 
+    /**
+     * 
+     * @param activityId
+     * @return
+     */
     @DeleteMapping("/api/v1/activity/{activityId}")
     public ResponseEntity<String> deleteActivity(@PathVariable Long activityId) {
         activityService.deleteActivity(activityId);
