@@ -22,6 +22,12 @@ public class TicketTypeService {
     private final TicketTypeRepository ticketTypeRepository;
     private final ActivityService activityService;
 
+    /**
+     * 
+     * @param activity
+     * @param ticketType
+     * @return
+     */
     // Add new TicketType
     public TicketType addNewTicketType(Activity activity, TicketType ticketType) {
         ticketType.setActivity(activity);
@@ -29,6 +35,11 @@ public class TicketTypeService {
 
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     // Get TicketType by id
     public TicketType getTicketTypeById(Long id) {
 
@@ -38,6 +49,11 @@ public class TicketTypeService {
 
     }
 
+    /**
+     * 
+     * @param activityId
+     * @return
+     */
     public Iterable<TicketType> getTicketTypeByActivityId(Long activityId) {
 
         return ticketTypeRepository.findByActivityId(activityId).orElseThrow(() ->
@@ -46,6 +62,11 @@ public class TicketTypeService {
 
     }
 
+    /**
+     * 
+     * @param ticketType
+     * @return
+     */
     // Update TicketType
     @Transactional
     public TicketType updateTicketType(TicketType ticketType) {
@@ -60,6 +81,9 @@ public class TicketTypeService {
         return ticketTypeRepository.save(ticketType);
     }
 
+    /**
+     * 
+     */
     // Delete all TicketType
     public void deleteAllTicketTypes() {
         ticketTypeRepository.deleteAll();
