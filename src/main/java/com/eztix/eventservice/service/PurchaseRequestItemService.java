@@ -16,11 +16,21 @@ public class PurchaseRequestItemService {
 
     private final PurchaseRequestItemRepository purchaseRequestItemRepository;
 
+    /**
+     * 
+     * @param purchaseRequestItem
+     * @return
+     */
     // Add new PurchaseRequestItem
     public PurchaseRequestItem addNewPurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }
 
+    /**
+     * 
+     * @param purchaseRequestItem_id
+     * @return
+     */
     // Get PurchaseRequestItem by id
     public PurchaseRequestItem getPurchaseRequestItemById(Long purchaseRequestItem_id) {
         return purchaseRequestItemRepository.findById(purchaseRequestItem_id).orElseThrow(() ->
@@ -29,11 +39,20 @@ public class PurchaseRequestItemService {
 
     }
 
+    /**
+     * 
+     * @return
+     */
     // Get all PurchaseRequestItem
     public Iterable<PurchaseRequestItem> getAllPurchaseRequestItems() {
         return purchaseRequestItemRepository.findAll();
     }
 
+    /**
+     * 
+     * @param purchaseRequestItem
+     * @return
+     */
     // Update PurchaseRequestItem
     @Transactional
     public PurchaseRequestItem updatePurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
@@ -47,10 +66,17 @@ public class PurchaseRequestItemService {
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }
 
+    /**
+     * 
+     * @param purchaseRequestItemList
+     */
     public void validatePurchaseRequestItemList(List<PurchaseRequestItem> purchaseRequestItemList) {
 
     }
 
+    /**
+     * 
+     */
     // Delete all PurchaseRequestItem
     public void deleteAllPurchaseRequestItems() {
         purchaseRequestItemRepository.deleteAll();
