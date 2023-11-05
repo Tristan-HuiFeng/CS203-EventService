@@ -16,6 +16,11 @@ public class EventController {
 
     private final EventService eventService;
 
+    /**
+     * 
+     * @param newEvent
+     * @return
+     */
     @PostMapping("/api/v1/event")
     public ResponseEntity<Event> addEvent(@RequestBody NewEvent newEvent) {
 
@@ -24,6 +29,11 @@ public class EventController {
 
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> getEventById(@PathVariable Long id) {
@@ -31,6 +41,12 @@ public class EventController {
                 .body(eventService.getEventById(id));
     }
 
+    /**
+     * 
+     * @param id
+     * @param event
+     * @return
+     */
     @PutMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
         event.setId(id);
@@ -38,6 +54,13 @@ public class EventController {
                 .body(eventService.updateEvent(event));
     }
 
+    /**
+     * 
+     * @param featuredOnly
+     * @param category
+     * @param search
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/api/v1/event")
     public ResponseEntity<Iterable<Event>> getAllEvent(@RequestParam(required = false, defaultValue = "false") boolean featuredOnly,
