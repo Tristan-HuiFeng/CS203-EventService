@@ -23,12 +23,12 @@ public class PurchaseRequestController {
 
     private final PurchaseRequestService purchaseRequestService;
 
-    //Add a new PurchaseRequest
     /**
+     * Create a purchase request.
      * 
-     * @param purchaseRequest
-     * @param authentication
-     * @return
+     * @param purchaseRequest a PurchaseRequestDTO object containing the info of the purchase request to be created.
+     * @param authentication an Authentication object containing user details.
+     * @return a ResponseEntity containing a PurchaseRequestCreation containing the details of the new purchase request and an OK status.
      */
     @CrossOrigin
     @PostMapping("/api/v1/purchase-request")
@@ -39,9 +39,10 @@ public class PurchaseRequestController {
     }
 
     /**
+     * Retrieve a event confirmation dto.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the purchase request.
+     * @return a ResponseEntity containing a EventConfirmationDTO containing details about the purchase request and an OK status.
      */
     @GetMapping ("/api/v1/purchase-request/{id}/confirmation")
     public ResponseEntity<EventConfirmationDTO> getPurchaseRequestConfirmation (@PathVariable Long id) {
@@ -50,9 +51,10 @@ public class PurchaseRequestController {
     }
 
     /**
+     * Retrieve a list of purchase requests filtered by userId.
      * 
-     * @param authentication
-     * @return
+     * @param authentication an Authentication object containing user details.
+     * @return a ResponseEntity containing a list of PurchaseRequestRetrievalDTO related to the userId and an OK status.
      */
     @GetMapping("/api/v1/purchase-request")
     public ResponseEntity<List<PurchaseRequestRetrievalDTO>> getPurchaseRequestByUserId(Authentication authentication){
@@ -61,9 +63,10 @@ public class PurchaseRequestController {
     }
 
     /**
+     * Retrieve a purchase request.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the purchase request.
+     * @return a ResponseEntity containing the PurchaseRequest and an OK status.
      */
     @GetMapping ("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
@@ -71,12 +74,12 @@ public class PurchaseRequestController {
                 .body(purchaseRequestService.getPurchaseRequestById(id));
     }
 
-    //Update PurchaseRequest
     /**
+     * Update a purchase request.
      * 
-     * @param id
-     * @param purchaseRequest
-     * @return
+     * @param id a long value representing the unique identifier of the purchase request.
+     * @param purchaseRequest a PurchaseRequest object containing the PurchaseRequest info to be updated.
+     * @return a ResponseEntity containing the updated PurchaseRequest and an OK status.
      */
     @PutMapping("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long id, @RequestBody PurchaseRequest purchaseRequest) {

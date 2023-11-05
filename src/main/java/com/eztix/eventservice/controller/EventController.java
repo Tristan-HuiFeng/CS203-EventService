@@ -48,7 +48,7 @@ public class EventController {
      * 
      * @param id a long value representing the unique identifier of the event to update.
      * @param event an Event object containing the new Event info to be updated.
-     * @return
+     * @return a ResponseEntity containing the updated Event and an OK status.
      */
     @PutMapping("/api/v1/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
@@ -63,7 +63,7 @@ public class EventController {
      * @param featuredOnly a boolean value representing if the events are featured.
      * @param category a String value representing the category of the events.
      * @param search a String value representing the search keyword(s).
-     * @return a ResponseEntity containing an iterable of retrieved Event that matches the filter criterion above.
+     * @return a ResponseEntity containing an iterable of retrieved Event that matches the filter criterion above and an OK status.
      */
     @CrossOrigin
     @GetMapping("/api/v1/event")
