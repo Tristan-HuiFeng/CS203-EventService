@@ -16,6 +16,11 @@ public class AdmissionPolicyController {
 
     private final AdmissionPolicyService admissionPolicyService;
 
+    /**
+     * 
+     * @param eventId
+     * @return
+     */
     @CrossOrigin
     @GetMapping("/api/v1/event/{eventId}/admission-policy")
     public ResponseEntity<List<AdmissionPolicy>>getAdmissionPolicyByEventId(@PathVariable Long eventId){
@@ -28,12 +33,23 @@ public class AdmissionPolicyController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(admissionPolicyService.addNewAdmissionPolicy(eventId, admissionPolicy));
 //    }
 
+    /**
+     * 
+     * @param admissionPolicyId
+     * @param admissionPolicy
+     * @return
+     */
     @PutMapping("/api/v1/admission-policy/{id}")
     public ResponseEntity<AdmissionPolicy> updateAdmissionPolicy(@PathVariable Long admissionPolicyId, @RequestBody AdmissionPolicy admissionPolicy){
         admissionPolicy.setId(admissionPolicyId);
         return ResponseEntity.status(HttpStatus.OK).body(admissionPolicyService.updateAdmissionPolicy(admissionPolicy));
     }
 
+    /**
+     * 
+     * @param admissionPolicyId
+     * @return
+     */
     @DeleteMapping("/api/v1/admission-policy/{admissionPolicyId}")
     public ResponseEntity<String> deleteAdmissionPolicy(@PathVariable Long admissionPolicyId) {
         admissionPolicyService.deleteAdmissionPolicy(admissionPolicyId);
