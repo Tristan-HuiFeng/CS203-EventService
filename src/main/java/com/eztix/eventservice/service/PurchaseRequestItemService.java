@@ -33,7 +33,6 @@ public class PurchaseRequestItemService {
      * @param purchaseRequestItem_id a long value representing the unique identifier of the PurchaseRequestItem to retrieve.
      * @return  the retrieved PurchaseRequestItem object.
      */
-    // Get PurchaseRequestItem by id
     public PurchaseRequestItem getPurchaseRequestItemById(Long purchaseRequestItem_id) {
         return purchaseRequestItemRepository.findById(purchaseRequestItem_id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("purchase request item with id %d does not exist.", purchaseRequestItem_id))
@@ -81,7 +80,6 @@ public class PurchaseRequestItemService {
     /**
      * Delete all purchase request items.
      */
-    // Delete all PurchaseRequestItem
     public void deleteAllPurchaseRequestItems() {
         purchaseRequestItemRepository.deleteAll();
     }

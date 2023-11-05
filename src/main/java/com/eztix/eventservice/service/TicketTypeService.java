@@ -23,12 +23,12 @@ public class TicketTypeService {
     private final ActivityService activityService;
 
     /**
+     * Create a ticket type associated with a given activity.
      * 
-     * @param activity
-     * @param ticketType
-     * @return
+     * @param activity an Activity object to associate with the ticket type to be created.
+     * @param ticketType a TicketType object to be associated with an activity.
+     * @return the created TicketType object.
      */
-    // Add new TicketType
     public TicketType addNewTicketType(Activity activity, TicketType ticketType) {
         ticketType.setActivity(activity);
         return ticketTypeRepository.save(ticketType);
@@ -36,11 +36,12 @@ public class TicketTypeService {
     }
 
     /**
+     * Retrieve a ticket type.
+     * If there is no ticket type with given "id", throw a ResourceNotFoundException.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the TicketType to retrieve.
+     * @return the retrieved TicketType object.
      */
-    // Get TicketType by id
     public TicketType getTicketTypeById(Long id) {
 
         return ticketTypeRepository.findById(id).orElseThrow(() ->
@@ -50,9 +51,11 @@ public class TicketTypeService {
     }
 
     /**
+     * Retrieve all ticket types associated with an activity.
+     * If there is no ticket sales limit associated with given activity, throw a ResourceNotFoundException.
      * 
-     * @param activityId
-     * @return
+     * @param activityId a long value representing the unique identifier of the Activity associated with the TicketTypes to be retrieved.
+     * @return an iterable of all TicketType objects associated with an Activity.
      */
     public Iterable<TicketType> getTicketTypeByActivityId(Long activityId) {
 
@@ -63,11 +66,13 @@ public class TicketTypeService {
     }
 
     /**
+     * Update a ticket type.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no ticket type with given "id", throw a ResourceNotFoundException.
      * 
-     * @param ticketType
-     * @return
+     * @param ticketType a TicketType object containing the new TicketType info to be updated.
+     * @return the updated TicketType objects.
      */
-    // Update TicketType
     @Transactional
     public TicketType updateTicketType(TicketType ticketType) {
         if (ticketType.getId() == null) {
@@ -82,9 +87,8 @@ public class TicketTypeService {
     }
 
     /**
-     * 
+     * Delete all ticket types.
      */
-    // Delete all TicketType
     public void deleteAllTicketTypes() {
         ticketTypeRepository.deleteAll();
     }

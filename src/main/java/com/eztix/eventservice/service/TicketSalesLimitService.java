@@ -20,7 +20,6 @@ public class TicketSalesLimitService {
      * @param ticketSalesLimit a TicketSalesLimit object to be created.
      * @return the created TicketSalesLimit object.
      */
-    // Add new TicketSalesLimit
     public TicketSalesLimit addNewTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }
@@ -32,7 +31,6 @@ public class TicketSalesLimitService {
      * @param ticketSalesLimit_id a long value representing the unique identifier of the TicketSalesLimit to retrieve.
      * @return the retrieved TicketSalesLimit object.
      */
-    // Get TicketSalesLimit by id
     public TicketSalesLimit getTicketSalesLimitById(Long ticketSalesLimit_id) {
 
         return ticketSalesLimitRepository.findById(ticketSalesLimit_id).orElseThrow(() ->
@@ -56,7 +54,6 @@ public class TicketSalesLimitService {
      * 
      * @return an iterable of all TicketSalesLimit objects.
      */
-    // Get all TicketSalesLimit
     public Iterable<TicketSalesLimit> getAllTicketSalesLimits() {
         return ticketSalesLimitRepository.findAll();
     }
@@ -69,7 +66,6 @@ public class TicketSalesLimitService {
      * @param ticketSalesLimit a TicketSalesLimit object containing the new TicketSalesLimit info to be updated.
      * @return the updated TicketSalesLimit object.
      */
-    // Update TicketSalesLimit
     @Transactional
     public TicketSalesLimit updateTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
         if (ticketSalesLimit.getId() == null) {

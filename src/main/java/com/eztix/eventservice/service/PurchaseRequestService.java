@@ -49,7 +49,6 @@ public class PurchaseRequestService {
      * @param userId a String representing the user id.
      * @return a PurchaseRequestCreation object containing the details of the new purchase request.
      */
-    // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
 
         if (purchaseRequestDTO.getEventId() == null) {
@@ -162,7 +161,6 @@ public class PurchaseRequestService {
      * @param id a long value representing the unique identifier of the purchase request.
      * @return the retrieved PurchaseRequest object.
      */
-    // Get PurchaseRequest by id
     public PurchaseRequest getPurchaseRequestById(Long id) {
 
         return purchaseRequestRepository.findById(id).orElseThrow(() ->

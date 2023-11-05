@@ -38,7 +38,6 @@ public class SalesRoundService {
      * @param salesRounds an array of NewSalesRound objects containing details for the new SalesRounds to be created.
      * @return an array of the new SalesRounds created.
      */
-    // Add new SalesRound
     public SalesRound[] addSalesRounds(long eventId, NewSalesRound[] salesRounds) {
         Event event = eventService.getEventById(eventId);
 
@@ -98,7 +97,6 @@ public class SalesRoundService {
      * @param id a long value representing the unique identifier of the salesRounds to be retrieved.
      * @return the retrieved SalesRound.
      */
-    // Get SalesRound by id
     public SalesRound getSalesRoundById(Long id) {
 
         return salesRoundRepository.findById(id).orElseThrow(() ->
@@ -127,7 +125,6 @@ public class SalesRoundService {
      * @param salesRound a SalesRound object containing the new SalesRound info to be updated.
      * @return the updated SalesRound.
      */
-    // Update SalesRound
     @Transactional
     public SalesRound updateSalesRound(SalesRound salesRound) {
         if (salesRound.getId() == null) {
