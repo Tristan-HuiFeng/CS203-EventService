@@ -31,6 +31,12 @@ public class SalesRoundService {
     private final TicketTypeService ticketTypeService;
     private final TicketSalesLimitService ticketSalesLimitService;
 
+    /**
+     * 
+     * @param eventId
+     * @param salesRounds
+     * @return
+     */
     // Add new SalesRound
     public SalesRound[] addSalesRounds(long eventId, NewSalesRound[] salesRounds) {
         Event event = eventService.getEventById(eventId);
@@ -85,6 +91,11 @@ public class SalesRoundService {
 
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     // Get SalesRound by id
     public SalesRound getSalesRoundById(Long id) {
 
@@ -94,6 +105,11 @@ public class SalesRoundService {
 
     }
 
+    /**
+     * 
+     * @param eventId
+     * @return
+     */
     public Iterable<SalesRound> getSalesRoundByEventId(Long eventId) {
 
         return salesRoundRepository.findByEventId(eventId).orElseThrow(() ->
@@ -102,6 +118,11 @@ public class SalesRoundService {
 
     }
 
+    /**
+     * 
+     * @param salesRound
+     * @return
+     */
     // Update SalesRound
     @Transactional
     public SalesRound updateSalesRound(SalesRound salesRound) {
@@ -117,6 +138,9 @@ public class SalesRoundService {
         return salesRoundRepository.save(salesRound);
     }
 
+    /**
+     * 
+     */
     // Delete all SalesRound
     public void deleteAllSalesRounds() {
         salesRoundRepository.deleteAll();
