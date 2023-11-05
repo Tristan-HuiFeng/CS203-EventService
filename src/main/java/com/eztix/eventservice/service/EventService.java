@@ -20,9 +20,10 @@ public class EventService {
     private final TicketTypeService ticketTypeService;
 
     /**
+     * Create an event.
      * 
-     * @param newEvent
-     * @return
+     * @param newEvent a NewEvent datatype object containing the Event info to be created.
+     * @return the created Event.
      */
     public Event addNewEvent(NewEvent newEvent) {
         Event inputEvent = Event.builder()
@@ -73,9 +74,10 @@ public class EventService {
     }
 
     /**
+     * Retrieve an event.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the event to retrieve.
+     * @return the retrieved Event.
      */
     public Event getEventById(Long id) {
         return eventRepository.findById(id).orElseThrow(() ->
@@ -84,9 +86,10 @@ public class EventService {
     }
 
     /**
+     * Update an event.
      * 
-     * @param event
-     * @return
+     * @param event an Event object containing the new Event info to be updated.
+     * @return the updated Event.
      */
     @Transactional
     public Event updateEvent(Event event) {
@@ -102,11 +105,12 @@ public class EventService {
     }
 
     /**
+     * Retrieve a list of events based on filter citerion.
      * 
-     * @param featuredOnly
-     * @param category
-     * @param search
-     * @return
+     * @param featuredOnly a boolean value representing if the events are featured.
+     * @param category a String value representing the category of the events.
+     * @param search a String value representing the search keyword(s).
+     * @return an iterable of retrieved Events that matches the filter criterion above.
      */
     public Iterable<Event> getAllEvents(boolean featuredOnly, String category, String search) {
 
@@ -128,7 +132,7 @@ public class EventService {
 
 
     /**
-     * 
+     * Delete all events.
      */
     public void deleteAll() {
         eventRepository.deleteAll();

@@ -63,7 +63,7 @@ public class EventController {
      * @param featuredOnly a boolean value representing if the events are featured.
      * @param category a String value representing the category of the events.
      * @param search a String value representing the search keyword(s).
-     * @return a ResponseEntity containing an iterable of retrieved Event that matches the filter criterion above and an OK status.
+     * @return a ResponseEntity containing an iterable of retrieved Events that matches the filter criterion above and an OK status.
      */
     @CrossOrigin
     @GetMapping("/api/v1/event")
