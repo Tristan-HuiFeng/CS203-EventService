@@ -17,19 +17,21 @@ public class PurchaseRequestItemService {
     private final PurchaseRequestItemRepository purchaseRequestItemRepository;
 
     /**
+     * Create new purchase request item.
      * 
-     * @param purchaseRequestItem
-     * @return
+     * @param purchaseRequestItem the PurchaseRequestItem object to be added.
+     * @return the created PurchaseRequestItem object.
      */
-    // Add new PurchaseRequestItem
     public PurchaseRequestItem addNewPurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }
 
     /**
+     * Retrieve a purchase request item.
+     * If there is no purchase request item with given "id", throw a ResourceNotFoundException.
      * 
-     * @param purchaseRequestItem_id
-     * @return
+     * @param purchaseRequestItem_id a long value representing the unique identifier of the PurchaseRequestItem to retrieve.
+     * @return  the retrieved PurchaseRequestItem object.
      */
     // Get PurchaseRequestItem by id
     public PurchaseRequestItem getPurchaseRequestItemById(Long purchaseRequestItem_id) {
@@ -40,20 +42,22 @@ public class PurchaseRequestItemService {
     }
 
     /**
+     * Retrieves all purchase request items.
      * 
-     * @return
+     * @return an iterable of retrieved PurchaseRequestItems.
      */
-    // Get all PurchaseRequestItem
     public Iterable<PurchaseRequestItem> getAllPurchaseRequestItems() {
         return purchaseRequestItemRepository.findAll();
     }
 
     /**
+     * Update a purchase request item.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no purchase request item with given "id", throw a ResourceNotFoundException.
      * 
      * @param purchaseRequestItem
      * @return
      */
-    // Update PurchaseRequestItem
     @Transactional
     public PurchaseRequestItem updatePurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
         if (purchaseRequestItem.getId() == null) {
@@ -75,7 +79,7 @@ public class PurchaseRequestItemService {
     }
 
     /**
-     * 
+     * Delete all purchase request items.
      */
     // Delete all PurchaseRequestItem
     public void deleteAllPurchaseRequestItems() {
