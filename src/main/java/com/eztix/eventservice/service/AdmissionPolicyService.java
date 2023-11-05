@@ -17,17 +17,33 @@ import java.util.List;
 public class AdmissionPolicyService {
     private final AdmissionPolicyRepository admissionPolicyRepository;
 
+    /**
+     * 
+     * @param eventId
+     * @return
+     */
     public List<AdmissionPolicy> getAllAdmissionPolicyByEventId(Long eventId){
         return admissionPolicyRepository.findAllByEventIdOrderByPolicyOrder(eventId).orElseThrow(() ->
                     new ResourceNotFoundException(String.format("event with id %d does not have admission policy", eventId))
                 );
     }
 
+    /**
+     * 
+     * @param event
+     * @param admissionPolicy
+     * @return
+     */
     public AdmissionPolicy addNewAdmissionPolicy(Event event, AdmissionPolicy admissionPolicy){
         admissionPolicy.setEvent(event);
         return admissionPolicyRepository.save(admissionPolicy);
     }
 
+    /**
+     * 
+     * @param admissionPolicy
+     * @return
+     */
     @Transactional
     public AdmissionPolicy updateAdmissionPolicy(AdmissionPolicy admissionPolicy){
         if (admissionPolicy.getId() == null){
@@ -40,6 +56,10 @@ public class AdmissionPolicyService {
         return admissionPolicyRepository.save(admissionPolicy);
     }
 
+    /**
+     * 
+     * @param admissionPolicyId
+     */
     public void deleteAdmissionPolicy(Long admissionPolicyId) {
         if (admissionPolicyId == null) {
             throw new RequestValidationException("admission policy id cannot be null.");
