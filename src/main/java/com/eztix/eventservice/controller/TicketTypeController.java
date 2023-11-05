@@ -21,12 +21,22 @@ public class TicketTypeController {
 //    }
 
     //Get TicketType by id
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @GetMapping ("/api/v1/ticket-type/{id}")
     public ResponseEntity<TicketType> getTicketTypeById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                .body(ticketTypeService.getTicketTypeById(id));
     }
 
+    /**
+     * 
+     * @param activityId
+     * @return
+     */
     @GetMapping("/api/v1/activity/{activityId}/ticket-type")
     public ResponseEntity<Iterable<TicketType>> getTicketTypeByActivityId (@PathVariable Long activityId) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -34,6 +44,12 @@ public class TicketTypeController {
     }
 
     //Update TicketType
+    /**
+     * 
+     * @param id
+     * @param ticketType
+     * @return
+     */
     @PutMapping("/api/v1/ticket-type/{id}")
     public ResponseEntity<TicketType> updateTicketType (@PathVariable Long id, @RequestBody TicketType ticketType) {
         ticketType.setId(id);
