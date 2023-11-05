@@ -24,6 +24,12 @@ public class PurchaseRequestController {
     private final PurchaseRequestService purchaseRequestService;
 
     //Add a new PurchaseRequest
+    /**
+     * 
+     * @param purchaseRequest
+     * @param authentication
+     * @return
+     */
     @CrossOrigin
     @PostMapping("/api/v1/purchase-request")
     public ResponseEntity<PurchaseRequestCreation> addPurchaseRequest (@RequestBody PurchaseRequestDTO purchaseRequest, Authentication authentication) {
@@ -32,18 +38,33 @@ public class PurchaseRequestController {
                 .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest, authentication.getName()));
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @GetMapping ("/api/v1/purchase-request/{id}/confirmation")
     public ResponseEntity<EventConfirmationDTO> getPurchaseRequestConfirmation (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(purchaseRequestService.getPurchaseRequestConfirmation(id));
     }
 
+    /**
+     * 
+     * @param authentication
+     * @return
+     */
     @GetMapping("/api/v1/purchase-request")
     public ResponseEntity<List<PurchaseRequestRetrievalDTO>> getPurchaseRequestByUserId(Authentication authentication){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(purchaseRequestService.getPurchaseRequestByUserId(authentication.getName()));
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     @GetMapping ("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> getPurchaseRequestById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -51,6 +72,12 @@ public class PurchaseRequestController {
     }
 
     //Update PurchaseRequest
+    /**
+     * 
+     * @param id
+     * @param purchaseRequest
+     * @return
+     */
     @PutMapping("/api/v1/purchase-request/{id}")
     public ResponseEntity<PurchaseRequest> updatePurchaseRequest (@PathVariable Long id, @RequestBody PurchaseRequest purchaseRequest) {
         purchaseRequest.setId(id);
