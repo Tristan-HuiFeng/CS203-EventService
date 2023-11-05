@@ -19,6 +19,11 @@ public class EventService {
     private final ActivityService activityService;
     private final TicketTypeService ticketTypeService;
 
+    /**
+     * 
+     * @param newEvent
+     * @return
+     */
     public Event addNewEvent(NewEvent newEvent) {
         Event inputEvent = Event.builder()
                 .name(newEvent.getName())
@@ -67,12 +72,22 @@ public class EventService {
         return savedEvent;
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public Event getEventById(Long id) {
         return eventRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("event with id %d does not exist.", id))
         );
     }
 
+    /**
+     * 
+     * @param event
+     * @return
+     */
     @Transactional
     public Event updateEvent(Event event) {
         if (event == null || event.getId() == null) {
@@ -86,6 +101,13 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    /**
+     * 
+     * @param featuredOnly
+     * @param category
+     * @param search
+     * @return
+     */
     public Iterable<Event> getAllEvents(boolean featuredOnly, String category, String search) {
 
         if (featuredOnly) {
@@ -105,6 +127,9 @@ public class EventService {
     }
 
 
+    /**
+     * 
+     */
     public void deleteAll() {
         eventRepository.deleteAll();
     }
