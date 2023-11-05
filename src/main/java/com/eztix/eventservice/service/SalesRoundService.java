@@ -32,10 +32,11 @@ public class SalesRoundService {
     private final TicketSalesLimitService ticketSalesLimitService;
 
     /**
+     * Create sales rounds, and schedule processing of purchase requests when sales rounds end.
      * 
-     * @param eventId
-     * @param salesRounds
-     * @return
+     * @param eventId a long value representing the unique identifier of the event associated with SalesRounds to be added.
+     * @param salesRounds an array of NewSalesRound objects containing details for the new SalesRounds to be created.
+     * @return an array of the new SalesRounds created.
      */
     // Add new SalesRound
     public SalesRound[] addSalesRounds(long eventId, NewSalesRound[] salesRounds) {
@@ -92,9 +93,10 @@ public class SalesRoundService {
     }
 
     /**
+     * Retrieve a sales round.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the salesRounds to be retrieved.
+     * @return the retrieved SalesRound.
      */
     // Get SalesRound by id
     public SalesRound getSalesRoundById(Long id) {
@@ -106,9 +108,10 @@ public class SalesRoundService {
     }
 
     /**
+     * Retrieve all sales rounds associated with an event.
      * 
-     * @param eventId
-     * @return
+     * @param eventId a long value representing the unique identifier of the event associated with SalesRounds to be retrieved.
+     * @return an iterable of the SalesRounds of the event.
      */
     public Iterable<SalesRound> getSalesRoundByEventId(Long eventId) {
 
@@ -119,9 +122,10 @@ public class SalesRoundService {
     }
 
     /**
+     * Update a sales round.
      * 
-     * @param salesRound
-     * @return
+     * @param salesRound a SalesRound object containing the new SalesRound info to be updated.
+     * @return the updated SalesRound.
      */
     // Update SalesRound
     @Transactional
@@ -139,9 +143,8 @@ public class SalesRoundService {
     }
 
     /**
-     * 
+     * Delete all sales rounds.
      */
-    // Delete all SalesRound
     public void deleteAllSalesRounds() {
         salesRoundRepository.deleteAll();
     }
