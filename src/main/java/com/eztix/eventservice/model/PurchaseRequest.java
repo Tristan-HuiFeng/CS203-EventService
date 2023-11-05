@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @EqualsAndHashCode
@@ -28,18 +29,26 @@ public class PurchaseRequest {
     private Long id;
 
     @NotNull
-    @Column(name = "status")
-    private String status;
+    @Column(name = "is_paid")
+    private Boolean isPaid;
+
     @Column(name = "queue_number")
     private Long queueNumber;
+
     @NotNull
     @Column(name = "customer_id")
     private String customerId;
+
+    @NotNull
+    @Column(name = "submit_datetime")
+    private OffsetDateTime submitDateTime;
+
     @JsonBackReference
     @ManyToOne
     @NotNull
     @JoinColumn(name = "salesRound_id")
     private SalesRound salesRound;
+
     @JsonManagedReference
     @OneToMany(mappedBy="purchaseRequest",
             orphanRemoval = true,

@@ -190,11 +190,11 @@ UPDATE purchase_request_seq
 SET next_val = 101;
 
 
-INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
-VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", "processing");
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
 
-INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
-VALUES (1,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", "processed");
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (1,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
 
 UPDATE purchase_request_item_seq
 SET next_val = 101;
