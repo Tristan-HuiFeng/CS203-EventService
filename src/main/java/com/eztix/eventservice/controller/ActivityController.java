@@ -16,7 +16,7 @@ public class ActivityController {
     /**
      * Retrieve an activity.
      * 
-     * @param activityId a long value representing the unique identifier of the activity to retrieve.
+     * @param activityId a long value representing the unique identifier of the Activity to retrieve.
      * @return a ResponseEntity containing the retrieved Activity and an OK status.
      */
     @GetMapping("/api/v1/activity/{activityId}")

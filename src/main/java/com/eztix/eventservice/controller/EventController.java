@@ -17,9 +17,10 @@ public class EventController {
     private final EventService eventService;
 
     /**
+     * Create an event.
      * 
-     * @param newEvent
-     * @return
+     * @param newEvent a NewEvent datatype object containing the Event info to be created.
+     * @return a ResponseEntity containing the created Event and an OK status.
      */
     @PostMapping("/api/v1/event")
     public ResponseEntity<Event> addEvent(@RequestBody NewEvent newEvent) {
@@ -30,9 +31,10 @@ public class EventController {
     }
 
     /**
+     * Retrieve an event.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the event to retrieve.
+     * @return a ResponseEntity containing the retrieved Event and an OK status.
      */
     @CrossOrigin
     @GetMapping("/api/v1/event/{id}")
@@ -42,9 +44,10 @@ public class EventController {
     }
 
     /**
+     * Update an event.
      * 
-     * @param id
-     * @param event
+     * @param id a long value representing the unique identifier of the event to update.
+     * @param event an Event object containing the new Event info to be updated.
      * @return
      */
     @PutMapping("/api/v1/event/{id}")
@@ -55,11 +58,12 @@ public class EventController {
     }
 
     /**
+     * Retrieve a list of events based on filter criterion.
      * 
-     * @param featuredOnly
-     * @param category
-     * @param search
-     * @return
+     * @param featuredOnly a boolean value representing if the events are featured.
+     * @param category a String value representing the category of the events.
+     * @param search a String value representing the search keyword(s).
+     * @return a ResponseEntity containing an iterable of retrieved Event that matches the filter criterion above.
      */
     @CrossOrigin
     @GetMapping("/api/v1/event")
