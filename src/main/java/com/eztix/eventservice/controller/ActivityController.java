@@ -31,7 +31,7 @@ public class ActivityController {
 //    }
 
     /**
-     * Update the info of an activity.
+     * Update an activity.
      * 
      * @param activityId a long value representing the unique identifier of the Activity to update.
      * @param activity an Activity object containing the new Activity info to be updated.
