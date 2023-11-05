@@ -37,6 +37,12 @@ public class PurchaseRequestService {
     private final PurchaseRequestItemService purchaseRequestItemService;
     private final SalesRoundRepository salesRoundRepository;
 
+    /**
+     * 
+     * @param purchaseRequestDTO
+     * @param userId
+     * @return
+     */
     // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
 
@@ -75,6 +81,11 @@ public class PurchaseRequestService {
         return PurchaseRequestCreation.builder().purchaseRequestId(newPurchaseRequest.getId()).build();
     }
 
+    /**
+     * 
+     * @param purchaseRequestId
+     * @return
+     */
     public EventConfirmationDTO getPurchaseRequestConfirmation(Long purchaseRequestId) {
 
         PurchaseRequest purchaseRequest = purchaseRequestRepository.findById(purchaseRequestId)
@@ -114,6 +125,11 @@ public class PurchaseRequestService {
 
     }
 
+    /**
+     * 
+     * @param customerId
+     * @return
+     */
     @Transactional
     public List<PurchaseRequestRetrievalDTO> getPurchaseRequestByUserId(String customerId){
         if (customerId == null) {
@@ -131,6 +147,11 @@ public class PurchaseRequestService {
                 .toList();
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     // Get PurchaseRequest by id
     public PurchaseRequest getPurchaseRequestById(Long id) {
 
@@ -140,6 +161,11 @@ public class PurchaseRequestService {
 
     }
 
+    /**
+     * 
+     * @param purchaseRequest
+     * @return
+     */
     // Update PurchaseRequest
     @Transactional
     public PurchaseRequest updatePurchaseRequest(PurchaseRequest purchaseRequest) {
@@ -186,6 +212,10 @@ public class PurchaseRequestService {
         return purchaseRequestRepository.save(currentPurchaseRequest);
     }
 
+    /**
+     * 
+     * @param salesRoundId
+     */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void processPurchaseRequests(Long salesRoundId) {
         // Get the total count of items for the given sales round
@@ -243,11 +273,20 @@ public class PurchaseRequestService {
 
     }
 
+    /**
+     * 
+     */
     // Delete all PurchaseRequest
     public void deleteAllPurchaseRequests() {
         purchaseRequestRepository.deleteAll();
     }
 
+    /**
+     * 
+     * @param purchaseRequestDTO
+     * @param newPurchaseRequest
+     * @return
+     */
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequestDTO purchaseRequestDTO,
                                                           PurchaseRequest newPurchaseRequest) {
         AtomicInteger sum = new AtomicInteger();
@@ -273,6 +312,12 @@ public class PurchaseRequestService {
         return newPurchaseRequestItemList;
     }
 
+    /**
+     * 
+     * @param purchaseRequest
+     * @param currentPurchaseRequest
+     * @return
+     */
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequest purchaseRequest,
                                                           PurchaseRequest currentPurchaseRequest) {
         AtomicInteger sum = new AtomicInteger();
@@ -295,6 +340,10 @@ public class PurchaseRequestService {
         return newPurchaseRequestItemList;
     }
 
+    /**
+     * 
+     * @param sum
+     */
     private void checkTicketLimit(AtomicInteger sum) {
         if (sum.get() > 4) {
             throw new RequestValidationException("purchase request exceed 4 ticket limit.");
