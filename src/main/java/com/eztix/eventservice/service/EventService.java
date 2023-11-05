@@ -75,6 +75,7 @@ public class EventService {
 
     /**
      * Retrieve an event.
+     * If there is no event with given "id", throw a ResourceNotFoundException.
      * 
      * @param id a long value representing the unique identifier of the event to retrieve.
      * @return the retrieved Event.
@@ -87,6 +88,8 @@ public class EventService {
 
     /**
      * Update an event.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no event with given "id", throw a ResourceNotFoundException.
      * 
      * @param event an Event object containing the new Event info to be updated.
      * @return the updated Event.
