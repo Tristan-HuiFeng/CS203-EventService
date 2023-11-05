@@ -38,10 +38,16 @@ public class PurchaseRequestService {
     private final SalesRoundRepository salesRoundRepository;
 
     /**
+     * Create a purchase request.
+     * If "event id" is null, throw a RequestValidationException.
+     * If "user id" is null, throw a RequestValidationException.
+     * If 0 purchase request items, throw a RequestValidationException.
+     * If current datetime is after end of sales round, throw a RequestValidationException.
+     * If current datetime is before start of sales round, throw a RequestValidationException.
      * 
-     * @param purchaseRequestDTO
-     * @param userId
-     * @return
+     * @param purchaseRequestDTO a PurchaseRequestDTO object containing the info of the purchase request to be created.
+     * @param userId a String representing the user id.
+     * @return a PurchaseRequestCreation object containing the details of the new purchase request.
      */
     // Add new PurchaseRequest
     public PurchaseRequestCreation addNewPurchaseRequest(PurchaseRequestDTO purchaseRequestDTO, String userId) {
@@ -82,9 +88,10 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Retrieve an event confirmation dto.
      * 
-     * @param purchaseRequestId
-     * @return
+     * @param purchaseRequestId a long value representing the unique identifier of the purchase request related to the event confirmation.
+     * @return the EventConfirmationDTO containing details about the purchase request.
      */
     public EventConfirmationDTO getPurchaseRequestConfirmation(Long purchaseRequestId) {
 
@@ -126,9 +133,11 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Retrieve a list of purchase requests filtered by userId.
+     * If "customer id" is null, throw a RequestValidationException.
      * 
-     * @param customerId
-     * @return
+     * @param customerId a String representing the customer id.
+     * @return a list of PurchaseRequestRetrievalDTO related to the customer id.
      */
     @Transactional
     public List<PurchaseRequestRetrievalDTO> getPurchaseRequestByUserId(String customerId){
@@ -148,9 +157,10 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Retrieve a purchase request.
      * 
-     * @param id
-     * @return
+     * @param id a long value representing the unique identifier of the purchase request.
+     * @return the retrieved PurchaseRequest object.
      */
     // Get PurchaseRequest by id
     public PurchaseRequest getPurchaseRequestById(Long id) {
@@ -162,9 +172,10 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Update a purchase request.
      * 
-     * @param purchaseRequest
-     * @return
+     * @param purchaseRequest a PurchaseRequest object containing the new PurchaseRequest info to be updated.
+     * @return the updated PurchaseRequest object.
      */
     // Update PurchaseRequest
     @Transactional
@@ -213,8 +224,9 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Process purchase requests made within the sales round.
      * 
-     * @param salesRoundId
+     * @param salesRoundId a long value representing the unique identifier of the SalesRound to process.
      */
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void processPurchaseRequests(Long salesRoundId) {
@@ -274,18 +286,19 @@ public class PurchaseRequestService {
     }
 
     /**
-     * 
+     * Delete all purchase requests.
      */
-    // Delete all PurchaseRequest
     public void deleteAllPurchaseRequests() {
         purchaseRequestRepository.deleteAll();
     }
 
     /**
+     * Create a list of purchase request items based on the PurchaseRequestDTO object and the new PurchaseRequest object.
+     * If "ticket type id" of a purchase request item is null, throw a RequestValidationException.
      * 
-     * @param purchaseRequestDTO
-     * @param newPurchaseRequest
-     * @return
+     * @param purchaseRequestDTO a PurchaseRequestDTO object containing PurchaseRequestItems.
+     * @param newPurchaseRequest a new PurchaseRequest object to which the PurchaseRequestItems belong.
+     * @return the created list of PurchaseRequestItems.
      */
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequestDTO purchaseRequestDTO,
                                                           PurchaseRequest newPurchaseRequest) {
@@ -313,10 +326,12 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Create a list of purchase request items based on the PurchaseRequestDTO object and the new PurchaseRequest object.
+     * If "ticket type id" of a purchase request item is null, throw a RequestValidationException.
      * 
-     * @param purchaseRequest
-     * @param currentPurchaseRequest
-     * @return
+     * @param purchaseRequestDTO a PurchaseRequestDTO object containing PurchaseRequestItems.
+     * @param newPurchaseRequest a new PurchaseRequest object to which the PurchaseRequestItems belong.
+     * @return the created list of PurchaseRequestItems.
      */
     private List<PurchaseRequestItem> createNewPrItemList(PurchaseRequest purchaseRequest,
                                                           PurchaseRequest currentPurchaseRequest) {
@@ -341,8 +356,11 @@ public class PurchaseRequestService {
     }
 
     /**
+     * Check if number of tickets is not larger than 4, not less than 0.
+     * If number of tickets is larger than 4, throw a RequestValidationException.
+     * If number of tickets is smaller than 0, throw a RequestValidationException.
      * 
-     * @param sum
+     * @param sum an AtomicInteger representing the current number of tickets in a purchase request.
      */
     private void checkTicketLimit(AtomicInteger sum) {
         if (sum.get() > 4) {

@@ -39,7 +39,7 @@ public class PurchaseRequestController {
     }
 
     /**
-     * Retrieve a event confirmation dto.
+     * Retrieve an event confirmation dto.
      * 
      * @param id a long value representing the unique identifier of the purchase request related to the event confirmation.
      * @return a ResponseEntity containing a EventConfirmationDTO containing details about the purchase request and an OK status.
@@ -78,7 +78,7 @@ public class PurchaseRequestController {
      * Update a purchase request.
      * 
      * @param id a long value representing the unique identifier of the purchase request to be updated.
-     * @param purchaseRequest a PurchaseRequest object containing the PurchaseRequest info to be updated.
+     * @param purchaseRequest a PurchaseRequest object containing the new PurchaseRequest info to be updated.
      * @return a ResponseEntity containing the updated PurchaseRequest and an OK status.
      */
     @PutMapping("/api/v1/purchase-request/{id}")
