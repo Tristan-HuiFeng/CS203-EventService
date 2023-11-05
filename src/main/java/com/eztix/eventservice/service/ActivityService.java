@@ -16,18 +16,34 @@ import java.util.Optional;
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
+    /**
+     * 
+     * @param id
+     * @return
+     */
     public Activity getActivityById(Long id){
             return activityRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(String.format("activity with id %d does not exist.", id))
             );
     }
 
+    /**
+     * 
+     * @param event
+     * @param activity
+     * @return
+     */
     public Activity addNewActivity(Event event, Activity activity) {
         activity.setEvent(event);
 
         return activityRepository.save(activity);
     }
 
+    /**
+     * 
+     * @param activity
+     * @return
+     */
     @Transactional
     public Activity updateActivity(Activity activity){
         if (activity.getId() == null){
@@ -41,6 +57,10 @@ public class ActivityService {
         return activityRepository.save(activity);
    }
 
+   /**
+    * 
+    * @param activityId
+    */
    public void deleteActivity(Long activityId) {
         if (activityId == null) {
             throw new RequestValidationException("activity id cannot be null.");
