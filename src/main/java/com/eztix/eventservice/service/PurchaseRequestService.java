@@ -47,11 +47,7 @@ public class PurchaseRequestService {
     public String getStatus(PurchaseRequest pr) {
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Singapore"));
 
-        if (pr.getIsPaid() || pr.getSalesRound().getPurchaseEnd().isBefore(now)) {
-            return "end";
-        }
-
-        if(pr.getSalesRound().getRoundEnd().isBefore(now)) {
+        if(now.isAfter(pr.getSalesRound().getRoundEnd()) && now.isBefore(pr.getSalesRound().getPurchaseEnd())) {
             return "processing";
         }
 
@@ -97,7 +93,7 @@ public class PurchaseRequestService {
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().customerId(userId).salesRound(salesRound).submitDateTime(now).build();
+                PurchaseRequest.builder().customerId(userId).isPaid(false).salesRound(salesRound).submitDateTime(now).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
@@ -167,7 +163,8 @@ public class PurchaseRequestService {
             throw new RequestValidationException("must contain valid customer id");
         }
 
-        return purchaseRequestRepository.findByCustomerIdOrderBySubmitDateTimeDesc(customerId)
+        return purchaseRequestRepository.findByCustomerIdAndIsPaidFalseOrderBySubmitDateTimeDesc(customerId)
+                .filter(pr -> pr.getSalesRound().getPurchaseEnd().isAfter(OffsetDateTime.now(ZoneId.of("Singapore"))))
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())

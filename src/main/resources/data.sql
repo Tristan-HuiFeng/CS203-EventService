@@ -92,38 +92,51 @@ INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
 VALUES (6, 1, 7, "No outside food and beverage are allowed into the venue.");
 
 INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
-VALUES (7, 2, 1, "Printed electronic tickets must be produced for admission.");
+VALUES (7, 0, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (8, 2, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (9, 3, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (10, 4, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (11, 5, 1, "Printed electronic tickets must be produced for admission.");
+
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (12, 5, 6, "Printed electronic tickets must be produced for admission.");
 
 
 UPDATE activity_seq
 SET next_val = 101;
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (0, "2023-12-17T12:00:00+08:00", "2023-12-17T16:00:00+08:00", 1);
+VALUES (0, "2024-02-22T12:00:00+08:00", "2023-02-22T16:00:00+08:00", 1);
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (1, "2023-12-18T12:00:00+08:00", "2023-12-18T16:00:00+08:00", 1);
+VALUES (1, "2024-02-24T12:00:00+08:00", "2024-02-24T16:00:00+08:00", 1);
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (2, "2023-12-19T12:00:00+08:00", "2023-12-19T16:00:00+08:00", 1);
+VALUES (2, "2024-01-18T12:00:00+08:00", "2024-10-18T16:00:00+08:00", 0);
 
 INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (3, "2023-12-20T12:00:00+08:00", "2023-12-23T16:00:00+08:00", 0);
+VALUES (3, "2024-01-15T12:00:00+08:00", "2024-01-15T16:00:00+08:00", 2);
 
-INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (4, "2024-01-15T12:00:00+08:00", "2023-01-17T16:00:00+08:00", 2);
-
-INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (5, "2023-01-16T12:00:00+08:00", "2023-01-18T16:00:00+08:00", 3);
-
-INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (6, "2023-01-19T12:00:00+08:00", "2023-01-21T16:00:00+08:00", 4);
-
-INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (7, "2023-02-13T12:00:00+08:00", "2023-02-17T16:00:00+08:00", 5);
-
-INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
-VALUES (8, "2023-02-20T12:00:00+08:00", "2023-02-25T16:00:00+08:00", 6);
+--INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
+--VALUES (4, "2024-01-16T12:00:00+08:00", "2024-01-18T16:00:00+08:00", 3);
+--
+--INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
+--VALUES (5, "2024-01-19T12:00:00+08:00", "2024-01-19T16:00:00+08:00", 4);
+--
+--INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
+--VALUES (6, "2024-02-13T12:00:00+08:00", "2024-02-13T16:00:00+08:00", 5);
+--
+--INSERT INTO ACTIVITY (id, start_datetime, end_datetime, event_id)
+--VALUES (7, "2024-02-20T12:00:00+08:00", "2024-02-20T16:00:00+08:00", 6);
+--
 
 UPDATE ticket_type_seq
 SET next_val = 101;
@@ -138,82 +151,127 @@ INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupie
 VALUES (2, "CAT C", 200, 500, 0, 0, 0);
 
 INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
-VALUES (3, "CAT A", 300, 200, 0, 0, 4);
+VALUES (3, "CAT A", 300, 200, 0, 0, 1);
 
 INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
-VALUES (4, "CAT B", 240, 350, 0, 0, 4);
+VALUES (4, "CAT B", 240, 350, 0, 0, 1);
 
 INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
-VALUES (5, "CAT C", 200, 500, 0, 0, 4);
+VALUES (5, "CAT C", 200, 500, 0, 0, 1);
 
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (6, "CAT A", 300, 200, 0, 0, 2);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (7, "CAT B", 240, 350, 0, 0, 2);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (8, "CAT C", 200, 500, 0, 0, 2);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (9, "CAT A", 300, 200, 0, 0, 3);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (10, "CAT B", 240, 350, 0, 0, 3);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (11, "CAT C", 200, 500, 0, 0, 3);
 
 
 UPDATE sales_round_seq
 SET next_val = 101;
-
+-- end
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (0, "Round 1 General", "2023-09-29T08:00:00+08:00", "2023-10-04T22:00:00+08:00", "2023-10-05T08:00:00+08:00", "2023-10-05T22:00:00+08:00", 1);
+VALUES (0, "Round 1 General", "2023-10-01T08:00:00+08:00", "2023-10-27T22:00:00+08:00", "2023-09-28T08:00:00+08:00", "2023-09-29T22:00:00+08:00", 0);
 
+-- submit
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (1, "Round 2 General", "2023-10-06T08:00:00+08:00", "2023-10-11T22:00:00+08:00", "2023-10-12T08:00:00+08:00", "2023-10-12T22:00:00+08:00", 1);
+VALUES (1, "Round 1 General", "2023-11-01T08:00:00+08:00", "2023-12-29T22:00:00+08:00", "2024-01-01T08:00:00+08:00", "2024-01-01T22:00:00+08:00", 1);
 
+-- ongoing
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (2, "Round 3 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 1);
-
-INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (3, "Round 1 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 2);
+VALUES (2, "Round 1 General", "2023-10-29T08:00:00+08:00", "2023-11-01T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 2);
 
 
 UPDATE ticket_sales_limit_seq
 SET next_val = 101;
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (0,  100, 0, 0, 0);
+VALUES (0,  100, 0, 1, 0);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (1,  150, 0, 0, 1);
+VALUES (1,  150, 0, 1, 1);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (2,  200, 0, 0, 2);
+VALUES (2,  200, 0, 1, 2);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (3,  100, 0, 3, 3);
+VALUES (3,  100, 0, 0, 3);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (4,  150, 0, 3, 4);
+VALUES (4,  150, 0, 0, 4);
 
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
-VALUES (5,  200, 0, 3, 5);
+VALUES (5,  200, 0, 0, 5);
+
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (6,  100, 0, 0, 6);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (7,  150, 0, 0, 7);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (8,  200, 0, 0, 8);
+
+
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (9,  100, 0, 2, 9);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (10,  150, 0, 2, 10);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (11,  200, 0, 2, 11);
+
 
 
 UPDATE purchase_request_seq
 SET next_val = 101;
 
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (0,  0, "18b172d4-d66e-470d-991e-84bba61ca3f7", 1, "2023-09-17T22:00:00+08:00");
+
+--INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+--VALUES (1,  1, "18b172d4-d66e-470d-991e-84bba61ca3f7", 1, "2023-10-12T20:00:00+08:00");
+
+--INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+--VALUES (1,  1, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-11-01T22:00:00+08:00");
 
 INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
-VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
+VALUES (1,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-11-17T22:00:00+08:00");
 
-INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
-VALUES (1,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
 
 UPDATE purchase_request_item_seq
 SET next_val = 101;
 
+-- end
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (0,  1, 0, 0, 0);
+VALUES (0,  1, 0, 0, 6);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (1,  1, 0, 0, 1);
+VALUES (1,  1, 0, 0, 7);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (2,  2, 0, 0, 2);
+VALUES (2,  2, 0, 0, 8);
+
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (3,  1, 0, 1, 3);
+VALUES (3,  1, 0, 1, 9);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (4,  1, 0, 1, 4);
+VALUES (4,  1, 0, 1, 10);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
-VALUES (5,  2, 0, 1, 5);
-
+VALUES (5,  2, 0, 1, 11);
