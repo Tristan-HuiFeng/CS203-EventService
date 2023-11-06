@@ -43,9 +43,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -225,8 +224,51 @@ public class EventServiceIT {
         Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
 
         assertThat(retrieved).isNotNull();
+        Iterator<SalesRound> salesRoundIterator = retrieved.get().iterator();
+        SalesRound retrievedSalesRoundFromRepo = salesRoundIterator.hasNext() ? salesRoundIterator.next() : null;
+        assertThat(retrievedSalesRoundFromRepo).isNotNull();
+        if (retrievedSalesRoundFromRepo != null) {
+                // assertThat(salesRoundDTOs[0].getPurchaseEnd()).isEqualTo(retrievedSalesRoundFromRepo.getPurchaseEnd());
+                // assertThat(salesRoundDTOs[0].getPurchaseStart()).isEqualTo(retrievedSalesRoundFromRepo.getPurchaseStart());
+                // assertThat(salesRoundDTOs[0].getRoundEnd()).isEqualTo(retrievedSalesRoundFromRepo.getRoundEnd());
+                // assertThat(salesRoundDTOs[0].getRoundStart()).isEqualTo(retrievedSalesRoundFromRepo.getRoundStart());
+                assertThat(salesRoundDTOs[0].getSalesType()).isEqualTo(retrievedSalesRoundFromRepo.getSalesType());
+        }
+        
 
     }
+
+//     @Test
+//     @WithMockUser(roles = "admin")
+//     public void addNewSalesRound() throws Exception {
+//         // given
+//         event = eventService.addNewEvent(eventDTO);
+//         activity.setEvent(event);
+//         activityRepository.save(activity); // associated with event and saved
+//         ticketType.setActivity(activity);
+//         ticketTypeRepository.save(ticketType); // associated with activity and saved
+//         salesRoundDTOs = createMockNewSalesRounds();
+//         // salesRounds = salesRoundService.addSalesRounds(event.getId(), salesRoundDTOs); // associated with event and saved
+
+//         // when
+//         ResultActions resultActions = mockMvc.perform(post("/api/v1/event/{eventId}/sales-round", event.getId())
+//                 .contentType(MediaType.APPLICATION_JSON)
+//                 .content(objectMapper.writeValueAsString(salesRoundDTOs)));
+
+//         // then
+//         MockHttpServletResponse result = resultActions
+//                 .andExpect(status().isCreated())
+//                 .andDo(print())
+//                 .andReturn()
+//                 .getResponse();
+
+//         // Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
+
+//         Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
+
+//         assertThat(retrieved).isNotNull();
+
+//     }
 
     private NewSalesRound[] createMockNewSalesRounds() {
         NewSalesRound mockSalesRoundDTO = new NewSalesRound();
