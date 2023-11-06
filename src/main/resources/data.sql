@@ -241,7 +241,7 @@ UPDATE purchase_request_seq
 SET next_val = 101;
 
 INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
-VALUES (0,  0, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-09-17T22:00:00+08:00");
+VALUES (0,  0, "18b172d4-d66e-470d-991e-84bba61ca3f7", 1, "2023-09-17T22:00:00+08:00");
 
 --INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
 --VALUES (1,  1, "18b172d4-d66e-470d-991e-84bba61ca3f7", 1, "2023-10-12T20:00:00+08:00");
