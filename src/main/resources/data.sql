@@ -186,7 +186,7 @@ VALUES (0, "Round 1 General", "2023-10-01T08:00:00+08:00", "2023-10-27T22:00:00+
 
 -- submit
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (1, "Round 1 General", "2023-11-01T08:00:00+08:00", "2023-12-29T22:00:00+08:00", "2024-01-01T08:00:00+08:00", "2021-01-01T22:00:00+08:00", 1);
+VALUES (1, "Round 1 General", "2023-11-01T08:00:00+08:00", "2023-12-29T22:00:00+08:00", "2024-01-01T08:00:00+08:00", "2024-01-01T22:00:00+08:00", 1);
 
 -- ongoing
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
