@@ -10,7 +10,7 @@ public interface PurchaseRequestRepository extends CrudRepository<PurchaseReques
 
     long countBySalesRoundId(Long salesRoundId);
 
-    Stream<PurchaseRequest> findByCustomerIdOrderBySubmitDateTimeDesc(String customerId);
+    Stream<PurchaseRequest> findByCustomerIdAndIsPaidFalseOrderBySubmitDateTimeDesc(String customerId);
 
 
 }

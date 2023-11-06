@@ -275,6 +275,3 @@ VALUES (4,  1, 0, 1, 10);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
 VALUES (5,  2, 0, 1, 11);
-
-
-
