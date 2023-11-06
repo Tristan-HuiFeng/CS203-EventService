@@ -61,6 +61,9 @@ class PurchaseRequestServiceTest {
     @InjectMocks
     private PurchaseRequestService testPurchaseRequestService;
     static private Event event;
+    static private Activity activity;
+    static private SalesRound salesRound;
+    static private PurchaseRequest purchaseRequest;
 
     @BeforeAll
     static void setup() {
@@ -74,6 +77,23 @@ class PurchaseRequestServiceTest {
         event.setSeatMapURL("url2");
         event.setLocation("location");
         event.setIsFeatured(false);
+
+        activity = new Activity();
+        activity.setEvent(event);
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+
+        salesRound = new SalesRound();
+        salesRound.setEvent(event);
+        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setSalesType("test sales type");
+
+        purchaseRequest = new PurchaseRequest();
+        purchaseRequest.setCustomerId("test customer");
+        purchaseRequest.setQueueNumber(1L);
     }
 
     @Test
@@ -83,7 +103,6 @@ class PurchaseRequestServiceTest {
         purchaseRequestDTO.setEventId(1L);
         purchaseRequestDTO.setPurchaseRequestItems(createPurchaseRequestItemDTOs());
 
-        SalesRound salesRound = new SalesRound();
         OffsetDateTime now = OffsetDateTime.now();
         salesRound.setRoundStart(now.minusDays(1));
         salesRound.setRoundEnd(now.plusDays(1));
@@ -148,12 +167,6 @@ class PurchaseRequestServiceTest {
     void givenPurchaseRequestExist_whenRetrieve_thenSuccessful() {
 
         // given
-
-        PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setCustomerId("test customer");
-        purchaseRequest.setQueueNumber(1L);
-        purchaseRequest.setStatus("test status");
-
         given(purchaseRequestRepository.findById(purchaseRequest.getId()))
                 .willReturn(Optional.of(purchaseRequest));
 
@@ -167,37 +180,6 @@ class PurchaseRequestServiceTest {
 
     @Test
     void givenNullId_whenUpdate_throwRequestValidationException() {
-        // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-        // eventRepository.save(event);
-
-        Activity activity = new Activity();
-        activity.setEvent(event);
-        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        // activityRepository.save(activity);
-
-        SalesRound salesRound = new SalesRound();
-        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setSalesType("test sales type");
-        // salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
-
-        PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setCustomerId("test customer");
-        purchaseRequest.setQueueNumber(1L);
-        purchaseRequest.setSalesRound(salesRound);
-        purchaseRequest.setStatus("test status");
 
         // when
         // then
@@ -209,38 +191,9 @@ class PurchaseRequestServiceTest {
 
     @Test
     void givenIdNotInDB_whenUpdate_throwResourceNotFoundException() {
-        // given
-        Event event = new Event();
-        event.setName("Test Event");
-        event.setCategory("concert");
-        event.setArtist("artist1");
-        event.setDescription("This is a test event");
-        event.setBannerURL("url1");
-        event.setSeatMapURL("url2");
-        event.setIsFeatured(false);
-        // eventRepository.save(event);
 
-        Activity activity = new Activity();
-        activity.setEvent(event);
-        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        // activityRepository.save(activity);
-
-        SalesRound salesRound = new SalesRound();
-        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
-        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
-        salesRound.setSalesType("test sales type");
-        // salesRound.setActivity(activity);
-        // salesRoundRepository.save(salesRound);
-
-        PurchaseRequest purchaseRequest = new PurchaseRequest();
         purchaseRequest.setId(1L);
-        purchaseRequest.setCustomerId("test customer");
-        purchaseRequest.setQueueNumber(1L);
         purchaseRequest.setSalesRound(salesRound);
-        purchaseRequest.setStatus("test status");
 
         given(purchaseRequestRepository.findById(1L)).willReturn(Optional.empty());
         // when
@@ -256,20 +209,20 @@ class PurchaseRequestServiceTest {
         // given
         Long purchaseRequestId = 1L;
 
-        Event event = new Event();
-        event.setId(1L);
+        // Event event = new Event();
+        // event.setId(1L);
 
-        SalesRound salesRound = new SalesRound();
-        salesRound.setEvent(event);
+        // SalesRound salesRound = new SalesRound();
+        // salesRound.setEvent(event);
 
-        Activity activity = new Activity();
-        activity.setEvent(event);
+        // Activity activity = new Activity();
+        // activity.setEvent(event);
 
         TicketType ticketType = new TicketType();
         ticketType.setActivity(activity);
 
         PurchaseRequest purchaseRequest = new PurchaseRequest();
-        purchaseRequest.setId(purchaseRequestId);
+        purchaseRequest.setId(1L);
         purchaseRequest.setSalesRound(salesRound);
 
         PurchaseRequestItem purchaseRequestItem = new PurchaseRequestItem();
