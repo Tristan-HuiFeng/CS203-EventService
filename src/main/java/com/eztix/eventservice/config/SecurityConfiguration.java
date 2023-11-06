@@ -54,6 +54,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/**").hasRole("admin")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasRole("admin")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/purchase-request/{id}/paid").hasRole("server")
 
                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "**").denyAll()

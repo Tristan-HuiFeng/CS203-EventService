@@ -42,11 +42,7 @@ public class PurchaseRequestService {
     public String getStatus(PurchaseRequest pr) {
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Singapore"));
 
-        if (now.isAfter(pr.getSalesRound().getPurchaseEnd()) || pr.getIsPaid()) {
-            return "end";
-        }
-
-        if(now.isBefore(pr.getSalesRound().getRoundEnd())) {
+        if(now.isAfter(pr.getSalesRound().getRoundEnd()) && now.isBefore(pr.getSalesRound().getPurchaseEnd())) {
             return "processing";
         }
 
@@ -139,6 +135,7 @@ public class PurchaseRequestService {
         }
 
         return purchaseRequestRepository.findByCustomerIdAndIsPaidFalseOrderBySubmitDateTimeDesc(customerId)
+                .filter(pr -> pr.getSalesRound().getPurchaseEnd().isAfter(OffsetDateTime.now(ZoneId.of("Singapore"))))
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
