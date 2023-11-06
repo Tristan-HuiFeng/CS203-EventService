@@ -81,7 +81,7 @@ public class PurchaseRequestService {
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().customerId(userId).salesRound(salesRound).submitDateTime(now).build();
+                PurchaseRequest.builder().customerId(userId).isPaid(false).salesRound(salesRound).submitDateTime(now).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
