@@ -24,6 +24,7 @@ import com.jayway.jsonpath.JsonPath;
 
 import lombok.core.configuration.*;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Role;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -93,14 +96,10 @@ public class EventServiceIT {
     static private NewSalesRound salesRoundDTO;
     static private SalesRound salesRound;
     static private SalesRound[] salesRounds;
+    static TaskScheduler taskScheduler;
 
     /**
      * Setup
-     *  EventDTO
-     *  Activity
-     *  TicketType
-     *  TicketSalesLimit
-     *  SalesRound
      */
     @BeforeAll
     static void setup() {
@@ -132,9 +131,18 @@ public class EventServiceIT {
     }
 
     /**
+     * Teardown
+     */
+    @AfterEach
+    static void cleanUp() {
+        ((ThreadPoolTaskScheduler) taskScheduler).shutdown();
+    }
+
+    /**
      * Flow of Integration Test (testing main flow)
      * 1. Create event
      * 2. Create sales round
+     * 3. Process purchase requests
      * 
      */
 
@@ -234,41 +242,40 @@ public class EventServiceIT {
                 // assertThat(salesRoundDTOs[0].getRoundStart()).isEqualTo(retrievedSalesRoundFromRepo.getRoundStart());
                 assertThat(salesRoundDTOs[0].getSalesType()).isEqualTo(retrievedSalesRoundFromRepo.getSalesType());
         }
-        
 
     }
 
-//     @Test
-//     @WithMockUser(roles = "admin")
-//     public void addNewSalesRound() throws Exception {
-//         // given
-//         event = eventService.addNewEvent(eventDTO);
-//         activity.setEvent(event);
-//         activityRepository.save(activity); // associated with event and saved
-//         ticketType.setActivity(activity);
-//         ticketTypeRepository.save(ticketType); // associated with activity and saved
-//         salesRoundDTOs = createMockNewSalesRounds();
-//         // salesRounds = salesRoundService.addSalesRounds(event.getId(), salesRoundDTOs); // associated with event and saved
+    @Test
+    @WithMockUser(roles = "admin")
+    public void processPurchaseRequests() throws Exception {
+        // given
+        event = eventService.addNewEvent(eventDTO);
+        activity.setEvent(event);
+        activityRepository.save(activity); // associated with event and saved
+        ticketType.setActivity(activity);
+        ticketTypeRepository.save(ticketType); // associated with activity and saved
+        salesRoundDTOs = createMockNewSalesRounds();
+        // salesRounds = salesRoundService.addSalesRounds(event.getId(), salesRoundDTOs); // associated with event and saved
 
-//         // when
-//         ResultActions resultActions = mockMvc.perform(post("/api/v1/event/{eventId}/sales-round", event.getId())
-//                 .contentType(MediaType.APPLICATION_JSON)
-//                 .content(objectMapper.writeValueAsString(salesRoundDTOs)));
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/event/{eventId}/sales-round", event.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(salesRoundDTOs)));
 
-//         // then
-//         MockHttpServletResponse result = resultActions
-//                 .andExpect(status().isCreated())
-//                 .andDo(print())
-//                 .andReturn()
-//                 .getResponse();
+        // then
+        MockHttpServletResponse result = resultActions
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andReturn()
+                .getResponse();
 
-//         // Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
+        // Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
 
-//         Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
+        Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
 
-//         assertThat(retrieved).isNotNull();
+        assertThat(retrieved).isNotNull();
 
-//     }
+    }
 
     private NewSalesRound[] createMockNewSalesRounds() {
         NewSalesRound mockSalesRoundDTO = new NewSalesRound();
