@@ -256,6 +256,11 @@ class PurchaseRequestServiceTest {
         event.setId(1L);
 
         SalesRound salesRound = new SalesRound();
+        salesRound.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(3));
+        salesRound.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        salesRound.setSalesType("test sales type");
         salesRound.setEvent(event);
 
         Activity activity = new Activity();
