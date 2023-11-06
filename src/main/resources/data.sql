@@ -152,16 +152,16 @@ UPDATE sales_round_seq
 SET next_val = 101;
 
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (0, "Round 1 General", "2023-09-29T08:00:00+08:00", "2023-10-04T22:00:00+08:00", "2023-10-05T08:00:00+08:00", "2023-10-05T22:00:00+08:00", 1);
+VALUES (0, "Round 1 General", "2023-09-01T08:00:00+08:00", "2023-09-27T22:00:00+08:00", "2023-09-28T08:00:00+08:00", "2023-09-29T22:00:00+08:00", 1);
 
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (1, "Round 2 General", "2023-10-06T08:00:00+08:00", "2023-10-11T22:00:00+08:00", "2023-10-12T08:00:00+08:00", "2023-10-12T22:00:00+08:00", 1);
+VALUES (1, "Round 2 General", "2023-10-01T08:00:00+08:00", "2023-10-11T22:00:00+08:00", "2023-10-12T08:00:00+08:00", "2023-10-12T22:00:00+08:00", 1);
 
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (2, "Round 3 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 1);
+VALUES (2, "Round 1 General", "2023-10-23T08:00:00+08:00", "2023-11-02T22:00:00+08:00", "2023-12-01T08:00:00+08:00", "2023-12-01T22:00:00+08:00", 2);
 
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
-VALUES (3, "Round 1 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 2);
+VALUES (3, "Round 1 General", "2023-10-29T08:00:00+08:00", "2023-11-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 3);
 
 
 UPDATE ticket_sales_limit_seq
@@ -189,12 +189,18 @@ VALUES (5,  200, 0, 3, 5);
 UPDATE purchase_request_seq
 SET next_val = 101;
 
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (0,  0, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-09-17T22:00:00+08:00");
 
 INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
-VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
+VALUES (1,  1, "18b172d4-d66e-470d-991e-84bba61ca3f7", 1, "2023-10-12T20:00:00+08:00");
 
 INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
-VALUES (1,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
+VALUES (2,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-11-01T22:00:00+08:00");
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (3,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-11-17T22:00:00+08:00");
+
 
 UPDATE purchase_request_item_seq
 SET next_val = 101;
