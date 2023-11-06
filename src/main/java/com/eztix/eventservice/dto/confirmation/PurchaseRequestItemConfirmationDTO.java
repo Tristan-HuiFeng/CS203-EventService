@@ -13,6 +13,8 @@ import java.time.OffsetDateTime;
 @Builder
 public class PurchaseRequestItemConfirmationDTO {
 
+    Long id;
+
     int quantityRequested;
 
     String ticketType;

@@ -3,6 +3,7 @@ package com.eztix.eventservice.controller;
 import com.eztix.eventservice.dto.PurchaseRequestCreation;
 import com.eztix.eventservice.dto.PurchaseRequestDTO;
 import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestItemRetrivalDTO;
 import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -75,6 +76,18 @@ public class PurchaseRequestController {
     }
 
     /**
+     * Retrieve a purchase request item.
+     * 
+     * @param id a long value representing the unique identifier of the purchase request item to be retrieved.
+     * @return a ResponseEntity containing the retrieved PurchaseRequestItemDTO and and OK status.
+     */
+    @GetMapping ("/api/v1/purchase-request/item/{id}")
+    public ResponseEntity<PurchaseRequestItemRetrivalDTO> getPurchaseRequestItemById (@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(purchaseRequestService.getPurchaseRequestItemById(id));
+    }
+    
+    /**
      * Update a purchase request.
      * 
      * @param id a long value representing the unique identifier of the purchase request to be updated.
@@ -86,6 +99,21 @@ public class PurchaseRequestController {
         purchaseRequest.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
               .body(purchaseRequestService.updatePurchaseRequest(purchaseRequest));
+    }
+    
+    /**
+     * Delete a purchase request.
+     * 
+     * @param id a long value representing the unique identifier of the purchase request to be deleted.
+     * @return a ResponseEntity containing a String to indicate successful deletion and an OK status.
+     */
+    @DeleteMapping("/api/v1/purchase-request/{id}")
+    public ResponseEntity<String> deletePurchaseRequestById (@PathVariable Long id) {
+
+        purchaseRequestService.deletePurchaseRequest(id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("deleted successfully");
     }
 
 }

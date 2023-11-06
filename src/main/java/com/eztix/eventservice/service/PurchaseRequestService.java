@@ -6,6 +6,7 @@ import com.eztix.eventservice.dto.confirmation.EventConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.PurchaseRequestItemConfirmationDTO;
 import com.eztix.eventservice.dto.confirmation.SalesRoundConfirmationDTO;
+import com.eztix.eventservice.dto.prretrieval.PurchaseRequestItemRetrivalDTO;
 import com.eztix.eventservice.dto.prretrieval.PurchaseRequestRetrievalDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
@@ -36,6 +37,27 @@ public class PurchaseRequestService {
     private final TicketSalesLimitService ticketSalesLimitService;
     private final PurchaseRequestItemService purchaseRequestItemService;
     private final SalesRoundRepository salesRoundRepository;
+
+    /**
+     * Get the status of a purchase request.
+     * 
+     * @param pr a PurchaseRequest object that we want to obtain the status of.
+     * @return a String that indicates the status of the PurchaseRequest.
+     */
+    public String getStatus(PurchaseRequest pr) {
+        OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Singapore"));
+
+        if (pr.getIsPaid() || pr.getSalesRound().getPurchaseEnd().isBefore(now)) {
+            return "end";
+        }
+
+        if(pr.getSalesRound().getRoundEnd().isBefore(now)) {
+            return "processing";
+        }
+
+        return "submitted";
+
+    }
 
     /**
      * Create a purchase request.
@@ -75,7 +97,7 @@ public class PurchaseRequestService {
 
         // New Purchase Request
         PurchaseRequest newPurchaseRequest =
-                PurchaseRequest.builder().status("pending").customerId(userId).salesRound(salesRound).build();
+                PurchaseRequest.builder().customerId(userId).salesRound(salesRound).submitDateTime(now).build();
 
         List<PurchaseRequestItem> newPurchaseRequestItemList = createNewPrItemList(purchaseRequestDTO,
                 newPurchaseRequest);
@@ -116,9 +138,10 @@ public class PurchaseRequestService {
                         .build())
                 .purchaseRequest(PurchaseRequestConfirmationDTO.builder()
                         .id(purchaseRequestId)
-                        .status(purchaseRequest.getStatus())
+                        .status(getStatus(purchaseRequest))
                         .purchaseRequestItems(purchaseRequest.getPurchaseRequestItems().stream().map(prItem ->
                                 PurchaseRequestItemConfirmationDTO.builder()
+                                        .id(prItem.getId())
                                         .price(prItem.getTicketType().getPrice() * prItem.getQuantityRequested())
                                         .ticketType(prItem.getTicketType().getType())
                                         .quantityRequested(prItem.getQuantityRequested())
@@ -144,11 +167,11 @@ public class PurchaseRequestService {
             throw new RequestValidationException("must contain valid customer id");
         }
 
-        return purchaseRequestRepository.findByCustomerIdOrderByStatusAsc(customerId)
+        return purchaseRequestRepository.findByCustomerIdOrderBySubmitDateTimeDesc(customerId)
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
-                        .status(pr.getStatus())
+                        .status(getStatus(pr))
                         .bannerURL(pr.getSalesRound().getEvent().getBannerURL())
                         .queueNumber(pr.getQueueNumber())
                         .build())
@@ -158,7 +181,7 @@ public class PurchaseRequestService {
     /**
      * Retrieve a purchase request.
      * 
-     * @param id a long value representing the unique identifier of the purchase request.
+     * @param id a long value representing the unique identifier of the purchase request to be retrieved.
      * @return the retrieved PurchaseRequest object.
      */
     public PurchaseRequest getPurchaseRequestById(Long id) {
@@ -288,6 +311,38 @@ public class PurchaseRequestService {
      */
     public void deleteAllPurchaseRequests() {
         purchaseRequestRepository.deleteAll();
+    }
+
+    /**
+     * Delete a purchase request.
+     * 
+     * @param id a long value representing the unique identifier of the purchase request to be deleted.
+     */
+    public void deletePurchaseRequest(long id) {
+
+        purchaseRequestRepository.deleteById(id);
+    }
+
+    /**
+     * Retrieve a purchase request item.
+     * 
+     * @param id a long value representing the unique identifier of the purchase request.
+     * @return a PurchaseRequestItemRetrivalDTO containing info of the retrieved purchase request item.
+     */
+    public PurchaseRequestItemRetrivalDTO getPurchaseRequestItemById(Long id) {
+
+        PurchaseRequestItem prItem = purchaseRequestItemService.getPurchaseRequestItemById(id);
+
+
+        return PurchaseRequestItemRetrivalDTO.builder()
+                .id(prItem.getId())
+                .ticketType(prItem.getTicketType().getType())
+                .price(prItem.getTicketType().getPrice())
+                .quantityRequested(prItem.getQuantityRequested())
+                .eventStartDateTime(prItem.getTicketType().getActivity().getStartDateTime())
+                .eventEndDateTime(prItem.getTicketType().getActivity().getEndDateTime())
+                .build();
+
     }
 
     /**

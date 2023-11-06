@@ -91,6 +91,9 @@ VALUES (5, 1, 6, "No photography, videography and social media live streaming al
 INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
 VALUES (6, 1, 7, "No outside food and beverage are allowed into the venue.");
 
+INSERT INTO ADMISSION_POLICY (id, event_id, policy_order, description)
+VALUES (7, 2, 1, "Printed electronic tickets must be produced for admission.");
+
 
 UPDATE activity_seq
 SET next_val = 101;
@@ -134,6 +137,16 @@ VALUES (1, "CAT B", 240, 350, 0, 0, 0);
 INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
 VALUES (2, "CAT C", 200, 500, 0, 0, 0);
 
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (3, "CAT A", 300, 200, 0, 0, 4);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (4, "CAT B", 240, 350, 0, 0, 4);
+
+INSERT INTO TICKET_TYPE (id, type, price, total_vacancy, reserved_count, occupied_count, activity_id)
+VALUES (5, "CAT C", 200, 500, 0, 0, 4);
+
+
 
 UPDATE sales_round_seq
 SET next_val = 101;
@@ -146,6 +159,9 @@ VALUES (1, "Round 2 General", "2023-10-06T08:00:00+08:00", "2023-10-11T22:00:00+
 
 INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
 VALUES (2, "Round 3 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 1);
+
+INSERT INTO SALES_ROUND (id, sales_type, round_start, round_end, purchase_start, purchase_end, event_id)
+VALUES (3, "Round 1 General", "2023-10-29T08:00:00+08:00", "2023-12-18T22:00:00+08:00", "2023-12-19T08:00:00+08:00", "2023-12-19T22:00:00+08:00", 2);
 
 
 UPDATE ticket_sales_limit_seq
@@ -160,12 +176,25 @@ VALUES (1,  150, 0, 0, 1);
 INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
 VALUES (2,  200, 0, 0, 2);
 
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (3,  100, 0, 3, 3);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (4,  150, 0, 3, 4);
+
+INSERT INTO TICKET_SALES_LIMIT (id, limit_vacancy, occupied_vacancy, sales_round_id, ticket_type_id)
+VALUES (5,  200, 0, 3, 5);
+
 
 UPDATE purchase_request_seq
 SET next_val = 101;
 
-INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, status)
-VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", "processing");
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (0,  2, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
+
+INSERT INTO PURCHASE_REQUEST (id, sales_round_id, customer_id, is_paid, submit_datetime)
+VALUES (1,  3, "18b172d4-d66e-470d-991e-84bba61ca3f7", 0, "2023-12-17T22:00:00+08:00");
 
 UPDATE purchase_request_item_seq
 SET next_val = 101;
@@ -178,3 +207,13 @@ VALUES (1,  1, 0, 0, 1);
 
 INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
 VALUES (2,  2, 0, 0, 2);
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (3,  1, 0, 1, 3);
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (4,  1, 0, 1, 4);
+
+INSERT INTO PURCHASE_REQUEST_ITEM (id, quantity_request, quantity_approved, purchase_request_id, ticket_type_id)
+VALUES (5,  2, 0, 1, 5);
+

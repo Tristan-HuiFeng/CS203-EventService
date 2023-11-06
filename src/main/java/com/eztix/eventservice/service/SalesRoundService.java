@@ -26,7 +26,10 @@ public class SalesRoundService {
     @Setter
     @Autowired
     private EventService eventService;
-    private final PurchaseRequestService purchaseRequestService;
+
+    @Setter
+    @Autowired
+    private PurchaseRequestService purchaseRequestService;
     private final TaskScheduler taskScheduler;
     private final TicketTypeService ticketTypeService;
     private final TicketSalesLimitService ticketSalesLimitService;
