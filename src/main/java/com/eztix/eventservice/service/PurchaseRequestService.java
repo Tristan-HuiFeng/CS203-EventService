@@ -42,11 +42,11 @@ public class PurchaseRequestService {
     public String getStatus(PurchaseRequest pr) {
         OffsetDateTime now = OffsetDateTime.now(ZoneId.of("Singapore"));
 
-        if (pr.getIsPaid() || pr.getSalesRound().getPurchaseEnd().isBefore(now)) {
+        if (now.isAfter(pr.getSalesRound().getPurchaseEnd()) || pr.getIsPaid()) {
             return "end";
         }
 
-        if(pr.getSalesRound().getRoundEnd().isBefore(now)) {
+        if(now.isBefore(pr.getSalesRound().getRoundEnd())) {
             return "processing";
         }
 
@@ -138,7 +138,7 @@ public class PurchaseRequestService {
             throw new RequestValidationException("must contain valid customer id");
         }
 
-        return purchaseRequestRepository.findByCustomerIdOrderBySubmitDateTimeDesc(customerId)
+        return purchaseRequestRepository.findByCustomerIdAndIsPaidFalseOrderBySubmitDateTimeDesc(customerId)
                 .map(pr -> PurchaseRequestRetrievalDTO.builder()
                         .id(pr.getId())
                         .eventName(pr.getSalesRound().getEvent().getName())
