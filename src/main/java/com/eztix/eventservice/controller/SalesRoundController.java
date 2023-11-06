@@ -14,32 +14,39 @@ import com.eztix.eventservice.service.SalesRoundService;
 public class SalesRoundController {
     private final SalesRoundService salesRoundService;
 
-    //Add a new SalesRound
+    // Add a new SalesRound
     @PostMapping("/api/v1/event/{eventId}/sales-round")
-    public ResponseEntity<SalesRound[]> addSalesRound (@PathVariable Long eventId, @RequestBody NewSalesRound[] salesRounds) {
+    public ResponseEntity<SalesRound[]> addSalesRound(@PathVariable Long eventId,
+            @RequestBody NewSalesRound[] salesRounds) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(salesRoundService.addSalesRounds(eventId, salesRounds));
     }
 
-    //Get SalesRound by id
-    @GetMapping ("/api/v1/sales-round/{id}")
-    public ResponseEntity<SalesRound> getSalesRoundById (@PathVariable Long id) {
+    // Get SalesRound by id
+    @GetMapping("/api/v1/sales-round/{id}")
+    public ResponseEntity<SalesRound> getSalesRoundById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(salesRoundService.getSalesRoundById(id));
+                .body(salesRoundService.getSalesRoundById(id));
     }
 
-    @GetMapping ("/api/v1/event/{eventId}/sales-round")
-    public ResponseEntity<Iterable<SalesRound>> getSalesRoundByEventId (@PathVariable Long eventId) {
+    @GetMapping("/api/v1/event/{eventId}/sales-round")
+    public ResponseEntity<Iterable<SalesRound>> getSalesRoundByEventId(@PathVariable Long eventId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(salesRoundService.getSalesRoundByEventId(eventId));
     }
 
-    //Update SalesRound
+    // Update SalesRound
     @PutMapping("/api/v1/sales-round/{id}")
-    public ResponseEntity<SalesRound> updateSalesRound (@PathVariable Long id, @RequestBody SalesRound salesRound) {
+    public ResponseEntity<SalesRound> updateSalesRound(@PathVariable Long id, @RequestBody SalesRound salesRound) {
         salesRound.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
-              .body(salesRoundService.updateSalesRound(salesRound));
+                .body(salesRoundService.updateSalesRound(salesRound));
+    }
+
+    @PostMapping("/api/v1/event/{eventId}/sales-round/{salesRoundId}/process-purchase")
+    public ResponseEntity<Void> processPurchaseRequests(@PathVariable Long eventId, @PathVariable Long salesRoundId) {
+        salesRoundService.processPurchaseRequests(salesRoundId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
