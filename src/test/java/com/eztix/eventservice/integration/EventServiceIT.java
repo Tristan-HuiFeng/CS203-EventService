@@ -3,9 +3,22 @@ package com.eztix.eventservice.integration;
 import com.eztix.eventservice.dto.request.NewActivity;
 import com.eztix.eventservice.dto.request.NewAdmissionPolicy;
 import com.eztix.eventservice.dto.request.NewEvent;
+import com.eztix.eventservice.dto.request.NewSalesRound;
+import com.eztix.eventservice.dto.request.NewTicketSalesLimit;
+import com.eztix.eventservice.model.Activity;
 import com.eztix.eventservice.model.Event;
+import com.eztix.eventservice.model.SalesRound;
+import com.eztix.eventservice.model.TicketSalesLimit;
+import com.eztix.eventservice.model.TicketType;
+import com.eztix.eventservice.repository.ActivityRepository;
 import com.eztix.eventservice.repository.EventRepository;
+import com.eztix.eventservice.repository.SalesRoundRepository;
+import com.eztix.eventservice.repository.TicketSalesLimitRepository;
+import com.eztix.eventservice.repository.TicketTypeRepository;
+import com.eztix.eventservice.service.ActivityService;
 import com.eztix.eventservice.service.EventService;
+import com.eztix.eventservice.service.TicketTypeService;
+import com.eztix.eventservice.service.SalesRoundService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 
@@ -28,7 +41,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,9 +70,39 @@ public class EventServiceIT {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private ActivityRepository activityRepository;
+
+    @Autowired
+    private TicketTypeRepository ticketTypeRepository;
+
+    @Autowired
+    private TicketSalesLimitRepository ticketSalesLimitRepository;
+
+    @Autowired
+    private SalesRoundRepository salesRoundRepository;
+
+    @Autowired 
+    private SalesRoundService salesRoundService;
+
     static private NewEvent eventDTO;
     static private Event event;
+    static private Activity activity;
+    static private TicketType ticketType;
+    static private TicketSalesLimit ticketSalesLimit;
+    static private NewSalesRound[] salesRoundDTOs;
+    static private NewSalesRound salesRoundDTO;
+    static private SalesRound salesRound;
+    static private SalesRound[] salesRounds;
 
+    /**
+     * Setup
+     *  EventDTO
+     *  Activity
+     *  TicketType
+     *  TicketSalesLimit
+     *  SalesRound
+     */
     @BeforeAll
     static void setup() {
         eventDTO = new NewEvent();
@@ -70,10 +116,28 @@ public class EventServiceIT {
         eventDTO.setIsFeatured(false);
         eventDTO.setActivities(new ArrayList<NewActivity>());
         eventDTO.setAdmissionPolicies(new ArrayList<NewAdmissionPolicy>());
+        
+        activity = new Activity();
+        activity.setStartDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        activity.setEndDateTime(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(14));
+
+        ticketType = new TicketType();
+        ticketType.setOccupiedCount(0);
+        ticketType.setPrice(0);
+        ticketType.setReservedCount(0);
+        ticketType.setTotalVacancy(100);
+        ticketType.setType("test type");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
+    /**
+     * Flow of Integration Test (testing main flow)
+     * 1. Create event
+     * 2. Create sales round
+     * 
+     */
 
     @Test
     @WithMockUser(roles = "admin")
@@ -132,5 +196,59 @@ public class EventServiceIT {
     }
 */
 
+    @Test
+    @WithMockUser(roles = "admin")
+    public void addNewSalesRound() throws Exception {
+        // given
+        event = eventService.addNewEvent(eventDTO);
+        activity.setEvent(event);
+        activityRepository.save(activity); // associated with event and saved
+        ticketType.setActivity(activity);
+        ticketTypeRepository.save(ticketType); // associated with activity and saved
+        salesRoundDTOs = createMockNewSalesRounds();
+        // salesRounds = salesRoundService.addSalesRounds(event.getId(), salesRoundDTOs); // associated with event and saved
+
+        // when
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/event/{eventId}/sales-round", event.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(salesRoundDTOs)));
+
+        // then
+        MockHttpServletResponse result = resultActions
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andReturn()
+                .getResponse();
+
+        // Long id = JsonPath.parse(result.getContentAsString()).read("$.id", Long.class);
+
+        Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
+
+        assertThat(retrieved).isNotNull();
+
+    }
+
+    private NewSalesRound[] createMockNewSalesRounds() {
+        NewSalesRound mockSalesRoundDTO = new NewSalesRound();
+        mockSalesRoundDTO.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).minusDays(3));
+        mockSalesRoundDTO.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        mockSalesRoundDTO.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).minusDays(3));
+        mockSalesRoundDTO.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+        mockSalesRoundDTO.setSalesType("test sales type");
+        mockSalesRoundDTO.setTicketSalesLimitList(createMockTicketSalesLimits());
+
+        NewSalesRound[] mockNewSalesRounds = { mockSalesRoundDTO };
+        return mockNewSalesRounds;
+    }
+
+    private List<NewTicketSalesLimit> createMockTicketSalesLimits() {
+        NewTicketSalesLimit mockTicketSalesLimitDTO = new NewTicketSalesLimit();
+        mockTicketSalesLimitDTO.setLimitVacancy(100);
+        mockTicketSalesLimitDTO.setTicketTypeId(ticketType.getId());
+
+        List<NewTicketSalesLimit> mockNewTicketSalesLimits = new ArrayList<>();
+        mockNewTicketSalesLimits.add(mockTicketSalesLimitDTO);
+        return mockNewTicketSalesLimits;
+    }
 
 }
