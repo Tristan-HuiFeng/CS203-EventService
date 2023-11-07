@@ -1,5 +1,8 @@
 package com.eztix.eventservice.integration;
 
+import com.eztix.eventservice.dto.PurchaseRequestCreation;
+import com.eztix.eventservice.dto.PurchaseRequestDTO;
+import com.eztix.eventservice.dto.PurchaseRequestItemDTO;
 import com.eztix.eventservice.dto.request.NewActivity;
 import com.eztix.eventservice.dto.request.NewAdmissionPolicy;
 import com.eztix.eventservice.dto.request.NewEvent;
@@ -19,12 +22,11 @@ import com.eztix.eventservice.repository.TicketSalesLimitRepository;
 import com.eztix.eventservice.repository.TicketTypeRepository;
 import com.eztix.eventservice.service.ActivityService;
 import com.eztix.eventservice.service.EventService;
+import com.eztix.eventservice.service.PurchaseRequestService;
 import com.eztix.eventservice.service.TicketTypeService;
 import com.eztix.eventservice.service.SalesRoundService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-
-import lombok.core.configuration.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -52,6 +54,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -92,6 +95,9 @@ public class EventServiceIT {
         @Autowired
         private PurchaseRequestRepository purchaseRequestRepository;
 
+        @Autowired
+        private PurchaseRequestService purchaseRequestService;
+
         static private NewEvent eventDTO;
         static private Event event;
         static private Activity activity;
@@ -102,6 +108,10 @@ public class EventServiceIT {
         static private SalesRound salesRound;
         static private SalesRound[] salesRounds;
         static TaskScheduler taskScheduler;
+        static private PurchaseRequestDTO purchaseRequestDTO;
+        static private PurchaseRequestCreation purchaseRequestCreation;
+        static private String userId;
+        static private List<PurchaseRequestItemDTO> purchaseRequestItemDTOs;
 
         /**
          * Setup
@@ -133,6 +143,8 @@ public class EventServiceIT {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                userId = "user";
         }
 
         /**
@@ -265,8 +277,12 @@ public class EventServiceIT {
                 activity.setEvent(event);
                 activityRepository.save(activity); // associated with event and saved
                 ticketType.setActivity(activity);
-                ticketTypeRepository.save(ticketType); // associated with activity and saved
+                TicketType returnedTicketType = ticketTypeRepository.save(ticketType); // associated with activity and saved
                 salesRoundDTOs = createMockNewSalesRounds();
+                purchaseRequestDTO.setEventId(event.getId());
+                purchaseRequestItemDTOs = createMockPRItems(returnedTicketType.getId());
+                purchaseRequestDTO.setPurchaseRequestItems(purchaseRequestItemDTOs);
+                purchaseRequestCreation = purchaseRequestService.addNewPurchaseRequest(purchaseRequestDTO, userId);
 
                 // when
                 ResultActions salesRoundResultActions = mockMvc
@@ -281,20 +297,41 @@ public class EventServiceIT {
                 Iterable<SalesRound> salesRounds = retrieved.get();
                 Long salesRoundId = salesRounds.iterator().next().getId();
 
-                // wait for the scheduled processPurchaseRequests to run
-                // Thread.sleep(5000);
-
                 Stream<PurchaseRequest> purchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
-                // verify changes and assert based on the changes expected in the purchase
-                // requests after processing
+                purchaseRequests.forEach(pr -> {
+                        pr.getPurchaseRequestItems().forEach(prItem ->{
+                                assertThat(prItem.getQuantityApproved()).isEqualTo(prItem.getQuantityRequested());
+                        });
+                });
+        }
+
+        private List<PurchaseRequestItemDTO> createMockPRItems(long ticketTypeId) {
+                PurchaseRequestItemDTO mockPRItemDTO1 = new PurchaseRequestItemDTO();
+                PurchaseRequestItemDTO mockPRItemDTO2 = new PurchaseRequestItemDTO();
+                PurchaseRequestItemDTO mockPRItemDTO3 = new PurchaseRequestItemDTO();
+
+                mockPRItemDTO1.setQuantityRequested(4);
+                mockPRItemDTO2.setQuantityRequested(3);
+                mockPRItemDTO3.setQuantityRequested(2);
+
+                mockPRItemDTO1.setTicketTypeId(ticketTypeId);
+                mockPRItemDTO2.setTicketTypeId(ticketTypeId);
+                mockPRItemDTO3.setTicketTypeId(ticketTypeId);
+
+                List<PurchaseRequestItemDTO> mockPurchaseRequestItemDTOs = new ArrayList<>();
+                mockPurchaseRequestItemDTOs.add(mockPRItemDTO1);
+                mockPurchaseRequestItemDTOs.add(mockPRItemDTO2);
+                mockPurchaseRequestItemDTOs.add(mockPRItemDTO3);
+
+                return mockPurchaseRequestItemDTOs;
         }
 
         private NewSalesRound[] createMockNewSalesRounds() {
                 NewSalesRound mockSalesRoundDTO = new NewSalesRound();
                 mockSalesRoundDTO.setRoundStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).minusDays(3));
-                mockSalesRoundDTO.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                mockSalesRoundDTO.setRoundEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusMinutes(1));
                 mockSalesRoundDTO.setPurchaseStart(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).minusDays(3));
-                mockSalesRoundDTO.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusDays(7));
+                mockSalesRoundDTO.setPurchaseEnd(OffsetDateTime.now(ZoneId.of("Asia/Singapore")).plusMinutes(1));
                 mockSalesRoundDTO.setSalesType("test sales type");
                 mockSalesRoundDTO.setTicketSalesLimitList(createMockTicketSalesLimits());
 
