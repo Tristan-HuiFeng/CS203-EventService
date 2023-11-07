@@ -43,10 +43,10 @@ public class SalesRoundController {
                 .body(salesRoundService.updateSalesRound(salesRound));
     }
 
-    @PostMapping("/api/v1/event/{eventId}/sales-round/{salesRoundId}/process-purchase")
-    public ResponseEntity<Void> processPurchaseRequests(@PathVariable Long eventId, @PathVariable Long salesRoundId) {
-        salesRoundService.processPurchaseRequests(salesRoundId);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+    // @PostMapping("/api/v1/event/{eventId}/sales-round/{salesRoundId}/process-purchase")
+    // public ResponseEntity<Void> processPurchaseRequests(@PathVariable Long eventId, @PathVariable Long salesRoundId) {
+    //     salesRoundService.processPurchaseRequests(salesRoundId);
+    //     return ResponseEntity.status(HttpStatus.OK).build();
+    // }
 
 }
