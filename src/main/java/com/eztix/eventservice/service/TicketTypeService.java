@@ -1,5 +1,6 @@
 package com.eztix.eventservice.service;
 
+import com.eztix.eventservice.dto.TicketTypeDTO;
 import com.eztix.eventservice.exception.RequestValidationException;
 import com.eztix.eventservice.exception.ResourceNotFoundException;
 import com.eztix.eventservice.model.Activity;
@@ -28,6 +29,19 @@ public class TicketTypeService {
         return ticketTypeRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", id))
         );
+
+    }
+
+    public TicketTypeDTO getTicketTypeDateById(Long id) {
+
+        TicketType ticketType = ticketTypeRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException(String.format("ticket type with id %d does not exist.", id))
+        );
+
+        return TicketTypeDTO.builder().startDateTime(ticketType.getActivity().getStartDateTime())
+                .endDateTime(ticketType.getActivity().getEndDateTime())
+                .ticketType(ticketType.getType())
+                .build();
 
     }
 
