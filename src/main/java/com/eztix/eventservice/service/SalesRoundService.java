@@ -34,7 +34,13 @@ public class SalesRoundService {
     private final TicketTypeService ticketTypeService;
     private final TicketSalesLimitService ticketSalesLimitService;
 
-    // Add new SalesRound
+    /**
+     * Create sales rounds, and schedule processing of purchase requests when sales rounds end.
+     * 
+     * @param eventId a long value representing the unique identifier of the event associated with SalesRounds to be added.
+     * @param salesRounds an array of NewSalesRound objects containing details for the new SalesRounds to be created.
+     * @return an array of the new SalesRounds created.
+     */
     public SalesRound[] addSalesRounds(long eventId, NewSalesRound[] salesRounds) {
         Event event = eventService.getEventById(eventId);
 
@@ -88,7 +94,12 @@ public class SalesRoundService {
 
     }
 
-    // Get SalesRound by id
+    /**
+     * Retrieve a sales round.
+     * 
+     * @param id a long value representing the unique identifier of the salesRounds to be retrieved.
+     * @return the retrieved SalesRound.
+     */
     public SalesRound getSalesRoundById(Long id) {
 
         return salesRoundRepository.findById(id).orElseThrow(() ->
@@ -97,6 +108,12 @@ public class SalesRoundService {
 
     }
 
+    /**
+     * Retrieve all sales rounds associated with an event.
+     * 
+     * @param eventId a long value representing the unique identifier of the event associated with SalesRounds to be retrieved.
+     * @return an iterable of the SalesRounds of the event.
+     */
     public Iterable<SalesRound> getSalesRoundByEventId(Long eventId) {
 
         return salesRoundRepository.findByEventId(eventId).orElseThrow(() ->
@@ -105,7 +122,12 @@ public class SalesRoundService {
 
     }
 
-    // Update SalesRound
+    /**
+     * Update a sales round.
+     * 
+     * @param salesRound a SalesRound object containing the new SalesRound info to be updated.
+     * @return the updated SalesRound.
+     */
     @Transactional
     public SalesRound updateSalesRound(SalesRound salesRound) {
         if (salesRound.getId() == null) {
@@ -120,7 +142,9 @@ public class SalesRoundService {
         return salesRoundRepository.save(salesRound);
     }
 
-    // Delete all SalesRound
+    /**
+     * Delete all sales rounds.
+     */
     public void deleteAllSalesRounds() {
         salesRoundRepository.deleteAll();
     }
