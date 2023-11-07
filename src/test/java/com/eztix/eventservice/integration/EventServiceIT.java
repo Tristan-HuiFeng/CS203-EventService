@@ -274,7 +274,6 @@ public class EventServiceIT {
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(objectMapper.writeValueAsString(salesRoundDTOs)));
 
-
                 salesRoundResultActions.andExpect(status().isCreated());
                 Optional<Iterable<SalesRound>> retrieved = salesRoundRepository.findByEventId(event.getId());
                 assertThat(retrieved).isPresent();
@@ -286,7 +285,8 @@ public class EventServiceIT {
                 // Thread.sleep(5000);
 
                 Stream<PurchaseRequest> purchaseRequests = purchaseRequestRepository.findBySalesRoundId(salesRoundId);
-                // verify changes and assert based on the changes expected in the purchase requests after processing
+                // verify changes and assert based on the changes expected in the purchase
+                // requests after processing
         }
 
         private NewSalesRound[] createMockNewSalesRounds() {
