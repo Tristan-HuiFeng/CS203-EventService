@@ -152,7 +152,6 @@ class PurchaseRequestServiceTest {
         PurchaseRequest purchaseRequest = new PurchaseRequest();
         purchaseRequest.setCustomerId("test customer");
         purchaseRequest.setQueueNumber(1L);
-        purchaseRequest.setStatus("test status");
 
         given(purchaseRequestRepository.findById(purchaseRequest.getId()))
                 .willReturn(Optional.of(purchaseRequest));
@@ -197,8 +196,6 @@ class PurchaseRequestServiceTest {
         purchaseRequest.setCustomerId("test customer");
         purchaseRequest.setQueueNumber(1L);
         purchaseRequest.setSalesRound(salesRound);
-        purchaseRequest.setStatus("test status");
-
         // when
         // then
         assertThatThrownBy(() -> testPurchaseRequestService.updatePurchaseRequest(purchaseRequest))
@@ -240,7 +237,6 @@ class PurchaseRequestServiceTest {
         purchaseRequest.setCustomerId("test customer");
         purchaseRequest.setQueueNumber(1L);
         purchaseRequest.setSalesRound(salesRound);
-        purchaseRequest.setStatus("test status");
 
         given(purchaseRequestRepository.findById(1L)).willReturn(Optional.empty());
         // when
