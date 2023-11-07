@@ -419,4 +419,10 @@ public class PurchaseRequestService {
             throw new RequestValidationException("purchase request must have at least 1 ticket.");
         }
     }
+
+    public void setPurchaseRequestIsPaid(Long id) {
+        PurchaseRequest pr = this.getPurchaseRequestById(id);
+        pr.setIsPaid(true);
+        purchaseRequestRepository.save(pr);
+    }
 }
