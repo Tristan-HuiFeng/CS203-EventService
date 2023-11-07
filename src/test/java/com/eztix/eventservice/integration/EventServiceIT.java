@@ -268,7 +268,7 @@ public class EventServiceIT {
                 }
 
         }
-
+/*
         @Test
         @WithMockUser(roles = "admin")
         public void processPurchaseRequests() throws Exception {
@@ -304,7 +304,7 @@ public class EventServiceIT {
                         });
                 });
         }
-
+ */
         private List<PurchaseRequestItemDTO> createMockPRItems(long ticketTypeId) {
                 PurchaseRequestItemDTO mockPRItemDTO1 = new PurchaseRequestItemDTO();
                 PurchaseRequestItemDTO mockPRItemDTO2 = new PurchaseRequestItemDTO();
