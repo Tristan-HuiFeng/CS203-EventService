@@ -76,9 +76,10 @@ public class PurchaseRequestController {
 
     @CrossOrigin
     @PostMapping("/api/v1/purchase-request/{id}/paid")
-    public void setPurchaseRequestPaid (Authentication authentication, Long id) {
-
+    public ResponseEntity<String> setPurchaseRequestPaid (Authentication authentication, Long id) {
         purchaseRequestService.setPurchaseRequestIsPaid(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
 }
