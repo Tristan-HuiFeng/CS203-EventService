@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.TicketTypeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,12 @@ public class TicketTypeController {
     public ResponseEntity<TicketType> getTicketTypeById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                .body(ticketTypeService.getTicketTypeById(id));
+    }
+
+    @GetMapping ("/api/v1/ticket-type/{id}/date")
+    public ResponseEntity<TicketTypeDTO> getTicketTypeDateById (@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ticketTypeService.getTicketTypeDateById(id));
     }
 
     @GetMapping("/api/v1/activity/{activityId}/ticket-type")
