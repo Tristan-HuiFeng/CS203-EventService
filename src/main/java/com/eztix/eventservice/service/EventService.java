@@ -19,6 +19,12 @@ public class EventService {
     private final ActivityService activityService;
     private final TicketTypeService ticketTypeService;
 
+    /**
+     * Create an event.
+     * 
+     * @param newEvent a NewEvent datatype object containing the Event info to be created.
+     * @return the created Event.
+     */
     public Event addNewEvent(NewEvent newEvent) {
         Event inputEvent = Event.builder()
                 .name(newEvent.getName())
@@ -67,12 +73,27 @@ public class EventService {
         return savedEvent;
     }
 
+    /**
+     * Retrieve an event.
+     * If there is no event with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param id a long value representing the unique identifier of the event to retrieve.
+     * @return the retrieved Event.
+     */
     public Event getEventById(Long id) {
         return eventRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("event with id %d does not exist.", id))
         );
     }
 
+    /**
+     * Update an event.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no event with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param event an Event object containing the new Event info to be updated.
+     * @return the updated Event.
+     */
     @Transactional
     public Event updateEvent(Event event) {
         if (event == null || event.getId() == null) {
@@ -86,6 +107,14 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    /**
+     * Retrieve a list of events based on filter citerion.
+     * 
+     * @param featuredOnly a boolean value representing if the events are featured.
+     * @param category a String value representing the category of the events.
+     * @param search a String value representing the search keyword(s).
+     * @return an iterable of retrieved Events that matches the filter criterion above.
+     */
     public Iterable<Event> getAllEvents(boolean featuredOnly, String category, String search) {
 
         if (featuredOnly) {
@@ -105,6 +134,9 @@ public class EventService {
     }
 
 
+    /**
+     * Delete all events.
+     */
     public void deleteAll() {
         eventRepository.deleteAll();
     }
