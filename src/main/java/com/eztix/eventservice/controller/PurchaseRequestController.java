@@ -74,12 +74,11 @@ public class PurchaseRequestController {
                 .body("deleted successfully");
     }
 
-//    @CrossOrigin
-//    @PostMapping("/api/v1/purchase-request/{id}/paid")
-//    public ResponseEntity<PurchaseRequestCreation> setPurchaseRequestPaid (@Authentication authentication) {
-//
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(purchaseRequestService.addNewPurchaseRequest(purchaseRequest, authentication.getName()));
-//    }
+    @CrossOrigin
+    @PostMapping("/api/v1/purchase-request/{id}/paid")
+    public void setPurchaseRequestPaid (Authentication authentication, Long id) {
+
+        purchaseRequestService.setPurchaseRequestIsPaid(id);
+    }
 
 }
