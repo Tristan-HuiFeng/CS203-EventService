@@ -14,12 +14,23 @@ public class TicketSalesLimitService {
 
     private final TicketSalesLimitRepository ticketSalesLimitRepository;
 
-    // Add new TicketSalesLimit
+    /**
+     * Create a ticket sales limit.
+     * 
+     * @param ticketSalesLimit a TicketSalesLimit object to be created.
+     * @return the created TicketSalesLimit object.
+     */
     public TicketSalesLimit addNewTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }
 
-    // Get TicketSalesLimit by id
+    /**
+     * Retrieve a ticket sales limit.
+     * If there is no ticket sales limit with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param ticketSalesLimit_id a long value representing the unique identifier of the TicketSalesLimit to retrieve.
+     * @return the retrieved TicketSalesLimit object.
+     */
     public TicketSalesLimit getTicketSalesLimitById(Long ticketSalesLimit_id) {
 
         return ticketSalesLimitRepository.findById(ticketSalesLimit_id).orElseThrow(() ->
@@ -28,16 +39,33 @@ public class TicketSalesLimitService {
 
     }
 
+    /**
+     * Retrieve all ticket sales limits associated with a given sales round.
+     * 
+     * @param salesRoundId a long value representing the unique identifier of the SalesRound associated with the TicketSalesLimits to be retrieved.
+     * @return an iterable of the TicketSalesLimits associated with the sales round.
+     */
     public Iterable<TicketSalesLimit> getTicketSalesLimitBySalesRoundId(Long salesRoundId){
         return ticketSalesLimitRepository.findBySalesRoundId(salesRoundId);
     }
 
-    // Get all TicketSalesLimit
+    /**
+     * Retrieve all ticket sales limits.
+     * 
+     * @return an iterable of all TicketSalesLimit objects.
+     */
     public Iterable<TicketSalesLimit> getAllTicketSalesLimits() {
         return ticketSalesLimitRepository.findAll();
     }
 
-    // Update TicketSalesLimit
+    /**
+     * Update a ticket sales limit.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no ticket sales limit with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param ticketSalesLimit a TicketSalesLimit object containing the new TicketSalesLimit info to be updated.
+     * @return the updated TicketSalesLimit object.
+     */
     @Transactional
     public TicketSalesLimit updateTicketSalesLimit(TicketSalesLimit ticketSalesLimit) {
         if (ticketSalesLimit.getId() == null) {
@@ -50,7 +78,9 @@ public class TicketSalesLimitService {
         return ticketSalesLimitRepository.save(ticketSalesLimit);
     }
 
-    // Delete all TicketSalesLimit
+    /**
+     * Delete all ticket sales limits.
+     */
     public void deleteAllTicketSalesLimits() {
         ticketSalesLimitRepository.deleteAll();
     }

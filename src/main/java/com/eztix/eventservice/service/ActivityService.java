@@ -16,18 +16,39 @@ import java.util.Optional;
 public class ActivityService {
     private final ActivityRepository activityRepository;
 
+    /**
+     * Retrieve an activity.
+     * 
+     * @param id a long value representing the unique identifier of the Activity to retrieve.
+     * @return the updated Activity object.
+     */
     public Activity getActivityById(Long id){
             return activityRepository.findById(id).orElseThrow(() ->
                     new ResourceNotFoundException(String.format("activity with id %d does not exist.", id))
             );
     }
 
+    /**
+     * Create an activity.
+     * 
+     * @param event an Event object associated with the Activity to be created.
+     * @param activity an Activity object to associate with the Event.
+     * @return the created Activity object.
+     */
     public Activity addNewActivity(Event event, Activity activity) {
         activity.setEvent(event);
 
         return activityRepository.save(activity);
     }
 
+    /**
+     * Update an activity.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no activity with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param activity an Activity object containing the new Activity info to be updated.
+     * @return the updated Activity object.
+     */
     @Transactional
     public Activity updateActivity(Activity activity){
         if (activity.getId() == null){
@@ -41,6 +62,12 @@ public class ActivityService {
         return activityRepository.save(activity);
    }
 
+   /**
+    * Delete an activity.
+    * If "id" is null, throw a RequestValidationException.
+    * 
+    * @param activityId a long value representing the unique identifier of the Activity to delete.
+    */
    public void deleteActivity(Long activityId) {
         if (activityId == null) {
             throw new RequestValidationException("activity id cannot be null.");

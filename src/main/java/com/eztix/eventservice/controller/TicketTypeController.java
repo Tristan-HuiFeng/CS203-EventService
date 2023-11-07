@@ -1,5 +1,6 @@
 package com.eztix.eventservice.controller;
 
+import com.eztix.eventservice.dto.TicketTypeDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +21,43 @@ public class TicketTypeController {
 //                .body(ticketTypeService.addNewTicketType(activityId, ticketType));
 //    }
 
-    //Get TicketType by id
+    /**
+     * Retrieve a ticket type.
+     * 
+     * @param id a long value representing the unique identifier of the TicketType to retrieve.
+     * @return a ResponseEntity containing the retrieved TicketType and an OK status.
+     */
     @GetMapping ("/api/v1/ticket-type/{id}")
     public ResponseEntity<TicketType> getTicketTypeById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
                .body(ticketTypeService.getTicketTypeById(id));
     }
 
+    @GetMapping ("/api/v1/ticket-type/{id}/date")
+    public ResponseEntity<TicketTypeDTO> getTicketTypeDateById (@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ticketTypeService.getTicketTypeDateById(id));
+    }
+
+    /**
+     * Retrieve an iterable of ticket type based on activityId.
+     * 
+     * @param activityId a long value representing the unique identifier of the Activity associated with the TicketTypes to retrieve.
+     * @return a ResponseEntity containing an iterable of retrieved TicketTypes and an OK status.
+     */
     @GetMapping("/api/v1/activity/{activityId}/ticket-type")
     public ResponseEntity<Iterable<TicketType>> getTicketTypeByActivityId (@PathVariable Long activityId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ticketTypeService.getTicketTypeByActivityId(activityId));
     }
 
-    //Update TicketType
+    /**
+     * Update a ticket type.
+     * 
+     * @param id a long value representing the unique identifier of the TicketType to update.
+     * @param ticketType a TicketType object containing the new TicketType info to be updated.
+     * @return a ResponseEntity containing the updated TicketType and an OK status.
+     */
     @PutMapping("/api/v1/ticket-type/{id}")
     public ResponseEntity<TicketType> updateTicketType (@PathVariable Long id, @RequestBody TicketType ticketType) {
         ticketType.setId(id);

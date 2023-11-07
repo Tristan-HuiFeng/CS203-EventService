@@ -16,12 +16,23 @@ public class PurchaseRequestItemService {
 
     private final PurchaseRequestItemRepository purchaseRequestItemRepository;
 
-    // Add new PurchaseRequestItem
+    /**
+     * Create new purchase request item.
+     * 
+     * @param purchaseRequestItem the PurchaseRequestItem object to be added.
+     * @return the created PurchaseRequestItem object.
+     */
     public PurchaseRequestItem addNewPurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }
 
-    // Get PurchaseRequestItem by id
+    /**
+     * Retrieve a purchase request item.
+     * If there is no purchase request item with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param purchaseRequestItem_id a long value representing the unique identifier of the PurchaseRequestItem to retrieve.
+     * @return  the retrieved PurchaseRequestItem object.
+     */
     public PurchaseRequestItem getPurchaseRequestItemById(Long purchaseRequestItem_id) {
         return purchaseRequestItemRepository.findById(purchaseRequestItem_id).orElseThrow(() ->
                 new ResourceNotFoundException(String.format("purchase request item with id %d does not exist.", purchaseRequestItem_id))
@@ -29,12 +40,23 @@ public class PurchaseRequestItemService {
 
     }
 
-    // Get all PurchaseRequestItem
+    /**
+     * Retrieves all purchase request items.
+     * 
+     * @return an iterable of retrieved PurchaseRequestItems.
+     */
     public Iterable<PurchaseRequestItem> getAllPurchaseRequestItems() {
         return purchaseRequestItemRepository.findAll();
     }
 
-    // Update PurchaseRequestItem
+    /**
+     * Update a purchase request item.
+     * If "id" is null, throw a RequestValidationException.
+     * If there is no purchase request item with given "id", throw a ResourceNotFoundException.
+     * 
+     * @param purchaseRequestItem
+     * @return
+     */
     @Transactional
     public PurchaseRequestItem updatePurchaseRequestItem(PurchaseRequestItem purchaseRequestItem) {
         if (purchaseRequestItem.getId() == null) {
@@ -47,11 +69,17 @@ public class PurchaseRequestItemService {
         return purchaseRequestItemRepository.save(purchaseRequestItem);
     }
 
+    /**
+     * 
+     * @param purchaseRequestItemList
+     */
     public void validatePurchaseRequestItemList(List<PurchaseRequestItem> purchaseRequestItemList) {
 
     }
 
-    // Delete all PurchaseRequestItem
+    /**
+     * Delete all purchase request items.
+     */
     public void deleteAllPurchaseRequestItems() {
         purchaseRequestItemRepository.deleteAll();
     }
