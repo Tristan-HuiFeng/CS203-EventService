@@ -22,7 +22,8 @@ public class SalesRoundController {
      * @return a ResponseEntity containing an array of the created SalesRounds and an OK status.
      */
     @PostMapping("/api/v1/event/{eventId}/sales-round")
-    public ResponseEntity<SalesRound[]> addSalesRound (@PathVariable Long eventId, @RequestBody NewSalesRound[] salesRounds) {
+    public ResponseEntity<SalesRound[]> addSalesRound(@PathVariable Long eventId,
+            @RequestBody NewSalesRound[] salesRounds) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(salesRoundService.addSalesRounds(eventId, salesRounds));
     }
@@ -37,7 +38,7 @@ public class SalesRoundController {
     @GetMapping ("/api/v1/sales-round/{id}")
     public ResponseEntity<SalesRound> getSalesRoundById (@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK)
-               .body(salesRoundService.getSalesRoundById(id));
+                .body(salesRoundService.getSalesRoundById(id));
     }
 
     /**
@@ -61,10 +62,16 @@ public class SalesRoundController {
      * @return a ResponseEntity containing the updated SalesRound and an OK status.
      */
     @PutMapping("/api/v1/sales-round/{id}")
-    public ResponseEntity<SalesRound> updateSalesRound (@PathVariable Long id, @RequestBody SalesRound salesRound) {
+    public ResponseEntity<SalesRound> updateSalesRound(@PathVariable Long id, @RequestBody SalesRound salesRound) {
         salesRound.setId(id);
         return ResponseEntity.status(HttpStatus.OK)
-              .body(salesRoundService.updateSalesRound(salesRound));
+                .body(salesRoundService.updateSalesRound(salesRound));
     }
+
+    // @PostMapping("/api/v1/event/{eventId}/sales-round/{salesRoundId}/process-purchase")
+    // public ResponseEntity<Void> processPurchaseRequests(@PathVariable Long eventId, @PathVariable Long salesRoundId) {
+    //     salesRoundService.processPurchaseRequests(salesRoundId);
+    //     return ResponseEntity.status(HttpStatus.OK).build();
+    // }
 
 }
