@@ -7,8 +7,9 @@ This project lasted around 3 months. We developed a ticketing software system to
 - [Task Allocation / Task Done](#Task-Allocation-/-Task-Done)
 - [Libraries / Technologies Used](#Libraries-/-Technologies-Used)
 
-## Try it Out
+## How to Run
 ### Quick Start:
+Do note we have shut our own Keycloak server down, hence you need to have your own Keycloak server and change the link to start the microservices
 ```
 docker compose up
 mvnw spring-boot:run
@@ -18,7 +19,7 @@ mvnw spring-boot:run
 ```
 npm run dev
 ```
-at this link: https://github.com/Tristan-HuiFeng/CS201
+at this link: https://github.com/SMU-CS/CS203
 
 
 ## Motivations
