@@ -3,6 +3,7 @@ This project lasted around 3 months. We developed a ticketing software system to
 
 
 # Tables of content
+- [How to Run](#How-to-Run)
 - [Motivations](#Motivations)
 - [Task Allocation / Task Done](#Task-Allocation-/-Task-Done)
 - [Libraries / Technologies Used](#Libraries-/-Technologies-Used)
